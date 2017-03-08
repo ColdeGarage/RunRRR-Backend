@@ -1,3 +1,5 @@
+var db = require('./db.js');
+var connect = db.conn();
 //return login verification
 exports.login = function(req, res){
 	var email = req.body.email;
@@ -7,7 +9,7 @@ exports.login = function(req, res){
 	ret.object = "member";
 	ret.action = "login";
 
-	query("SELECT * FROM member WHERE email = "+email, function(err, rows){
+	connect.query("SELECT * FROM member WHERE email = "+email, function(err, rows){
 		if (err){
 			ret.brea = 0;
 			res.json(ret);
@@ -47,7 +49,7 @@ exports.liveordie = function(req, res){
 	ret.object = "member";
 	ret.action = "liveordie";
 
-	db.query("SELECT status FROM member WHERE uid = "+uid, function(err, rows){
+	connect.query("SELECT status FROM member WHERE uid = "+uid, function(err, rows){
 		if (err){
 			ret.brea = 0;
 			res.json(ret);
@@ -75,7 +77,7 @@ exports.update = function(req, res){
 	ret.object = "member";
 	ret.action = "update";
 
-	db.query("UPDATE member SET ? WHERE uid = "+uid, member, function(err, rows){
+	connect.query("UPDATE member SET ? WHERE uid = "+uid, member, function(err, rows){
 		if (err) {
 			ret.brea = 0;
 			res.json(ret);
@@ -98,8 +100,8 @@ exports.read = function(req, res){
 	ret.object = "member";
 	ret.action = "read";
 
-	if (mid) {
-		db.query("SELECT * FROM member", function(err, rows){
+	if (uid) {
+		connect.query("SELECT * FROM member", function(err, rows){
 			if (err) {
 				ret.brea = 0;
 				res.json(ret);
@@ -118,7 +120,7 @@ exports.read = function(req, res){
 		})
 	}
 	else {
-		db.query("SELECT * FROM member WHERE uid = ?", uid, function(err, rows){
+		connect.query("SELECT * FROM member WHERE uid = ?", uid, function(err, rows){
 			if (err) {
 				ret.brea = 0;
 				res.json(ret);
@@ -147,7 +149,7 @@ exports.money = function(req, res){
 	ret.object = "member";
 	ret.action = "money";
 
-	db.query("SELECT money FROM member WHERE uid = "+uid, function(err, rows){
+	connect.query("SELECT money FROM member WHERE uid = "+uid, function(err, rows){
 		if (err){
 			ret.brea = 0;
 			res.json(ret);
@@ -160,7 +162,7 @@ exports.money = function(req, res){
 		}
 	})
 	info['money'] = info['money'] + amount;
-	db.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, rows){
+	connect.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, rows){
 		if (err){
 			ret.brea = 0;
 			res.json(ret);
