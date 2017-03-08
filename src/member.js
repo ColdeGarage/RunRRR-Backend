@@ -138,7 +138,41 @@ exports.read = function(req, res){
 	}
 }
 //edit member's money
-exports.money = function(req, res){}
+exports.money = function(req, res){
+	var uid = req.body.uid;
+	var amount = req.body.money_amount;
+
+	var ret = new Object;
+	ret.uid = uid;
+	ret.object = "member";
+	ret.action = "money";
+
+	db.query("SELECT money FROM member WHERE uid = "+uid, function(err, rows){
+		if (err){
+			ret.brea = 0;
+			res.json(ret);
+			console.log('db error');
+		}
+		else {
+			ret.brea = 1;
+			var info = JSON.parse(rows);
+			console.log('get money successfully');
+		}
+	})
+	info['money'] = info['money'] + amount;
+	db.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, rows){
+		if (err){
+			ret.brea = 0;
+			res.json(ret);
+			console.log('db error');
+		}
+		else {
+			ret.brea = 1;
+			res.json(ret);
+			console.log('update money successfully');
+		}
+	})
+}
 //get emergency
 exports.callhelp = function(req, res){
 	var uid = req.body.uid;
