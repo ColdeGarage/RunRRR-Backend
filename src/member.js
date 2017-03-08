@@ -10,21 +10,27 @@ exports.login = function(req, res){
 	query("SELECT * FROM member WHERE email = "+email, function(err, rows){
 		if (err){
 			ret.brea = 0;
+			res.json(ret);
 			console.log('db error');
 		}
 		else {
 			ret.brea = 1;
-
 			var info = JSON.parse(rows);
 			ret.uid = info['uid'];
 
 			if (password == info['password']) {
-				ret.correct = 1;
+				ret.payload = {
+					type : correct,
+					objects : {correct : 1}
+				};
 				res.json(ret);
 				console.log('check successfully');
 			}
 			else {
-				ret.correct = 0;
+				ret.payload = {
+					type : "correct",
+					objects : {correct : 0}
+				};
 				res.json(ret);
 				console.log('login error');
 			}
@@ -43,13 +49,17 @@ exports.liveordie = function(req, res){
 
 	db.query("SELECT status FROM member WHERE uid = "+uid, function(err, rows){
 		if (err){
-			ret.brea = false;
+			ret.brea = 0;
+			res.json(ret);
 			console.log('db error');
 		}
 		else {
-			ret.brea = true;
+			ret.brea = 1;
 			var info = JSON.parse(rows);
-			ret.status = info['status'];
+			ret.payload = {
+				type : "status",
+				objects : info
+			};
 			res.json(ret);
 			console.log('send successfully');
 		}
@@ -65,13 +75,14 @@ exports.update = function(req, res){
 	ret.object = "member";
 	ret.action = "update";
 
-	db.query("UPDATE member SET ? ?"+"WHERE uid = "+uid, member, function(err, rows){
+	db.query("UPDATE member SET ? WHERE uid = "+uid, member, function(err, rows){
 		if (err) {
-			ret.brea = false;
+			ret.brea = 0;
+			res.json(ret);
 			console.log('update error');
 		}
 		else {
-			ret.brea = true;
+			ret.brea = 1;
 			res.json(ret);
 			console.log('update successfully');
 		}
@@ -90,10 +101,18 @@ exports.read = function(req, res){
 	if (mid) {
 		db.query("SELECT * FROM member", function(err, rows){
 			if (err) {
+				ret.brea = 0;
+				res.json(ret);
 				console.log("db error");
 			}
 			else {
-				res.json(rows);
+				ret.brea = 1;
+				var info = json.parse(rows);
+				ret.payload = {
+					type : "objects",
+					objects : info
+				}
+				res.json(ret);
 				console.log("read successfully");
 			}
 		})
@@ -101,12 +120,18 @@ exports.read = function(req, res){
 	else {
 		db.query("SELECT * FROM member WHERE uid = ?", uid, function(err, rows){
 			if (err) {
-				ret.brea = false;
+				ret.brea = 0;
+				res.json(ret);
 				console.log("db error");
 			}
 			else {
-				ret.brea = true;
-
+				ret.brea = 1;
+				var info = json.parse(rows);
+				ret.payload = {
+					type : "objects",
+					objects : info
+				}
+				res.json(ret);
 				console.log("read successfully");
 			} 
 		})
@@ -124,7 +149,7 @@ exports.callhelp = function(req, res){
 	ret.uid = uid;
 	ret.object = "member";
 	ret.action = "callhelp";
-	ret.brea = true;
+	ret.brea = 1;
 
 	res.json(ret);
 	console.log("Someone needs help!!!");
