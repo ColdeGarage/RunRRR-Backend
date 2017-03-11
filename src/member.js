@@ -1,7 +1,7 @@
 var db = require('./db.js');
 var connect = db.conn();
 //return login verification
-exports.login = function(req, res){
+/*exports.login = function(req, res){
 	var email = req.body.email;
 	var password = req.body.password;
 
@@ -38,25 +38,26 @@ exports.login = function(req, res){
 			}
 		}
 	})
-}
+}*/
 
 //return member's status
 exports.liveordie = function(req, res){
 	var uid = req.body.uid;
+	var info = {status : req.body.status};
 
 	var ret = new Object;
 	ret.uid = uid;
 	ret.object = "member";
 	ret.action = "liveordie";
 
-	connect.query("SELECT status FROM member WHERE uid = "+uid, function(err, rows){
+	connect.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, rows){
 		if (err){
-			ret.brea = 0;
+			ret.brea = 1;
 			res.json(ret);
 			console.log('db error');
 		}
 		else {
-			ret.brea = 1;
+			ret.brea = 0;
 			var info = JSON.parse(rows);
 			ret.payload = {
 				type : "status",
@@ -79,12 +80,12 @@ exports.update = function(req, res){
 
 	connect.query("UPDATE member SET ? WHERE uid = "+uid, member, function(err, rows){
 		if (err) {
-			ret.brea = 0;
+			ret.brea = 1;
 			res.json(ret);
 			console.log('update error');
 		}
 		else {
-			ret.brea = 1;
+			ret.brea = 0;
 			res.json(ret);
 			console.log('update successfully');
 		}
@@ -103,12 +104,12 @@ exports.read = function(req, res){
 	if (uid) {
 		connect.query("SELECT * FROM member", function(err, rows){
 			if (err) {
-				ret.brea = 0;
+				ret.brea = 1;
 				res.json(ret);
 				console.log("db error");
 			}
 			else {
-				ret.brea = 1;
+				ret.brea = 0;
 				var info = json.parse(rows);
 				ret.payload = {
 					type : "objects",
@@ -122,12 +123,12 @@ exports.read = function(req, res){
 	else {
 		connect.query("SELECT * FROM member WHERE uid = ?", uid, function(err, rows){
 			if (err) {
-				ret.brea = 0;
+				ret.brea = 1;
 				res.json(ret);
 				console.log("db error");
 			}
 			else {
-				ret.brea = 1;
+				ret.brea = 0;
 				var info = json.parse(rows);
 				ret.payload = {
 					type : "objects",
@@ -151,12 +152,12 @@ exports.money = function(req, res){
 
 	connect.query("SELECT money FROM member WHERE uid = "+uid, function(err, rows){
 		if (err){
-			ret.brea = 0;
+			ret.brea = 1;
 			res.json(ret);
 			console.log('db error');
 		}
 		else {
-			ret.brea = 1;
+			ret.brea = 0;
 			var info = JSON.parse(rows);
 			console.log('get money successfully');
 		}
@@ -164,12 +165,12 @@ exports.money = function(req, res){
 	info['money'] = info['money'] + amount;
 	connect.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, rows){
 		if (err){
-			ret.brea = 0;
+			ret.brea = 1;
 			res.json(ret);
 			console.log('db error');
 		}
 		else {
-			ret.brea = 1;
+			ret.brea = 0;
 			res.json(ret);
 			console.log('update money successfully');
 		}
@@ -185,7 +186,7 @@ exports.callhelp = function(req, res){
 	ret.uid = uid;
 	ret.object = "member";
 	ret.action = "callhelp";
-	ret.brea = 1;
+	ret.brea = 0;
 
 	res.json(ret);
 	console.log("Someone needs help!!!");
