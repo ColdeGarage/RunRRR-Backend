@@ -44,7 +44,10 @@ app.post(PREFIX+'/pack/create', pack.create);
 app.delete(PREFIX+'/pack/delete', pack.delete);
 app.get(PREFIX+'/pack/read', pack.read);
 
-
+app.post(PREFIX+'/boundary/create', boundary.create);
+app.put(PREFIX+'/boundary/edit', boundary.edit);
+app.delete(PREFIX+'/boundary/delete', boundary.delete);
+app.get(PREFIX+'/boundary/read', boundary.read);
 
 var server = app.listen(3000, function () {
     var port =  server.address().port;
