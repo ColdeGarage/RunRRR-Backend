@@ -75,7 +75,7 @@ Return JSON of  `/api/v1/mission/read`(requesting mid 12)
                             "class": 0,
                             "score": 20
                         }
-        }
+        ]
   }     
 }
 ```
