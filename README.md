@@ -67,7 +67,7 @@ Return JSON of  `/api/v1/mission/read`(requesting mid 12)
                         {
                             "mid": 12,
                             "title": "證人救出",
-                            "content": "證人Jacky快要被黑暗組織逮捕啦!! 快去湖心亭將Jacky帶回總部 blah blah blah".,
+                            "content": "證人Jacky快要被黑暗組織逮捕啦!! 快去湖心亭將Jacky帶回總部 blah blah blah",
                             "time_start": "14:03",
                             "time_end": "14:23",
                             "price": 1500,
@@ -94,7 +94,7 @@ Return JSON of  `/api/v1/mission/read` (No designate mid
                         {
                             "mid": 12,
                             "title": "證人救出",
-                            "content": "證人Jacky快要被黑暗組織逮捕啦!! 快去湖心亭將Jacky帶回總部 blah blah blah".,
+                            "content": "證人Jacky快要被黑暗組織逮捕啦!! 快去湖心亭將Jacky帶回總部 blah blah blah",
                             "time_start": "14:03",
                             "time_end": "14:23",
                             "price": 1500,
@@ -105,7 +105,7 @@ Return JSON of  `/api/v1/mission/read` (No designate mid
                         {
                             "mid": 15,
                             "title": "抓住證人",
-                            "content": "證人Jacky發瘋了! 找到他將他制伏".,
+                            "content": "證人Jacky發瘋了! 找到他將他制伏",
                             "time_start": "14:15",
                             "time_end": "14:30",
                             "price": 1100,
