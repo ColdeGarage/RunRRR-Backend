@@ -65,7 +65,7 @@ exports.read = function(req, res){
 	ret.action = "read";
 
 	if (uid) {
-		connect.query("SELECT * FROM member WHERE uid = ?", uid, function(err, rows){
+		connect.query("SELECT * FROM member WHERE uid = "+uid, function(err, rows){
 			if (err) {
 				ret.brea = 1;
 				res.json(ret);
