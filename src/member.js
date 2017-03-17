@@ -31,7 +31,10 @@ exports.liveordie = function(req, res){
 
 //update member's location
 exports.update = function(req, res){
-	var member = req.body;
+	var member = new Object;
+	member.uid = req.body.uid;
+	member.position_e = req.body.position_e;
+	member.position_n = req.body.position_n;
 
 	var ret = new Object;
 	ret.uid = uid;
