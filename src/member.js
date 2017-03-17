@@ -1,44 +1,5 @@
 var db = require('./db.js');
 var connect = db.conn();
-//return login verification
-/*exports.login = function(req, res){
-	var email = req.body.email;
-	var password = req.body.password;
-
-	var ret = new Object;
-	ret.object = "member";
-	ret.action = "login";
-
-	connect.query("SELECT * FROM member WHERE email = "+email, function(err, rows){
-		if (err){
-			ret.brea = 0;
-			res.json(ret);
-			console.log('db error');
-		}
-		else {
-			ret.brea = 1;
-			var info = JSON.parse(rows);
-			ret.uid = info['uid'];
-
-			if (password == info['password']) {
-				ret.payload = {
-					type : correct,
-					objects : {correct : 1}
-				};
-				res.json(ret);
-				console.log('check successfully');
-			}
-			else {
-				ret.payload = {
-					type : "correct",
-					objects : {correct : 0}
-				};
-				res.json(ret);
-				console.log('login error');
-			}
-		}
-	})
-}*/
 
 //return member's status
 exports.liveordie = function(req, res){
@@ -58,10 +19,9 @@ exports.liveordie = function(req, res){
 		}
 		else {
 			ret.brea = 0;
-			var info = JSON.parse(rows);
 			ret.payload = {
-				type : "status",
-				objects : info
+				type : "Attribute Name",
+				status : info.status
 			};
 			res.json(ret);
 			console.log('send successfully');
@@ -94,7 +54,7 @@ exports.update = function(req, res){
 
 //return member's information
 exports.read = function(req, res){
-	var uid = req.query;
+	var uid = req.query.uid;
 
 	var ret = new Object;
 	ret.uid = uid;
@@ -102,25 +62,6 @@ exports.read = function(req, res){
 	ret.action = "read";
 
 	if (uid) {
-		connect.query("SELECT * FROM member", function(err, rows){
-			if (err) {
-				ret.brea = 1;
-				res.json(ret);
-				console.log("db error");
-			}
-			else {
-				ret.brea = 0;
-				var info = json.parse(rows);
-				ret.payload = {
-					type : "objects",
-					objects : info
-				}
-				res.json(ret);
-				console.log("read successfully");
-			}
-		})
-	}
-	else {
 		connect.query("SELECT * FROM member WHERE uid = ?", uid, function(err, rows){
 			if (err) {
 				ret.brea = 1;
@@ -137,6 +78,25 @@ exports.read = function(req, res){
 				res.json(ret);
 				console.log("read successfully");
 			} 
+		})
+	}
+	else {
+		connect.query("SELECT * FROM member", function(err, rows){
+			if (err) {
+				ret.brea = 1;
+				res.json(ret);
+				console.log("db error");
+			}
+			else {
+				ret.brea = 0;
+				var info = json.parse(rows);
+				ret.payload = {
+					type : "objects",
+					objects : info
+				}
+				res.json(ret);
+				console.log("read successfully");
+			}
 		})
 	}
 }
