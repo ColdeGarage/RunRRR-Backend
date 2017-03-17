@@ -15,7 +15,7 @@ exports.liveordie = function(req, res){
 		if (err){
 			ret.brea = 1;
 			res.json(ret);
-			console.log('db error');
+			console.log("db error");
 		}
 		else {
 			ret.brea = 0;
@@ -24,7 +24,7 @@ exports.liveordie = function(req, res){
 				status : info.status
 			};
 			res.json(ret);
-			console.log('send successfully');
+			console.log("send successfully");
 		}
 	})
 }
@@ -45,12 +45,12 @@ exports.update = function(req, res){
 		if (err) {
 			ret.brea = 1;
 			res.json(ret);
-			console.log('update error');
+			console.log("update error");
 		}
 		else {
 			ret.brea = 0;
 			res.json(ret);
-			console.log('update successfully');
+			console.log("update successfully");
 		}
 	})
 }
@@ -117,25 +117,25 @@ exports.money = function(req, res){
 		if (err){
 			ret.brea = 1;
 			res.json(ret);
-			console.log('db error');
+			console.log("db error");
 		}
 		else {
 			ret.brea = 0;
 			var info = JSON.parse(rows);
-			console.log('get money successfully');
+			console.log("get money successfully");
 		}
 	})
-	info['money'] = info['money'] + amount;
+	info.money = info.money + amount;
 	connect.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, rows){
 		if (err){
 			ret.brea = 1;
 			res.json(ret);
-			console.log('db error');
+			console.log("db error");
 		}
 		else {
 			ret.brea = 0;
 			res.json(ret);
-			console.log('update money successfully');
+			console.log("update money successfully");
 		}
 	})
 }
