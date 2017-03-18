@@ -23,7 +23,7 @@ In some read api, if not designate id, it will return a list of items.
 ### Payload foramt
 There are always 2 entries in payload.
 * `type`: Type of payload, either `Attribute Name` or `Objects`
-* `*attribute name*`: Value of corresponding *`attribute name`*, where *`attribute name`* can be `status`,  `mid`, `tid` etc. **Only exists when `type` be `Attribute Name`**.
+* *`attribute name`*: Value of corresponding *`attribute name`*, where *`attribute name`* can be `status`,  `mid`, `tid` etc. **Only exists when `type` be `Attribute Name`**.
 * `Objects`: Whole objects attributes key/value pair.
 
 ### Examples

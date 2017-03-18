@@ -47,11 +47,6 @@ app.post(HOST_PREFIX+'/pack/create', pack.create);
 app.delete(HOST_PREFIX+'/pack/delete', pack.delete);
 app.get(HOST_PREFIX+'/pack/read', pack.read);
 
-app.post(HOST_PREFIX+'/boundary/create', boundary.create);
-app.put(HOST_PREFIX+'/boundary/edit', boundary.edit);
-app.delete(HOST_PREFIX+'/boundary/delete', boundary.delete);
-app.get(HOST_PREFIX+'/boundary/read', boundary.read);
-
 var server = app.listen(PORT, function () {
     var port =  server.address().port;
     console.log("Start Server at " + port);
