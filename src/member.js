@@ -73,7 +73,7 @@ exports.read = function(req, res){
 			}
 			else {
 				ret.brea = 0;
-				var info = json.parse(rows);
+				var info = JSON.parse(rows);
 				ret.payload = {
 					type : "objects",
 					objects : info
@@ -92,7 +92,7 @@ exports.read = function(req, res){
 			}
 			else {
 				ret.brea = 0;
-				var info = json.parse(rows);
+				var info = JSON.parse(rows);
 				ret.payload = {
 					type : "objects",
 					objects : info
