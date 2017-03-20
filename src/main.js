@@ -3,7 +3,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var member = require('./member.js');
 var mission = require('./mission.js');
-var clus = require('./clue.js');
+var clue = require('./clue.js');
 var pack = require('./pack.js');
 var tool = require('./tool.js');
 var report = require('./report.js');
@@ -16,12 +16,16 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+/**********************
+Need to add login api path
+***********************/
+// app.post(HOST_PREFIX+'/member/login', member.login);
+
 
 app.put(HOST_PREFIX+'/member/liveordie', member.liveordie);
 app.put(HOST_PREFIX+'/member/update', member.update);
 app.put(HOST_PREFIX+'/member/callhelp', member.callhelp);
 app.get(HOST_PREFIX+'/member/read', member.read);
-app.post(HOST_PREFIX+'/member/login', member.login);
 app.put(HOST_PREFIX+'/member/money', member.money);
 
 app.post(HOST_PREFIX+'/mission/create', mission.create);
