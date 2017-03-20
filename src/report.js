@@ -11,6 +11,11 @@ exports.check = function(req, res){
 	console.log("This api is still empty.");
 }
 
+//edit the report
+exports.edit = function(req, res){
+	console.log("This api is still empty.");
+}
+
 //delete a report
 exports.delete = function(req, res){
 	console.log("This api is still empty.");
