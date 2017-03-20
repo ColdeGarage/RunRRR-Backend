@@ -12,6 +12,7 @@ exports.create = function(req, res){
 	mission.clue = req.body.clue;
 	mission.class = req.body.class;
 	mission.score = req.body.score;
+	mission.location = req.body.location;
 
 	//check if post all of the values
 	var check = 1;
@@ -73,6 +74,7 @@ exports.edit = function(req, res){
 	mission.clue = req.body.clue;
 	mission.class = req.body.class;
 	mission.score = req.body.score;
+	mission.location = req.body.location;
 
 	//delete the key that don't send
 	for (var key in mission) {
