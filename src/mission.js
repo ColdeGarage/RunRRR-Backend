@@ -44,14 +44,21 @@ exports.create = function(req, res){
 				console.log("db error");
 			}
 			else {
-				ret.brea = 0;
-				var info = json.parse(rows);
-				ret.payload = {
-					type : "Attribute Name",
-					mid : info.mid
+				if (rows == []) {
+					ret.brea = 1;
+					ret.json(ret);
+					console.log("empty db");
 				}
-				res.json(ret);
-				console.log("get mission id successfully");
+				else {
+					ret.brea = 0;
+					var info = json.parse(rows);
+					ret.payload = {
+						type : "Attribute Name",
+						mid : info.mid
+					}
+					res.json(ret);
+					console.log("get mission id successfully");
+				}
 			}
 		})
 	}
@@ -142,14 +149,21 @@ exports.read = function(req, res){
 				console.log("db error");
 			}
 			else {
-				ret.brea = 0;
-				var info = json.parse(rows);
-				ret.payload = {
-					type : "objects",
-					objects : info
+				if (rows == []) {
+					ret.brea = 1;
+					ret.json(ret);
+					console.log("empty db");
 				}
-				res.json(ret);
-				console.log("read successfully");
+				else {
+					ret.brea = 0;
+					var info = json.parse(rows);
+					ret.payload = {
+						type : "objects",
+						objects : info
+					}
+					res.json(ret);
+					console.log("read successfully");
+				}
 			} 
 		})
 	}
@@ -161,14 +175,21 @@ exports.read = function(req, res){
 				console.log("db error");
 			}
 			else {
-				ret.brea = 0;
-				var info = json.parse(rows);
-				ret.payload = {
-					type : "objects",
-					objects : info
+				if (rows == []) {
+					ret.brea = 1;
+					ret.json(ret);
+					console.log("empty db");
 				}
-				res.json(ret);
-				console.log("read successfully");
+				else {
+					ret.brea = 0;
+					var info = json.parse(rows);
+					ret.payload = {
+						type : "objects",
+						objects : info
+					}
+					res.json(ret);
+					console.log("read successfully");
+				}	
 			}
 		})
 	}

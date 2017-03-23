@@ -72,14 +72,21 @@ exports.read = function(req, res){
 				console.log("db error");
 			}
 			else {
-				ret.brea = 0;
-				var info = JSON.parse(rows);
-				ret.payload = {
-					type : "objects",
-					objects : info
+				if (rows == []) {
+					ret.brea = 1;
+					ret.json(ret);
+					console.log("empty db");
 				}
-				res.json(ret);
-				console.log("read successfully");
+				else {
+					ret.brea = 0;
+					var info = JSON.parse(rows);
+					ret.payload = {
+						type : "objects",
+						objects : info
+					}
+					res.json(ret);
+					console.log("read successfully");
+				}
 			} 
 		})
 	}
@@ -91,14 +98,21 @@ exports.read = function(req, res){
 				console.log("db error");
 			}
 			else {
-				ret.brea = 0;
-				var info = JSON.parse(rows);
-				ret.payload = {
-					type : "objects",
-					objects : info
+				if (rows == []) {
+					ret.brea = 1;
+					ret.json(ret);
+					console.log("empty db");
 				}
-				res.json(ret);
-				console.log("read successfully");
+				else {
+					ret.brea = 0;
+					var info = JSON.parse(rows);
+					ret.payload = {
+						type : "objects",
+						objects : info
+					}
+					res.json(ret);
+					console.log("read successfully");
+				}
 			}
 		})
 	}
@@ -120,9 +134,16 @@ exports.money = function(req, res){
 			console.log("db error");
 		}
 		else {
-			ret.brea = 0;
-			var info = JSON.parse(rows);
-			console.log("get money successfully");
+			if (rows == []) {
+				ret.brea = 1;
+				ret.json(ret);
+				console.log("empty db");
+			}
+			else {
+				ret.brea = 0;
+				var info = JSON.parse(rows);
+				console.log("get money successfully");
+			}
 		}
 	})
 	info.money = info.money + amount;
