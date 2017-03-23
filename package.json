@@ -8,16 +8,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/jwwandy/EveryOneRunning-Backend.git"
+    "url": "git+ssh://git@github.com:ColdeGarage/RunRRR-Backend.git"
   },
   "author": "Colde Garage",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/jwwandy/EveryOneRunning-Backend/issues"
+    "url": "https://github.com/ColdeGarage/RunRRR-Backend/issues"
   },
-  "homepage": "https://gitlab.com/jwwandy/EveryOneRunning-Backend#README",
+  "homepage": "https://github.com/ColdeGarage/RunRRR-Backend#README",
   "dependencies": {
     "body-parser": "^1.17.1",
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "mysql": "^2.13.0"
   }
 }
