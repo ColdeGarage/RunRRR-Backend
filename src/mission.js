@@ -46,12 +46,12 @@ exports.create = function(req, res){
 			else {
 				if (rows.length == 0) {
 					ret.brea = 1;
-					ret.json(ret);
+					res.json(ret);
 					console.log("empty db");
 				}
 				else {
 					ret.brea = 0;
-					var info = json.parse(rows);
+					var info = JSON.parse(rows);
 					ret.payload = {
 						type : "Attribute Name",
 						mid : info.mid
@@ -151,12 +151,12 @@ exports.read = function(req, res){
 			else {
 				if (rows.length == 0) {
 					ret.brea = 1;
-					ret.json(ret);
+					res.json(ret);
 					console.log("empty db");
 				}
 				else {
 					ret.brea = 0;
-					var info = json.parse(rows);
+					var info = JSON.parse(rows);
 					ret.payload = {
 						type : "objects",
 						objects : info
@@ -177,12 +177,12 @@ exports.read = function(req, res){
 			else {
 				if (rows.length == 0) {
 					ret.brea = 1;
-					ret.json(ret);
+					res.json(ret);
 					console.log("empty db");
 				}
 				else {
 					ret.brea = 0;
-					var info = json.parse(rows);
+					var info = JSON.parse(rows);
 					ret.payload = {
 						type : "objects",
 						objects : info
