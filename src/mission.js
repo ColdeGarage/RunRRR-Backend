@@ -141,7 +141,7 @@ exports.read = function(req, res){
 	ret.object = "mission";
 	ret.action = "delete";
 
-	if (uid) {
+	if (mid) {
 		connect.query("SELECT * FROM mission WHERE mid = "+mid, function(err, rows){
 			if (err) {
 				ret.brea = 1;
