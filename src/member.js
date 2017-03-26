@@ -1,4 +1,5 @@
 var db = require('./db.js');
+var request = require('request');
 var connect = db.conn();
 
 //return member's status
@@ -174,4 +175,36 @@ exports.callhelp = function(req, res){
 
 	res.json(ret);
 	console.log("Someone needs help!!!");
+}
+
+// Login auth
+exports.login = function(req, res){
+	var ret = new Object;
+	ret.object = "member";
+	ret.action = "login";
+
+	request.get({url:'http://www.ee.nthu.edu.tw/engcamp/api/auth.php?token=nthuee&email='+req.query.email+'&id='+req.query.id},
+		function optionalCallback(err, httpResponse, body) {
+			if (err) {
+				console.error('Login auth access failed:', err);
+				ret.uid = 0;
+				ret.brea = 0;
+				ret.correct = 0;
+			}
+			else if (httpResponse.statusCode == 200){
+				console.log('Login auth access success. User auth success.');
+				var data = JSON.parse(body);
+				ret.uid = data.rid;
+				ret.brea = 1;
+				ret.correct = 1;
+			}
+			else{
+				console.log('Login auth access success. User auth failed.');
+				ret.uid = 0;
+				ret.brea = 1;
+				ret.correct = 0;
+			}
+			res.json(ret);
+		}
+	);
 }
