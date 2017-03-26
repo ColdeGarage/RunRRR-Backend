@@ -11,10 +11,10 @@ Source code of the project. <br>
 1. Go to EECS822.
 2. ssh NAS with your account.
 3. type `node ../howard19192828/RunRRR-Backend/src/main.js` in terminal.
-4. Console prints out `[INFO] Success when connecting to db` as start the server successfully.
+4. Console prints out `[INFO] Success when connecting to db` as starting the server successfully.
 
 ### API URL (temporarily)
-Call the API with URL when you're at EECS822.
+Call the API with URL when you're at EECS822. <br>
 URL : `192.168.0.2:8081/api/v1/object/action`
 
 ## API Return Template
