@@ -16,12 +16,7 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-/**********************
-Need to add login api path
-***********************/
-// app.post(HOST_PREFIX+'/member/login', member.login);
-
-
+app.post(HOST_PREFIX+'/member/login', member.login);
 app.put(HOST_PREFIX+'/member/liveordie', member.liveordie);
 app.put(HOST_PREFIX+'/member/update', member.update);
 app.put(HOST_PREFIX+'/member/callhelp', member.callhelp);
