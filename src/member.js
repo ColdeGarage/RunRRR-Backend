@@ -188,21 +188,30 @@ exports.login = function(req, res){
 			if (err) {
 				console.error('Login auth access failed:', err);
 				ret.uid = 0;
-				ret.brea = 0;
-				ret.correct = 0;
+				ret.brea = 1;
+				ret.payload = {
+					type : "Attribute Name",
+					correct : 1
+				}
 			}
 			else if (httpResponse.statusCode == 200){
 				console.log('Login auth access success. User auth success.');
 				var data = JSON.parse(body);
 				ret.uid = data.rid;
-				ret.brea = 1;
-				ret.correct = 1;
+				ret.brea = 0;
+				ret.payload = {
+					type : "Attribute Name",
+					correct : 0
+				}
 			}
 			else{
 				console.log('Login auth access success. User auth failed.');
 				ret.uid = 0;
-				ret.brea = 1;
-				ret.correct = 0;
+				ret.brea = 0;
+				ret.payload = {
+					type : "Attribute Name",
+					correct : 1
+				}
 			}
 			res.json(ret);
 		}
