@@ -72,7 +72,7 @@ exports.read = function(req, res){
 				console.log("db error");
 			}
 			else {
-				if (rows == []) {
+				if (rows.length == 0) {
 					ret.brea = 1;
 					ret.json(ret);
 					console.log("empty db");
@@ -98,7 +98,7 @@ exports.read = function(req, res){
 				console.log("db error");
 			}
 			else {
-				if (rows == []) {
+				if (rows.length == 0) {
 					ret.brea = 1;
 					ret.json(ret);
 					console.log("empty db");
@@ -134,7 +134,7 @@ exports.money = function(req, res){
 			console.log("db error");
 		}
 		else {
-			if (rows == []) {
+			if (rows.length == 0) {
 				ret.brea = 1;
 				ret.json(ret);
 				console.log("empty db");
