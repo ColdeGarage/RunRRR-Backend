@@ -183,7 +183,7 @@ exports.login = function(req, res){
 	ret.object = "member";
 	ret.action = "login";
 
-	request.get({url:'http://www.ee.nthu.edu.tw/engcamp/api/auth.php?token=nthuee&email='+req.query.email+'&id='+req.query.id},
+	request.get({url:'http://www.ee.nthu.edu.tw/engcamp/api/auth.php?token=nthuee&email='+req.body.email+'&id='+req.body.password},
 		function optionalCallback(err, httpResponse, body) {
 			if (err) {
 				console.error('Login auth access failed:', err);
