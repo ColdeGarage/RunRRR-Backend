@@ -3,6 +3,9 @@ var connect = db.conn();
 
 //create a new tool
 exports.create = function(req, res){
+	var tool = new Object;
+	tool.name = req.body.name;
+	tool.
 	console.log("This api is still empty.");
 }
 

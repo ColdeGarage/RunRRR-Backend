@@ -36,7 +36,7 @@ exports.create = function(req, res){
 				ret.brea = 0;
 				console.log("create mission successfully");
 			}
-		})
+		});
 		connect.query("SELECT mid FROM mission WHERE title = "+mission.title, function(err, rows){
 			if (err){
 				ret.brea = 1;
@@ -60,7 +60,7 @@ exports.create = function(req, res){
 					console.log("get mission id successfully");
 				}
 			}
-		})
+		});
 	}
 	else {
 		ret.brea = 2; //if no complete mission values
@@ -95,18 +95,25 @@ exports.edit = function(req, res){
 	ret.object = "mission";
 	ret.action = "edit";
 
-	connect.query("UPDATE mission SET ? WHERE mid = "+mid, mission, function(err, rows){
-		if (err){
-			ret.brea = 1;
-			res.json(ret);
-			console.log("db error");
-		}
-		else {
-			ret.brea = 0;
-			res.json(ret);
-			console.log("edit mission successfully");
-		}
-	})
+	if (mission.mid) {
+		connect.query("UPDATE mission SET ? WHERE mid = "+mid, mission, function(err, rows){
+			if (err){
+				ret.brea = 1;
+				res.json(ret);
+				console.log("db error");
+			}
+			else {
+				ret.brea = 0;
+				res.json(ret);
+				console.log("edit mission successfully");
+			}
+		});
+	}
+	else {
+		ret.brea = 2;
+		res.json(ret);
+		console.log("no mid value");
+	}
 }
 
 //delete mission
@@ -118,18 +125,25 @@ exports.delete = function(req, res){
 	ret.object = "mission";
 	ret.action = "delete";
 
-	connect.query("DELETE FROM mission WHERE mid = "+mid, function(err, rows){
-		if (err){
-			ret.brea = 1;
-			res.json(ret);
-			console.log("db error");
-		}
-		else {
-			ret.brea = 0;
-			res.json(ret);
-			console.log("delete mission successfully");
-		}
-	})
+	if (mid) {
+		connect.query("DELETE FROM mission WHERE mid = "+mid, function(err, rows){
+			if (err){
+				ret.brea = 1;
+				res.json(ret);
+				console.log("db error");
+			}
+			else {
+				ret.brea = 0;
+				res.json(ret);
+				console.log("delete mission successfully");
+			}
+		});
+	}
+	else {
+		ret.brea = 2;
+		res.json(ret);
+		console.log("no mid value")
+	}
 }
 
 //get missions" information
@@ -139,7 +153,7 @@ exports.read = function(req, res){
 	var ret = new Object;
 	ret.uid = req.body.operator_uid;
 	ret.object = "mission";
-	ret.action = "delete";
+	ret.action = "read";
 
 	if (mid) {
 		connect.query("SELECT * FROM mission WHERE mid = "+mid, function(err, rows){
@@ -165,7 +179,7 @@ exports.read = function(req, res){
 					console.log("read successfully");
 				}
 			} 
-		})
+		});
 	}
 	else {
 		connect.query("SELECT * FROM mission", function(err, rows){
@@ -191,6 +205,6 @@ exports.read = function(req, res){
 					console.log("read successfully");
 				}	
 			}
-		})
+		});
 	}
 }
