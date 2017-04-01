@@ -12,14 +12,15 @@ exports.create = function(req, res){
 	mission.clue = req.body.clue;
 	mission.class = req.body.class;
 	mission.score = req.body.score;
-	mission.location_e = req.body.location_e;
-	mission.location_n = req.body.location_n;
 
 	//check if post all of the values
 	var check = 1;
 	for (var key in mission) {
 		check = check && mission[key];
 	}
+	
+	mission.location_e = req.body.location_e;
+	mission.location_n = req.body.location_n;
 
 	var ret = new Object;
 	ret.uid = req.body.operator_uid;
