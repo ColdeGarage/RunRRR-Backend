@@ -22,7 +22,7 @@ exports.create = function(req, res){
 				console.log("create clue successfully");
 			}
 		});
-		connect.query("SELECT cid FROM clue WHERE title = "+content, function(err, rows){
+		connect.query("SELECT cid FROM clue WHERE content = "+content, function(err, rows){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
