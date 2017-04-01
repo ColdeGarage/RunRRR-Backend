@@ -44,7 +44,7 @@ Return JSON of  `/api/v1/member/callhelp`
   "uid": 86,
   "object": "member",
   "action": "callhelp",
-  "brea": 0,
+  "brea": 0
 }
 ```
 
@@ -83,7 +83,9 @@ Return JSON of  `/api/v1/mission/read`(requesting mid 12)
                             "price": 1500,
                             "clue": 8,
                             "class": 0,
-                            "score": 20
+                            "score": 20,
+                            "location_e": 120.995106,
+                            "location_n": 24.794090
                         }
         ]
   }     
@@ -110,7 +112,9 @@ Return JSON of  `/api/v1/mission/read` (No designate mid
                             "price": 1500,
                             "clue": 8,
                             "class": 0,
-                            "score": 20
+                            "score": 20,
+                            "location_e": 120.995106,
+                            "location_n": 24.794090
                         },
                         {
                             "mid": 15,
