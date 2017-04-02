@@ -7,7 +7,7 @@ var expect = chai.expect;
 var path = require('path')
 var config = require('./config.json');
 var PORT = config.port
-var HOST = 'http://' + config.host;
+var HOST = 'http://' + config.host + ':' + PORT;
 var HOST_PREFIX = config.host_prefix;
 chai.use(chaiHttp);
 
