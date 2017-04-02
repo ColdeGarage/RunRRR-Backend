@@ -86,10 +86,10 @@ exports.delete = function(req, res){
 
 //read clues
 exports.read = function(req, res){
-	var cid = req.body.cid;
+	var cid = req.query.cid;
 
 	var ret = new Object;
-	ret.uid = req.body.operator_uid;
+	ret.uid = req.query.operator_uid;
 	ret.object = "clue";
 	ret.action = "read";
 
