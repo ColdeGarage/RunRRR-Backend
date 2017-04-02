@@ -112,7 +112,7 @@ describe('Member Api', function(){
     it('/GET read(with uid)', function(done) { 
         var req = {'operator_uid':0, 'uid':12};
         chai.request(HOST)
-        .put(path.join(HOST_PREFIX, 'member', 'read'))
+        .get(path.join(HOST_PREFIX, 'member', 'read'))
         .send(req)
         .end(function(err, res) {
             expect(res).to.have.status(200);
@@ -141,7 +141,7 @@ describe('Member Api', function(){
     it('/GET read(with out uid)', function(done) { 
         var req = {'operator_uid':0};
         chai.request(HOST)
-        .put(path.join(HOST_PREFIX, 'member', 'read'))
+        .get(path.join(HOST_PREFIX, 'member', 'read'))
         .send(req)
         .end(function(err, res) {
             expect(res).to.have.status(200);
@@ -168,7 +168,7 @@ describe('Member Api', function(){
     });
     it('/GET read(Uncomplete request)', function(done) { // <= Pass in done callback
         chai.request(HOST)
-        .put(path.join(HOST_PREFIX, 'member', 'read'))
+        .get(path.join(HOST_PREFIX, 'member', 'read'))
         .end(function(err, res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
@@ -183,7 +183,7 @@ describe('Member Api', function(){
     it('/POST login', function(done) { 
         var req = {'operator_uid':0, 'email':'abcd@gmail.com', 'password':'xxxxx'};
         chai.request(HOST)
-        .put(path.join(HOST_PREFIX, 'member', 'login'))
+        .post(path.join(HOST_PREFIX, 'member', 'login'))
         .send(req)
         .end(function(err, res) {
             expect(res).to.have.status(200);
@@ -202,7 +202,7 @@ describe('Member Api', function(){
     });
     it('/POST login(Uncomplete request)', function(done) { // <= Pass in done callback
         chai.request(HOST)
-        .put(path.join(HOST_PREFIX, 'member', 'login'))
+        .post(path.join(HOST_PREFIX, 'member', 'login'))
         .end(function(err, res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
