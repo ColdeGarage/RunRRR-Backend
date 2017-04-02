@@ -28,7 +28,7 @@ describe('Member Api', function(){
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Attribute Name');
             res.body.payload.should.have.property('status').eql(1);
-            done()
+            done();
         });
     });
     it('/PUT update', function(done) { // <= Pass in done callback
@@ -37,7 +37,6 @@ describe('Member Api', function(){
         .put(path.join(HOST_PREFIX, 'member', 'update'))
         .send(req)
         .end(function(err, res) {
-            err.should.be.null;
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
@@ -49,7 +48,7 @@ describe('Member Api', function(){
             res.body.payload.should.have.property('type').eql('Attribute Name');
             res.body.payload.should.have.property('valid_area').eql(1);
 
-            done()
+            done();
         });
     });
     it('/PUT callhelp', function(done) { // <= Pass in done callback
@@ -57,12 +56,7 @@ describe('Member Api', function(){
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'callhelp'))
         .send(req)
-        .field('operator_uid', '0')
-        .field('uid', '12')
-        .field('position_e', '120.13')
-        .field('position_n', '23.456')
         .end(function(err, res) {
-            err.should.be.null;
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
@@ -71,32 +65,103 @@ describe('Member Api', function(){
             res.body.should.have.property('action').eql('callhelp');
             res.body.should.have.property('brea').to.be.an('number');
 
-            done()
+            done();
         });
     });
-    // it('/GET read', function(done) { // <= Pass in done callback
-    //     chai.request(HOST)
-    //     .put(path.join(HOST_PREFIX, 'member', 'read'))
-    //     .field('operator_uid', '0')
-    //     .field('uid', '12')
-    //     .end(function(err, res) {
-    //         err.should.be.null;
-    //         expect(res).to.have.status(200);
-    //         expect(res).to.be.json;
-    //         res.body.should.be.a('object');
-    //         res.body.should.have.property('uid').eql(12);
-    //         res.body.should.have.property('object').eql('member');
-    //         res.body.should.have.property('action').eql('read');
-    //         res.body.should.have.property('brea').to.be.an('number');
-    //         if (!res.body.brea){
-    //             res.body.should.have.property('payload');
-    //             res.body.payload.should.have.property('type').eql('Objects');
-    //             res.body.payload.should.have.property('Objects').to.be.an('array');
+    it('/GET read(with uid)', function(done) { 
+        var req = {'operator_uid':0, 'uid':12};
+        chai.request(HOST)
+        .put(path.join(HOST_PREFIX, 'member', 'read'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('member');
+            res.body.should.have.property('action').eql('read');
+            res.body.should.have.property('brea').eql(1);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Objects');
+            res.body.payload.should.have.property('Objects').to.be.an('array');
+            res.body.payload.Objects.length.should.eql(1);
+            for (member in res.body.payload.Objects){
+                member.should.have.property('uid').to.be.an('number');
+                member.should.have.property('money').to.be.an('number');
+                member.should.have.property('status').to.be.an('number');
+                member.should.have.property('position_e').to.be.an('number');
+                member.should.have.property('position_n').to.be.an('number');
+                member.should.have.property('score').to.be.an('number');
+                member.should.have.property('name').to.be.an('string');
+            }
+            done();
+        });
+    });
+    it('/GET read(with out uid)', function(done) { 
+        var req = {'operator_uid':0};
+        chai.request(HOST)
+        .put(path.join(HOST_PREFIX, 'member', 'read'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('member');
+            res.body.should.have.property('action').eql('read');
+            res.body.should.have.property('brea').eql(1);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Objects');
+            res.body.payload.should.have.property('Objects').to.be.an('array');
+            for (member in res.body.payload.Objects){
+                member.should.have.property('uid').to.be.an('number');
+                member.should.have.property('money').to.be.an('number');
+                member.should.have.property('status').to.be.an('number');
+                member.should.have.property('position_e').to.be.an('number');
+                member.should.have.property('position_n').to.be.an('number');
+                member.should.have.property('score').to.be.an('number');
+                member.should.have.property('name').to.be.an('string');
+            }
+            done();
+        });
+    });
+    it('/POST login', function(done) { 
+        var req = {'operator_uid':0, 'email':'abcd@gmail.com', 'password':'xxxxx'};
+        chai.request(HOST)
+        .put(path.join(HOST_PREFIX, 'member', 'login'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').to.be.a('number');
+            res.body.should.have.property('object').eql('member');
+            res.body.should.have.property('action').eql('login');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Attribute Name');
+            res.body.payload.should.have.property('correct').to.be.a('number');
 
-    //         }
-    //         done()
-    //     });
-    // });
+            done();
+        });
+    });
+    it('/PUT money', function(done) { 
+        var req = {'operator_uid':0, 'uid':12, 'money_amount':-50};
+        chai.request(HOST)
+        .put(path.join(HOST_PREFIX, 'member', 'money'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('member');
+            res.body.should.have.property('action').eql('money');
+            res.body.should.have.property('brea').eql(0);
+
+            done();
+        });
+    });
 });
 
 
