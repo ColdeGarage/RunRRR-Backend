@@ -95,10 +95,10 @@ exports.delete = function(req, res){
 
 //read the backpack's information
 exports.read = function(req, res){
-	var pid = req.body.pid;
+	var pid = req.query.pid;
 
 	var ret = new Object;
-	ret.uid = req.body.operator_uid;
+	ret.uid = req.query.operator_uid;
 	ret.object = "pack";
 	ret.action = "read";
 

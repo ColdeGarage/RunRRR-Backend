@@ -151,10 +151,10 @@ exports.delete = function(req, res){
 
 //get missions" information
 exports.read = function(req, res){
-	var mid = req.body.mid;
+	var mid = req.query.mid;
 
 	var ret = new Object;
-	ret.uid = req.body.operator_uid;
+	ret.uid = req.query.operator_uid;
 	ret.object = "mission";
 	ret.action = "read";
 
