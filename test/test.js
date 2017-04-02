@@ -13,35 +13,29 @@ chai.use(chaiHttp);
 
 describe('Member Api', function(){
     it('/PUT liveordie', function(done) { // <= Pass in done callback
+        let req = {'operator_uid':0, 'uid':12, 'status':1};
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'liveordie'))
-        .field('operator_uid', '0')
-        .field('uid', '12')
-        .field('status', '1')
+        .send(req)
         .end(function(err, res) {
-            err.should.be.null;
             expect(res).to.have.status(200);
             expect(res).to.be.json();
             res.body.should.be.a('object');
             res.body.should.have.property('uid').eql(12);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('liveordie');
-            res.body.should.have.property('brea').to.be.an('number');
-            if (res.body.brea === 0){
-                res.body.should.have.property('payload');
-                res.body.payload.should.have.property('type').eql('Attribute Name');
-                res.body.payload.should.have.property('status').eql(1);
-            }
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Attribute Name');
+            res.body.payload.should.have.property('status').eql(1);
             done()
         });
     });
     it('/PUT update', function(done) { // <= Pass in done callback
+        let req = {'operator_uid':0, 'uid':12, 'status':1, 'position_e':'120.13', 'position_n':'23.456'};
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'update'))
-        .field('operator_uid', '0')
-        .field('uid', '12')
-        .field('position_e', '120.13')
-        .field('position_n', '23.456')
+        .send(req)
         .end(function(err, res) {
             err.should.be.null;
             expect(res).to.have.status(200);
@@ -50,18 +44,19 @@ describe('Member Api', function(){
             res.body.should.have.property('uid').eql(12);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('update');
-            res.body.should.have.property('brea').to.be.an('number');
-            if (!res.body.brea){
-                res.body.should.have.property('payload');
-                res.body.payload.should.have.property('type').eql('Attribute Name');
-                res.body.payload.should.have.property('valid_area').eql(1);
-            }
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Attribute Name');
+            res.body.payload.should.have.property('valid_area').eql(1);
+
             done()
         });
     });
     it('/PUT callhelp', function(done) { // <= Pass in done callback
+        let req = {'operator_uid':0, 'uid':12, 'status':1, 'position_e':'120.13', 'position_n':'23.456'};
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'callhelp'))
+        .send(req)
         .field('operator_uid', '0')
         .field('uid', '12')
         .field('position_e', '120.13')
