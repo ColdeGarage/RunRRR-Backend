@@ -125,7 +125,9 @@ Return JSON of  `/api/v1/mission/read` (No designate mid
                             "price": 1100,
                             "clue": 10,
                             "class": 1,
-                            "score": 10
+                            "score": 10,
+                            "location_e": "",
+                            "location_n": ""
                         }
         ]
   }
