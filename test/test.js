@@ -13,7 +13,7 @@ chai.use(chaiHttp);
 
 describe('Member Api', function(){
     it('/PUT liveordie', function(done) { // <= Pass in done callback
-        let req = {'operator_uid':0, 'uid':12, 'status':1};
+        var req = {'operator_uid':0, 'uid':12, 'status':1};
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'liveordie'))
         .send(req)
@@ -32,7 +32,7 @@ describe('Member Api', function(){
         });
     });
     it('/PUT update', function(done) { // <= Pass in done callback
-        let req = {'operator_uid':0, 'uid':12, 'status':1, 'position_e':'120.13', 'position_n':'23.456'};
+        var req = {'operator_uid':0, 'uid':12, 'status':1, 'position_e':'120.13', 'position_n':'23.456'};
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'update'))
         .send(req)
@@ -53,7 +53,7 @@ describe('Member Api', function(){
         });
     });
     it('/PUT callhelp', function(done) { // <= Pass in done callback
-        let req = {'operator_uid':0, 'uid':12, 'status':1, 'position_e':'120.13', 'position_n':'23.456'};
+        var req = {'operator_uid':0, 'uid':12, 'status':1, 'position_e':'120.13', 'position_n':'23.456'};
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'callhelp'))
         .send(req)
