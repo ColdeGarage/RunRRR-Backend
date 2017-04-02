@@ -19,7 +19,7 @@ describe('Member Api', function(){
         .send(req)
         .end(function(err, res) {
             expect(res).to.have.status(200);
-            expect(res).to.be.json();
+            expect(res).to.be.json;
             res.body.should.be.a('object');
             res.body.should.have.property('uid').eql(12);
             res.body.should.have.property('object').eql('member');
@@ -39,7 +39,7 @@ describe('Member Api', function(){
         .end(function(err, res) {
             err.should.be.null;
             expect(res).to.have.status(200);
-            expect(res).to.be.json();
+            expect(res).to.be.json;
             res.body.should.be.a('object');
             res.body.should.have.property('uid').eql(12);
             res.body.should.have.property('object').eql('member');
@@ -64,7 +64,7 @@ describe('Member Api', function(){
         .end(function(err, res) {
             err.should.be.null;
             expect(res).to.have.status(200);
-            expect(res).to.be.json();
+            expect(res).to.be.json;
             res.body.should.be.a('object');
             res.body.should.have.property('uid').eql(12);
             res.body.should.have.property('object').eql('member');
@@ -82,7 +82,7 @@ describe('Member Api', function(){
     //     .end(function(err, res) {
     //         err.should.be.null;
     //         expect(res).to.have.status(200);
-    //         expect(res).to.be.json();
+    //         expect(res).to.be.json;
     //         res.body.should.be.a('object');
     //         res.body.should.have.property('uid').eql(12);
     //         res.body.should.have.property('object').eql('member');
