@@ -82,7 +82,7 @@ Return JSON of  `/api/v1/mission/read`(requesting mid 12)
                             "time_end": "14:23",
                             "price": 1500,
                             "clue": 8,
-                            "class": 0,
+                            "class": "MAIN",
                             "score": 20,
                             "location_e": 120.995106,
                             "location_n": 24.794090
@@ -111,7 +111,7 @@ Return JSON of  `/api/v1/mission/read` (No designate mid
                             "time_end": "14:23",
                             "price": 1500,
                             "clue": 8,
-                            "class": 0,
+                            "class": "MAIN",
                             "score": 20,
                             "location_e": 120.995106,
                             "location_n": 24.794090
@@ -124,7 +124,7 @@ Return JSON of  `/api/v1/mission/read` (No designate mid
                             "time_end": "14:30",
                             "price": 1100,
                             "clue": 10,
-                            "class": 1,
+                            "class": "SUB",
                             "score": 10,
                             "location_e": 0,
                             "location_n": 0
