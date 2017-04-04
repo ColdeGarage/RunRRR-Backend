@@ -12,7 +12,7 @@ var HOST_PREFIX = config.host_prefix;
 chai.use(chaiHttp);
 
 describe('Member Api', function(){
-    it('/PUT liveordie', function(done) { // <= Pass in done callback
+    it('/PUT liveordie', function(done) { 
         var req = {'operator_uid':0, 'uid':12, 'status':1};
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'liveordie'))
@@ -21,7 +21,7 @@ describe('Member Api', function(){
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
-            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('uid').eql(0);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('liveordie');
             res.body.should.have.property('brea').eql(0);
@@ -44,7 +44,7 @@ describe('Member Api', function(){
             done();
         });
     });
-    it('/PUT update', function(done) { // <= Pass in done callback
+    it('/PUT update', function(done) { 
         var req = {'operator_uid':0, 'uid':12, 'status':1, 'position_e':'120.13', 'position_n':'23.456'};
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'update'))
@@ -53,7 +53,7 @@ describe('Member Api', function(){
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
-            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('uid').eql(0);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('update');
             res.body.should.have.property('brea').eql(0);
@@ -64,7 +64,7 @@ describe('Member Api', function(){
             done();
         });
     });
-    it('/PUT update(Uncomplete request)', function(done) { // <= Pass in done callback
+    it('/PUT update(Uncomplete request)', function(done) { 
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'update'))
         .end(function(err, res) {
@@ -78,7 +78,7 @@ describe('Member Api', function(){
             done();
         });
     });
-    it('/PUT callhelp', function(done) { // <= Pass in done callback
+    it('/PUT callhelp', function(done) { 
         var req = {'operator_uid':0, 'uid':12, 'status':1, 'position_e':'120.13', 'position_n':'23.456'};
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'callhelp'))
@@ -87,7 +87,7 @@ describe('Member Api', function(){
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
-            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('uid').eql(0);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('callhelp');
             res.body.should.have.property('brea').to.be.an('number');
@@ -95,7 +95,7 @@ describe('Member Api', function(){
             done();
         });
     });
-    it('/PUT callhelp(Uncomplete request)', function(done) { // <= Pass in done callback
+    it('/PUT callhelp(Uncomplete request)', function(done) { 
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'callhelp'))
         .end(function(err, res) {
@@ -118,7 +118,7 @@ describe('Member Api', function(){
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
-            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('uid').eql(0);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('read');
             res.body.should.have.property('brea').eql(0);
@@ -147,7 +147,7 @@ describe('Member Api', function(){
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
-            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('uid').eql(0);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('read');
             res.body.should.have.property('brea').eql(0);
@@ -166,7 +166,7 @@ describe('Member Api', function(){
             done();
         });
     });
-    it('/GET read(Uncomplete request)', function(done) { // <= Pass in done callback
+    it('/GET read(Uncomplete request)', function(done) { 
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'member', 'read'))
         .end(function(err, res) {
@@ -181,7 +181,7 @@ describe('Member Api', function(){
         });
     });
     it('/POST login', function(done) { 
-        var req = {'operator_uid':0, 'email':'abcd@gmail.com', 'password':'xxxxx'};
+        var req = {'email':'abcd@gmail.com', 'password':'xxxxx'};
         chai.request(HOST)
         .post(path.join(HOST_PREFIX, 'member', 'login'))
         .send(req)
@@ -200,7 +200,7 @@ describe('Member Api', function(){
             done();
         });
     });
-    it('/POST login(Uncomplete request)', function(done) { // <= Pass in done callback
+    it('/POST login(Uncomplete request)', function(done) { 
         chai.request(HOST)
         .post(path.join(HOST_PREFIX, 'member', 'login'))
         .end(function(err, res) {
@@ -223,7 +223,7 @@ describe('Member Api', function(){
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
-            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('uid').eql(0);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('money');
             res.body.should.have.property('brea').eql(0);
@@ -231,7 +231,7 @@ describe('Member Api', function(){
             done();
         });
     });
-    it('/PUT money(Uncomplete request)', function(done) { // <= Pass in done callback
+    it('/PUT money(Uncomplete request)', function(done) { 
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'money'))
         .end(function(err, res) {
@@ -250,9 +250,10 @@ describe('Member Api', function(){
 
 
 describe('Mission Api', function(){
-    it('/POST create', function(done) { // <= Pass in done callback
-        var req = {'operator_uid':0, 'title':'Test Mission', 'content':'This is a test mission.',
-                   'time_start':!!!!, 'time_end':!!!!, 'prize':250, 'clue':12, 'class':0, 'score':100,
+    it('/POST create', function(done) { 
+        var req = {'operator_uid':12, 'title':'Test Mission', 'content':'This is a test mission.',
+                   'time_start':'2017-06-13 04:22:23', 'time_end':'2017-06-13 04:32:23',
+                   'prize':250, 'clue':12, 'class':0, 'score':100,
                    'location_e':123.33, 'location_n':25.32};
         chai.request(HOST)
         .post(path.join(HOST_PREFIX, 'mission', 'create'))
@@ -285,7 +286,7 @@ describe('Mission Api', function(){
         });
     });
     it('/PUT edit', function(done) { 
-        var req = {'operator_uid':0, 'mid':11, 'contexnt':'modified Test mission'};
+        var req = {'operator_uid':12, 'mid':11, 'content':'modified Test mission'};
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'mission', 'edit'))
         .send(req)
@@ -302,7 +303,7 @@ describe('Mission Api', function(){
         });
     });
     // !!!!(may add undefine mid)
-    it('/PUT edit(Uncomplete request)', function(done) { // <= Pass in done callback
+    it('/PUT edit(Uncomplete request)', function(done) { 
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'mission', 'edit'))
         .end(function(err, res) {
@@ -316,8 +317,8 @@ describe('Mission Api', function(){
             done();
         });
     });
-    it('/DEL delete', function(done) { // <= Pass in done callback
-        var req = {'operator_uid':0, 'mid':10};
+    it('/DEL delete', function(done) { 
+        var req = {'operator_uid':12, 'mid':10};
         chai.request(HOST)
         .delete(path.join(HOST_PREFIX, 'mission', 'delete'))
         .send(req)
@@ -333,7 +334,7 @@ describe('Mission Api', function(){
             done();
         });
     });
-    it('/DEL delete(Uncomplete request)', function(done) { // <= Pass in done callback
+    it('/DEL delete(Uncomplete request)', function(done) { 
         chai.request(HOST)
         .delete(path.join(HOST_PREFIX, 'mission', 'delete'))
         .end(function(err, res) {
@@ -348,7 +349,7 @@ describe('Mission Api', function(){
         });
     });
     it('/GET read(with mid)', function(done) { 
-        var req = {'operator_uid':0, 'mid':11};
+        var req = {'operator_uid':12, 'mid':11};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'mission', 'read'))
         .send(req)
@@ -380,8 +381,8 @@ describe('Mission Api', function(){
             done();
         });
     });
-    it('/GET read(with out uid)', function(done) { 
-        var req = {'operator_uid':0};
+    it('/GET read(with out mid)', function(done) { 
+        var req = {'operator_uid':12};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'mission', 'read'))
         .send(req)
@@ -412,7 +413,7 @@ describe('Mission Api', function(){
             done();
         });
     });
-    it('/GET read(Uncomplete request)', function(done) { // <= Pass in done callback
+    it('/GET read(Uncomplete request)', function(done) { 
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'mission', 'read'))
         .end(function(err, res) {
@@ -428,3 +429,601 @@ describe('Mission Api', function(){
     });
 });
 
+
+describe('Report Api', function(){
+    it('/POST create', function(done) { 
+        var req = {'operator_uid':12, 'mid':12, 'url':'coldegarage.tech'};
+        chai.request(HOST)
+        .post(path.join(HOST_PREFIX, 'report', 'create'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('report');
+            res.body.should.have.property('action').eql('create');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Attribute Name');
+            res.body.payload.should.have.property('rid').to.be.a('number');
+            done();
+        });
+    });
+    it('/POST create(uncomplete request)', function(done) { 
+        chai.request(HOST)
+        .post(path.join(HOST_PREFIX, 'report', 'create'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('report');
+            res.body.should.have.property('action').eql('create');
+            res.body.should.have.property('brea').eql(2);
+            done();
+        });
+    });
+    it('/PUT check', function(done) { 
+        var req = {'operator_uid':12, 'rid':11, 'status':1};
+        chai.request(HOST)
+        .put(path.join(HOST_PREFIX, 'report', 'check'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('report');
+            res.body.should.have.property('action').eql('check');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Attribute Name');
+            res.body.payload.should.have.property('status').eql(1);
+
+            done();
+        });
+    });
+    // !!!!(may add undefine mid)
+    it('/PUT check(Uncomplete request)', function(done) { 
+        chai.request(HOST)
+        .put(path.join(HOST_PREFIX, 'report', 'check'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('report');
+            res.body.should.have.property('action').eql('check');
+            res.body.should.have.property('brea').eql(2);
+
+            done();
+        });
+    });
+    it('/PUT edit', function(done) { 
+        var req = {'operator_uid':12, 'rid':11, 'url':'test.123.com'};
+        chai.request(HOST)
+        .put(path.join(HOST_PREFIX, 'report', 'edit'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('report');
+            res.body.should.have.property('action').eql('edit');
+            res.body.should.have.property('brea').eql(0);
+
+            done();
+        });
+    });
+    // !!!!(may add undefine mid)
+    it('/PUT edit(Uncomplete request)', function(done) { 
+        chai.request(HOST)
+        .put(path.join(HOST_PREFIX, 'report', 'edit'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('report');
+            res.body.should.have.property('action').eql('edit');
+            res.body.should.have.property('brea').eql(2);
+
+            done();
+        });
+    });
+    it('/DEL delete', function(done) { 
+        var req = {'operator_uid':12, 'rid':11};
+        chai.request(HOST)
+        .delete(path.join(HOST_PREFIX, 'report', 'delete'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('report');
+            res.body.should.have.property('action').eql('delete');
+            res.body.should.have.property('brea').eql(0);
+
+            done();
+        });
+    });
+    it('/DEL delete(Uncomplete request)', function(done) { 
+        chai.request(HOST)
+        .delete(path.join(HOST_PREFIX, 'report', 'delete'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('report');
+            res.body.should.have.property('action').eql('delete');
+            res.body.should.have.property('brea').eql(2);
+
+            done();
+        });
+    });
+    it('/GET read(with rid)', function(done) { 
+        var req = {'operator_uid':12, 'rid':11};
+        chai.request(HOST)
+        .get(path.join(HOST_PREFIX, 'report', 'read'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('report');
+            res.body.should.have.property('action').eql('read');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Objects');
+            res.body.payload.should.have.property('Objects').to.be.an('array');
+            res.body.payload.Objects.length.should.eql(1);
+            for (report in res.body.payload.Objects){
+                report.should.have.property('rid').eql(11);
+                report.should.have.property('uid').eql(12);
+                report.should.have.property('mid').to.be.a('number');
+                report.should.have.property('url').to.be.a('string');
+                report.should.have.property('status').to.be.a('number');
+                report.should.have.property('time').to.be.a('string');
+            }
+            done();
+        });
+    });
+    it('/GET read(with out rid)', function(done) { 
+        var req = {'operator_uid':12};
+        chai.request(HOST)
+        .get(path.join(HOST_PREFIX, 'report', 'read'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('report');
+            res.body.should.have.property('action').eql('read');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Objects');
+            res.body.payload.should.have.property('Objects').to.be.an('array');
+            for (report in res.body.payload.Objects){
+                report.should.have.property('rid').to.be.a('number');
+                report.should.have.property('uid').eql(12);
+                report.should.have.property('mid').to.be.a('number');
+                report.should.have.property('url').to.be.a('string');
+                report.should.have.property('status').to.be.a('number');
+                report.should.have.property('time').to.be.a('string');
+            }
+            done();
+        });
+    });
+    it('/GET read(Uncomplete request)', function(done) { 
+        chai.request(HOST)
+        .get(path.join(HOST_PREFIX, 'report', 'read'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('report');
+            res.body.should.have.property('action').eql('read');
+            res.body.should.have.property('brea').eql(2);
+
+            done();
+        });
+    });
+});
+
+describe('Tool Api', function(){
+    it('/POST create', function(done) { 
+        var req = {'operator_uid':12, 'title':'Test tool', 'content':'This is a test tool'
+                   ,'url':'coldegarage.tech/test.jpg', 'expire':10, 'price':100};
+        chai.request(HOST)
+        .post(path.join(HOST_PREFIX, 'tool', 'create'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('tool');
+            res.body.should.have.property('action').eql('create');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Attribute Name');
+            res.body.payload.should.have.property('tid').to.be.a('number');
+            done();
+        });
+    });
+    it('/POST create(uncomplete request)', function(done) { 
+        chai.request(HOST)
+        .post(path.join(HOST_PREFIX, 'tool', 'create'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('tool');
+            res.body.should.have.property('action').eql('create');
+            res.body.should.have.property('brea').eql(2);
+            done();
+        });
+    });
+    it('/DEL delete', function(done) { 
+        var req = {'operator_uid':12, 'tid':8};
+        chai.request(HOST)
+        .delete(path.join(HOST_PREFIX, 'tool', 'delete'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('tool');
+            res.body.should.have.property('action').eql('delete');
+            res.body.should.have.property('brea').eql(0);
+
+            done();
+        });
+    });
+    it('/DEL delete(Uncomplete request)', function(done) { 
+        chai.request(HOST)
+        .delete(path.join(HOST_PREFIX, 'tool', 'delete'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('tool');
+            res.body.should.have.property('action').eql('delete');
+            res.body.should.have.property('brea').eql(2);
+
+            done();
+        });
+    });
+    it('/GET read(with tid)', function(done) { 
+        var req = {'operator_uid':12, 'tid':11};
+        chai.request(HOST)
+        .get(path.join(HOST_PREFIX, 'tool', 'read'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('tool');
+            res.body.should.have.property('action').eql('read');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Objects');
+            res.body.payload.should.have.property('Objects').to.be.an('array');
+            res.body.payload.Objects.length.should.eql(1);
+            for (tool in res.body.payload.Objects){
+                tool.should.have.property('tid').eql(11);
+                tool.should.have.property('title').to.be.a('string');
+                tool.should.have.property('content').to.be.a('string');
+                tool.should.have.property('url').to.be.a('string');
+                tool.should.have.property('expire').to.be.a('number');
+                tool.should.have.property('price').to.be.a('number');
+            }
+            done();
+        });
+    });
+    it('/GET read(with out tid)', function(done) { 
+        var req = {'operator_uid':12};
+        chai.request(HOST)
+        .get(path.join(HOST_PREFIX, 'tool', 'read'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('tool');
+            res.body.should.have.property('action').eql('read');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Objects');
+            res.body.payload.should.have.property('Objects').to.be.an('array');
+            for (tool in res.body.payload.Objects){
+                tool.should.have.property('tid').to.be.a('number');
+                tool.should.have.property('title').to.be.a('string');
+                tool.should.have.property('content').to.be.a('string');
+                tool.should.have.property('url').to.be.a('string');
+                tool.should.have.property('expire').to.be.a('number');
+                tool.should.have.property('price').to.be.a('number');
+            }
+            done();
+        });
+    });
+    it('/GET read(Uncomplete request)', function(done) { 
+        chai.request(HOST)
+        .get(path.join(HOST_PREFIX, 'tool', 'read'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('tool');
+            res.body.should.have.property('action').eql('read');
+            res.body.should.have.property('brea').eql(2);
+
+            done();
+        });
+    });
+});
+
+
+describe('Clue Api', function(){
+    it('/POST create', function(done) { 
+        var req = {'operator_uid':12, 'content':'This is a test clue'};
+        chai.request(HOST)
+        .post(path.join(HOST_PREFIX, 'clue', 'create'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('clue');
+            res.body.should.have.property('action').eql('create');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Attribute Name');
+            res.body.payload.should.have.property('cid').to.be.a('number');
+            done();
+        });
+    });
+    it('/POST create(uncomplete request)', function(done) { 
+        chai.request(HOST)
+        .post(path.join(HOST_PREFIX, 'clue', 'create'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('clue');
+            res.body.should.have.property('action').eql('create');
+            res.body.should.have.property('brea').eql(2);
+            done();
+        });
+    });
+    it('/DEL delete', function(done) { 
+        var req = {'operator_uid':12, 'cid':8};
+        chai.request(HOST)
+        .delete(path.join(HOST_PREFIX, 'clue', 'delete'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('clue');
+            res.body.should.have.property('action').eql('delete');
+            res.body.should.have.property('brea').eql(0);
+
+            done();
+        });
+    });
+    it('/DEL delete(Uncomplete request)', function(done) { 
+        chai.request(HOST)
+        .delete(path.join(HOST_PREFIX, 'clue', 'delete'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('clue');
+            res.body.should.have.property('action').eql('delete');
+            res.body.should.have.property('brea').eql(2);
+
+            done();
+        });
+    });
+    it('/GET read(with cid)', function(done) { 
+        var req = {'operator_uid':12, 'cid':8};
+        chai.request(HOST)
+        .get(path.join(HOST_PREFIX, 'clue', 'read'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('clue');
+            res.body.should.have.property('action').eql('read');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Objects');
+            res.body.payload.should.have.property('Objects').to.be.an('array');
+            res.body.payload.Objects.length.should.eql(1);
+            for (clue in res.body.payload.Objects){
+                clue.should.have.property('cid').eql(8);
+                clue.should.have.property('content').to.be.a('string');
+            }
+            done();
+        });
+    });
+    it('/GET read(with out cid)', function(done) { 
+        var req = {'operator_uid':12};
+        chai.request(HOST)
+        .get(path.join(HOST_PREFIX, 'clue', 'read'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('clue');
+            res.body.should.have.property('action').eql('read');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Objects');
+            res.body.payload.should.have.property('Objects').to.be.an('array');
+            for (clue in res.body.payload.Objects){
+                clue.should.have.property('cid').to.be.a('number');
+                clue.should.have.property('content').to.be.a('string');
+            }
+            done();
+        });
+    });
+    it('/GET read(Uncomplete request)', function(done) { 
+        chai.request(HOST)
+        .get(path.join(HOST_PREFIX, 'clue', 'read'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('clue');
+            res.body.should.have.property('action').eql('read');
+            res.body.should.have.property('brea').eql(2);
+
+            done();
+        });
+    });
+});
+
+
+describe('Pack Api', function(){
+    it('/POST create', function(done) { 
+        var req = {'operator_uid':12, 'uid':'13', 'class':0, 'id':13};
+        chai.request(HOST)
+        .post(path.join(HOST_PREFIX, 'pack', 'create'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('pack');
+            res.body.should.have.property('action').eql('create');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Attribute Name');
+            res.body.payload.should.have.property('pid').to.be.a('number');
+            done();
+        });
+    });
+    it('/POST create(uncomplete request)', function(done) { 
+        chai.request(HOST)
+        .post(path.join(HOST_PREFIX, 'pack', 'create'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('pack');
+            res.body.should.have.property('action').eql('create');
+            res.body.should.have.property('brea').eql(2);
+            done();
+        });
+    });
+    it('/DEL delete', function(done) { 
+        var req = {'operator_uid':12, 'pid':3};
+        chai.request(HOST)
+        .delete(path.join(HOST_PREFIX, 'pack', 'delete'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('pack');
+            res.body.should.have.property('action').eql('delete');
+            res.body.should.have.property('brea').eql(0);
+
+            done();
+        });
+    });
+    it('/DEL delete(Uncomplete request)', function(done) { 
+        chai.request(HOST)
+        .delete(path.join(HOST_PREFIX, 'pack', 'delete'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('pack');
+            res.body.should.have.property('action').eql('delete');
+            res.body.should.have.property('brea').eql(2);
+
+            done();
+        });
+    });
+    it('/GET read(with cid)', function(done) { 
+        var req = {'operator_uid':12, 'pid':8};
+        chai.request(HOST)
+        .get(path.join(HOST_PREFIX, 'pack', 'read'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('pack');
+            res.body.should.have.property('action').eql('read');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Objects');
+            res.body.payload.should.have.property('Objects').to.be.an('array');
+            res.body.payload.Objects.length.should.eql(1);
+            for (pack in res.body.payload.Objects){
+                pack.should.have.property('pid').eql(8);
+                pack.should.have.property('uid').eql(12);
+                pack.should.have.property('class').to.be.a('number');
+                pack.should.have.property('id').to.be.a('number');
+            }
+            done();
+        });
+    });
+    it('/GET read(with out cid)', function(done) { 
+        var req = {'operator_uid':12};
+        chai.request(HOST)
+        .get(path.join(HOST_PREFIX, 'pack', 'read'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('pack');
+            res.body.should.have.property('action').eql('read');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Objects');
+            res.body.payload.should.have.property('Objects').to.be.an('array');
+            for (pack in res.body.payload.Objects){
+                pack.should.have.property('pid').to.be.a('number');
+                pack.should.have.property('uid').eql(12);
+                pack.should.have.property('class').to.be.a('number');
+                pack.should.have.property('id').to.be.a('number');
+            }
+            done();
+        });
+    });
+    it('/GET read(Uncomplete request)', function(done) { 
+        chai.request(HOST)
+        .get(path.join(HOST_PREFIX, 'pack', 'read'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('pack');
+            res.body.should.have.property('action').eql('read');
+            res.body.should.have.property('brea').eql(2);
+
+            done();
+        });
+    });
+});
