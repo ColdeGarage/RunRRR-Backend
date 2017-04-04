@@ -121,7 +121,7 @@ describe('Member Api', function(){
             res.body.should.have.property('uid').eql(12);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('read');
-            res.body.should.have.property('brea').eql(1);
+            res.body.should.have.property('brea').eql(0);
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Objects');
             res.body.payload.should.have.property('Objects').to.be.an('array');
@@ -150,7 +150,7 @@ describe('Member Api', function(){
             res.body.should.have.property('uid').eql(12);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('read');
-            res.body.should.have.property('brea').eql(1);
+            res.body.should.have.property('brea').eql(0);
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Objects');
             res.body.payload.should.have.property('Objects').to.be.an('array');
@@ -247,4 +247,184 @@ describe('Member Api', function(){
     });
 });
 
+
+
+describe('Mission Api', function(){
+    it('/POST create', function(done) { // <= Pass in done callback
+        var req = {'operator_uid':0, 'title':'Test Mission', 'content':'This is a test mission.',
+                   'time_start':!!!!, 'time_end':!!!!, 'prize':250, 'clue':12, 'class':0, 'score':100,
+                   'location_e':123.33, 'location_n':25.32};
+        chai.request(HOST)
+        .post(path.join(HOST_PREFIX, 'mission', 'create'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('mission');
+            res.body.should.have.property('action').eql('create');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Attribute Name');
+            res.body.payload.should.have.property('mid').to.be.a('number');
+            done();
+        });
+    });
+    it('/POST create(uncomplete request)', function(done) { 
+        chai.request(HOST)
+        .post(path.join(HOST_PREFIX, 'mission', 'create'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('mission');
+            res.body.should.have.property('action').eql('create');
+            res.body.should.have.property('brea').eql(2);
+            done();
+        });
+    });
+    it('/PUT edit', function(done) { 
+        var req = {'operator_uid':0, 'mid':11, 'contexnt':'modified Test mission'};
+        chai.request(HOST)
+        .put(path.join(HOST_PREFIX, 'mission', 'edit'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('mission');
+            res.body.should.have.property('action').eql('edit');
+            res.body.should.have.property('brea').eql(0);
+
+            done();
+        });
+    });
+    // !!!!(may add undefine mid)
+    it('/PUT edit(Uncomplete request)', function(done) { // <= Pass in done callback
+        chai.request(HOST)
+        .put(path.join(HOST_PREFIX, 'mission', 'edit'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('mission');
+            res.body.should.have.property('action').eql('edit');
+            res.body.should.have.property('brea').eql(2);
+
+            done();
+        });
+    });
+    it('/DEL delete', function(done) { // <= Pass in done callback
+        var req = {'operator_uid':0, 'mid':10};
+        chai.request(HOST)
+        .delete(path.join(HOST_PREFIX, 'mission', 'delete'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('mission');
+            res.body.should.have.property('action').eql('delete');
+            res.body.should.have.property('brea').eql(0);
+
+            done();
+        });
+    });
+    it('/DEL delete(Uncomplete request)', function(done) { // <= Pass in done callback
+        chai.request(HOST)
+        .delete(path.join(HOST_PREFIX, 'mission', 'delete'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('mission');
+            res.body.should.have.property('action').eql('delete');
+            res.body.should.have.property('brea').eql(2);
+
+            done();
+        });
+    });
+    it('/GET read(with mid)', function(done) { 
+        var req = {'operator_uid':0, 'mid':11};
+        chai.request(HOST)
+        .get(path.join(HOST_PREFIX, 'mission', 'read'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('mission');
+            res.body.should.have.property('action').eql('read');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Objects');
+            res.body.payload.should.have.property('Objects').to.be.an('array');
+            res.body.payload.Objects.length.should.eql(1);
+            for (mission in res.body.payload.Objects){
+                mission.should.have.property('mid').to.be.a('number');
+                mission.should.have.property('title').to.be.a('string');
+                mission.should.have.property('content').to.be.a('string');
+                mission.should.have.property('time_start').to.be.a('string');
+                mission.should.have.property('time_end').to.be.a('string');
+                mission.should.have.property('prize').to.be.a('number');
+                mission.should.have.property('clue').to.be.a('number');
+                mission.should.have.property('class').to.be.a('number');
+                mission.should.have.property('score').to.be.a('number');
+                mission.should.have.property('location_e').to.be.a('number');
+                mission.should.have.property('location_n').to.be.a('number');
+            }
+            done();
+        });
+    });
+    it('/GET read(with out uid)', function(done) { 
+        var req = {'operator_uid':0};
+        chai.request(HOST)
+        .get(path.join(HOST_PREFIX, 'mission', 'read'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(12);
+            res.body.should.have.property('object').eql('mission');
+            res.body.should.have.property('action').eql('read');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Objects');
+            res.body.payload.should.have.property('Objects').to.be.an('array');
+            for (mission in res.body.payload.Objects){
+                mission.should.have.property('mid').to.be.a('number');
+                mission.should.have.property('title').to.be.a('string');
+                mission.should.have.property('content').to.be.a('string');
+                mission.should.have.property('time_start').to.be.a('string');
+                mission.should.have.property('time_end').to.be.a('string');
+                mission.should.have.property('prize').to.be.a('number');
+                mission.should.have.property('clue').to.be.a('number');
+                mission.should.have.property('class').to.be.a('number');
+                mission.should.have.property('score').to.be.a('number');
+                mission.should.have.property('location_e').to.be.a('number');
+                mission.should.have.property('location_n').to.be.a('number');
+            }
+            done();
+        });
+    });
+    it('/GET read(Uncomplete request)', function(done) { // <= Pass in done callback
+        chai.request(HOST)
+        .get(path.join(HOST_PREFIX, 'mission', 'read'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('mission');
+            res.body.should.have.property('action').eql('read');
+            res.body.should.have.property('brea').eql(2);
+
+            done();
+        });
+    });
+});
 
