@@ -14,20 +14,27 @@ exports.liveordie = function(req, res){
 
 	var check = uid && info.status;
 	if (check) {
-		connect.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, rows){
+		connect.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, result){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
 				console.log("Failed! Member liveordie with database error.");
 			}
 			else {
-				ret.brea = 0;
-				ret.payload = {
-					type : "Attribute Name",
-					status : info.status
-				};
-				res.json(ret);
-				console.log("Success! Member liveordie change successfully.");
+				if (result.changeRows) {
+					ret.brea = 0;
+					ret.payload = {
+						type : "Attribute Name",
+						status : info.status
+					};
+					res.json(ret);
+					console.log("Success! Member liveordie change successfully.");
+				}
+				else {
+					ret.brea = 3;
+					res.json(ret);
+					console.log("Failed! Member liveordie database has nothing to change.");
+				}
 			}
 		});
 	}
@@ -52,16 +59,23 @@ exports.update = function(req, res){
 
 	var check = member.uid && member.position_e && member.position_n
 	if (check) {
-		connect.query("UPDATE member SET ? WHERE uid = "+uid, member, function(err, rows){
+		connect.query("UPDATE member SET ? WHERE uid = "+member.uid, member, function(err, result){
 			if (err) {
 				ret.brea = 1;
 				res.json(ret);
 				console.log("Failed! Member update with database error.");
 			}
 			else {
-				ret.brea = 0;
-				res.json(ret);
-				console.log("Success! Member update successfully.");
+				if (result.changeRows) {
+					ret.brea = 0;
+					res.json(ret);
+					console.log("Success! Member update successfully.");
+				}
+				else {
+					ret.brea = 3;
+					res.json(ret);
+					console.log("Failed! Member database has nothing to change.");
+				}
 			}
 		});
 	}
@@ -151,7 +165,7 @@ exports.money = function(req, res){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
-				console.log("Failed! Member money with database error.(select)");
+				console.log("Failed! Member money get with database error.");
 			}
 			else {
 				if (rows.length == 0) {
@@ -167,16 +181,23 @@ exports.money = function(req, res){
 			}
 		});
 		info.money = info.money + amount;
-		connect.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, rows){
+		connect.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, result){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
-				console.log("Failed! Member money with database error.(update)");
+				console.log("Failed! Member money update with database error.");
 			}
 			else {
-				ret.brea = 0;
-				res.json(ret);
-				console.log("Success! Member money update successfully.");
+				if (result.changeRows) {
+					ret.brea = 0;
+					res.json(ret);
+					console.log("Success! Member money update successfully.");	
+				}
+				else {
+					ret.brea = 3;
+					res.json(ret);
+					console.log("Failed! Member money database has nothing to change.");
+				}
 			}
 		});
 	}

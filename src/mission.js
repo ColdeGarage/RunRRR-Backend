@@ -28,7 +28,7 @@ exports.create = function(req, res){
 	ret.action = "create";
 
 	if (check) {
-		connect.query("INSERT INTO mission SET ?", mission, function(err, rows){
+		connect.query("INSERT INTO mission SET ?", mission, function(err, result){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
@@ -36,31 +36,11 @@ exports.create = function(req, res){
 			}
 			else {
 				ret.brea = 0;
+				ret.payload = {
+					type : "Attribute Name",
+					mid : result.insertId
+				}
 				console.log("Success! Mission create successfully.");
-			}
-		});
-		connect.query("SELECT mid FROM mission WHERE title = "+mission.title, function(err, rows){
-			if (err){
-				ret.brea = 1;
-				res.json(ret);
-				console.log("Failed! Mission mid get with database error.");
-			}
-			else {
-				if (rows.length == 0) {
-					ret.brea = 1;
-					res.json(ret);
-					console.log("Failed! Mission database is still empty.");
-				}
-				else {
-					ret.brea = 0;
-					var info = JSON.parse(rows);
-					ret.payload = {
-						type : "Attribute Name",
-						mid : info.mid
-					}
-					res.json(ret);
-					console.log("Success! Mission mid get successfully.");
-				}
 			}
 		});
 	}
@@ -99,16 +79,23 @@ exports.edit = function(req, res){
 	ret.action = "edit";
 
 	if (mission.mid) {
-		connect.query("UPDATE mission SET ? WHERE mid = "+mid, mission, function(err, rows){
+		connect.query("UPDATE mission SET ? WHERE mid = "+mid, mission, function(err, result){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
 				console.log("Failed! Mission edit with database error.");
 			}
 			else {
-				ret.brea = 0;
-				res.json(ret);
-				console.log("Success! Mission edit successfully");
+				if (result.changeRows) {
+					ret.brea = 0;
+					res.json(ret);
+					console.log("Success! Mission edit successfully");
+				}
+				else {
+					ret.brea = 3;
+					res.json(ret);
+					console.log("Failed! Mission database has nothing to edit.");
+				}
 			}
 		});
 	}
@@ -129,16 +116,23 @@ exports.delete = function(req, res){
 	ret.action = "delete";
 
 	if (mid) {
-		connect.query("DELETE FROM mission WHERE mid = "+mid, function(err, rows){
+		connect.query("DELETE FROM mission WHERE mid = "+mid, function(err, result){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
 				console.log("Failed! Mission delete with database error.");
 			}
 			else {
-				ret.brea = 0;
-				res.json(ret);
-				console.log("Success! Mission delete successfully.");
+				if (result.affectedRows) {
+					ret.brea = 0;
+					res.json(ret);
+					console.log("Success! Mission delete successfully.");
+				}
+				else {
+					ret.brea = 3;
+					res.json(ret);
+					console.log("Failed! Mission database has nothing to delete.");
+				}
 			}
 		});
 	}

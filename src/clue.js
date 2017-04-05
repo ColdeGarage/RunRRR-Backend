@@ -11,7 +11,7 @@ exports.create = function(req, res){
 	ret.action = "create";
 
 	if (content) {
-		connect.query("INSERT INTO clue SET ?", clue, function(err, rows){
+		connect.query("INSERT INTO clue SET ?", clue, function(err, result){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
@@ -19,31 +19,12 @@ exports.create = function(req, res){
 			}
 			else {
 				ret.brea = 0;
-				console.log("Success! Clue create successfully.");
-			}
-		});
-		connect.query("SELECT cid FROM clue WHERE content = "+content, function(err, rows){
-			if (err){
-				ret.brea = 1;
+				ret.payload = {
+					type : "Attribute Name",
+					cid : result.insertId
+				}
 				res.json(ret);
-				console.log("Failed! Clue cid get with database error.");
-			}
-			else {
-				if (rows.length == 0) {
-					ret.brea = 1;
-					res.json(ret);
-					console.log("Failed! Clue database is still empty.");
-				}
-				else {
-					ret.brea = 0;
-					var info = JSON.parse(rows);
-					ret.payload = {
-						type : "Attribute Name",
-						cid : info.cid
-					}
-					res.json(ret);
-					console.log("Success! Clue cid get successfully.");
-				}
+				console.log("Success! Clue create successfully.");
 			}
 		});
 	}
@@ -64,16 +45,23 @@ exports.delete = function(req, res){
 	ret.action = "delete";
 
 	if (cid) {
-		connect.query("DELETE FROM clue WHERE cid = "+cid, function(err, rows){
+		connect.query("DELETE FROM clue WHERE cid = "+cid, function(err, result){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
 				console.log("Failed! Clue delete with database error.");
 			}
 			else {
-				ret.brea = 0;
-				res.json(ret);
-				console.log("Success! Clue delete successfully.");
+				if (result.affectedRows) {
+					ret.brea = 0;
+					res.json(ret);
+					console.log("Success! Clue delete successfully.");
+				}
+				else {
+					ret.brea = 3;
+					res.json(ret);
+					console.log("Failed! Clue database has nothing to delete.");
+				}
 			}
 		});
 	}

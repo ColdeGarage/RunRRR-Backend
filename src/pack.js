@@ -20,7 +20,7 @@ exports.create = function(req, res){
 	ret.action = "create";
 
 	if (check) {
-		connect.query("INSERT INTO pack SET ?", pack, function(err, rows){
+		connect.query("INSERT INTO pack SET ?", pack, function(err, result){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
@@ -28,31 +28,12 @@ exports.create = function(req, res){
 			}
 			else {
 				ret.brea = 0;
-				console.log("Success! Pack create successfully.");
-			}
-		});
-		connect.query("SELECT pid FROM pack WHERE uid = "+pack.uid, function(err, rows){
-			if (err){
-				ret.brea = 1;
+				ret.payload = {
+					type : "Attribute Name",
+					pid : result.insertId
+				}
 				res.json(ret);
-				console.log("Failed! Pack pid get with database error.");
-			}
-			else {
-				if (rows.length == 0) {
-					ret.brea = 1;
-					res.json(ret);
-					console.log("Failed! Pack database is still empty.");
-				}
-				else {
-					ret.brea = 0;
-					var info = JSON.parse(rows);
-					ret.payload = {
-						type : "Attribute Name",
-						pid : info.pid
-					}
-					res.json(ret);
-					console.log("Success! Pack pid get successfully.");
-				}
+				console.log("Success! Pack create successfully.");
 			}
 		});
 	}
@@ -73,16 +54,23 @@ exports.delete = function(req, res){
 	ret.action = "delete";
 
 	if (pid) {
-		connect.query("DELETE FROM pack WHERE pid = "+pid, function(err, rows){
+		connect.query("DELETE FROM pack WHERE pid = "+pid, function(err, result){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
 				console.log("Failed! Pack delete with database error.");
 			}
 			else {
-				ret.brea = 0;
-				res.json(ret);
-				console.log("Success! Pack delete successfully.");
+				if (result.affectedRows) {
+					ret.brea = 0;
+					res.json(ret);
+					console.log("Success! Pack delete successfully.");
+				}
+				else {
+					ret.brea = 3;
+					res.json(ret);
+					console.log("Failed! Pack database has nothing to delete.");
+				}
 			}
 		});
 	}

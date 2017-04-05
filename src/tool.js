@@ -22,7 +22,7 @@ exports.create = function(req, res){
 	ret.action = "create";
 
 	if (check) {
-		connect.query("INSERT INTO tool SET ?", tool, function(err, rows){
+		connect.query("INSERT INTO tool SET ?", tool, function(err, result){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
@@ -30,31 +30,12 @@ exports.create = function(req, res){
 			}
 			else {
 				ret.brea = 0;
-				console.log("Success! Tool create successfully.");
-			}
-		});
-		connect.query("SELECT tid FROM tool WHERE title = "+tool.title, function(err, rows){
-			if (err){
-				ret.brea = 1;
+				ret.payload = {
+					type : "Attribute Name",
+					tid : result.insertId
+				}
 				res.json(ret);
-				console.log("Failed! Tool tid get with database error.");
-			}
-			else {
-				if (rows.length == 0) {
-					ret.brea = 1;
-					res.json(ret);
-					console.log("Failed! Tool database is still empty.");
-				}
-				else {
-					ret.brea = 0;
-					var info = JSON.parse(rows);
-					ret.payload = {
-						type : "Attribute Name",
-						tid : info.tid
-					}
-					res.json(ret);
-					console.log("Success! Tool tid get successfully.");
-				}
+				console.log("Success! Tool create successfully.");
 			}
 		});
 	}
@@ -75,16 +56,23 @@ exports.delete = function(req, res){
 	ret.action = "delete";
 
 	if (tid) {
-		connect.query("DELETE FROM tool WHERE tid = "+tid, function(err, rows){
+		connect.query("DELETE FROM tool WHERE tid = "+tid, function(err, result){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
 				console.log("Failed! Tool delete with database error.");
 			}
 			else {
-				ret.brea = 0;
-				res.json(ret);
-				console.log("Success! Tool delete successfully.");
+				if (result.affectedRows) {
+					ret.brea = 0;
+					res.json(ret);
+					console.log("Success! Tool delete successfully.");
+				}
+				else {
+					ret.brea = 3;
+					res.json(ret);
+					console.log("Failed! Tool database has nothing to delete.");
+				}
 			}
 		});
 	}
