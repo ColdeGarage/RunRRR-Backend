@@ -11,7 +11,7 @@ exports.create = function(req, res){
 	//check if post all of the values
 	var check = 1;
 	for (var key in pack) {
-		check = check && pack[key];
+		check = check && (pack[key]==null);
 	}
 
 	var ret = new Object;

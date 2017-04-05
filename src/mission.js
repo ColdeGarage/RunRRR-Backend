@@ -16,7 +16,7 @@ exports.create = function(req, res){
 	//check if post all of the values
 	var check = 1;
 	for (var key in mission) {
-		check = check && mission[key];
+		check = check && (mission[key]==null);
 	}
 	
 	mission.location_e = req.body.location_e;
