@@ -93,7 +93,7 @@ exports.read = function(req, res){
 				if (rows.length == 0) {
 					ret.brea = 3;
 					res.json(ret);
-					console.log("Failed! Clue database is still empty.");
+					console.log("Failed! (cid) Clue database is still empty.");
 				}
 				else {
 					ret.brea = 0;
