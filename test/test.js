@@ -142,7 +142,7 @@ describe('Member Api', function(){
         var req = {'operator_uid':0};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'member', 'read'))
-        .send(req)
+        .query(req)
         .end(function(err, res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
@@ -352,7 +352,7 @@ describe('Mission Api', function(){
         var req = {'operator_uid':12, 'mid':11};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'mission', 'read'))
-        .send(req)
+        .query(req)
         .end(function(err, res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
@@ -385,7 +385,7 @@ describe('Mission Api', function(){
         var req = {'operator_uid':12};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'mission', 'read'))
-        .send(req)
+        .query(req)
         .end(function(err, res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
@@ -565,7 +565,7 @@ describe('Report Api', function(){
         var req = {'operator_uid':12, 'rid':11};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'report', 'read'))
-        .send(req)
+        .query(req)
         .end(function(err, res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
@@ -593,7 +593,7 @@ describe('Report Api', function(){
         var req = {'operator_uid':12};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'report', 'read'))
-        .send(req)
+        .query(req)
         .end(function(err, res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
@@ -701,7 +701,7 @@ describe('Tool Api', function(){
         var req = {'operator_uid':12, 'tid':11};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'tool', 'read'))
-        .send(req)
+        .query(req)
         .end(function(err, res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
@@ -729,7 +729,7 @@ describe('Tool Api', function(){
         var req = {'operator_uid':12};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'tool', 'read'))
-        .send(req)
+        .query(req)
         .end(function(err, res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
@@ -837,7 +837,7 @@ describe('Clue Api', function(){
         var req = {'operator_uid':12, 'cid':8};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'clue', 'read'))
-        .send(req)
+        .query(req)
         .end(function(err, res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
@@ -861,7 +861,7 @@ describe('Clue Api', function(){
         var req = {'operator_uid':12};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'clue', 'read'))
-        .send(req)
+        .query(req)
         .end(function(err, res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
@@ -965,7 +965,7 @@ describe('Pack Api', function(){
         var req = {'operator_uid':12, 'pid':8};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'pack', 'read'))
-        .send(req)
+        .query(req)
         .end(function(err, res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
@@ -991,7 +991,7 @@ describe('Pack Api', function(){
         var req = {'operator_uid':12};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'pack', 'read'))
-        .send(req)
+        .query(req)
         .end(function(err, res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
