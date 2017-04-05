@@ -180,26 +180,28 @@ exports.money = function(req, res){
 				}
 			}
 		});
-		info.money = info.money + amount;
-		connect.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, result){
-			if (err){
-				ret.brea = 1;
-				res.json(ret);
-				console.log("Failed! Member money update with database error.");
-			}
-			else {
-				if (result.changeRows) {
-					ret.brea = 0;
+		if (ret.brea == 0) {
+			info.money = info.money + amount;
+			connect.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, result){
+				if (err){
+					ret.brea = 1;
 					res.json(ret);
-					console.log("Success! Member money update successfully.");	
+					console.log("Failed! Member money update with database error.");
 				}
 				else {
-					ret.brea = 3;
-					res.json(ret);
-					console.log("Failed! Member money database has nothing to change.");
+					if (result.changeRows) {
+						ret.brea = 0;
+						res.json(ret);
+						console.log("Success! Member money update successfully.");	
+					}
+					else {
+						ret.brea = 3;
+						res.json(ret);
+						console.log("Failed! Member money database has nothing to change.");
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 	else {
 		ret.brea = 2;
