@@ -110,10 +110,9 @@ exports.read = function(req, res){
 				}
 				else {
 					ret.brea = 0;
-					var info = JSON.parse(rows);
 					ret.payload = {
 						type : "objects",
-						objects : info
+						objects : rows
 					}
 					res.json(ret);
 					console.log("Success! (uid) Member data read successfully.");
@@ -136,10 +135,9 @@ exports.read = function(req, res){
 				}
 				else {
 					ret.brea = 0;
-					var info = JSON.parse(rows);
 					ret.payload = {
 						type : "objects",
-						objects : info
+						objects : rows
 					}
 					res.json(ret);
 					console.log("Success! Member data read successfully.");
@@ -175,7 +173,7 @@ exports.money = function(req, res){
 				}
 				else {
 					ret.brea = 0;
-					info = JSON.parse(rows);
+					info = rows;
 					console.log("Success! Member money get successfully.");
 				}
 			}
@@ -240,8 +238,7 @@ exports.callhelp = function(req, res){
 				}
 				else {
 					ret.brea = 0;
-					var info = JSON.parse(rows);
-					console.log(info.name+" press the help button!");
+					console.log(rows.name+" press the help button!");
 				}
 			}
 		});

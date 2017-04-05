@@ -105,10 +105,9 @@ exports.read = function(req, res){
 				}
 				else {
 					ret.brea = 0;
-					var info = JSON.parse(rows);
 					ret.payload = {
 						type : "objects",
-						objects : info
+						objects : rows
 					}
 					res.json(ret);
 					console.log("Success! Pack read successfully.");
@@ -131,10 +130,9 @@ exports.read = function(req, res){
 				}
 				else {
 					ret.brea = 0;
-					var info = JSON.parse(rows);
 					ret.payload = {
 						type : "objects",
-						objects : info
+						objects : rows
 					}
 					res.json(ret);
 					console.log("Success! Pack read successfully.");
