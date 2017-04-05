@@ -104,7 +104,7 @@ exports.read = function(req, res){
 			}
 			else {
 				if (rows.length == 0) {
-					ret.brea = 1;
+					ret.brea = 3;
 					res.json(ret);
 					console.log("Failed! Member database is still empty.");
 				}
@@ -130,7 +130,7 @@ exports.read = function(req, res){
 			}
 			else {
 				if (rows.length == 0) {
-					ret.brea = 1;
+					ret.brea = 3;
 					res.json(ret);
 					console.log("Failed! Member database is still empty.");
 				}
@@ -169,7 +169,7 @@ exports.money = function(req, res){
 			}
 			else {
 				if (rows.length == 0) {
-					ret.brea = 1;
+					ret.brea = 3;
 					res.json(ret);
 					console.log("Failed! Member database is still empty.");
 				}
@@ -233,7 +233,7 @@ exports.callhelp = function(req, res){
 			}
 			else {
 				if (rows.length == 0) {
-					ret.brea = 1;
+					ret.brea = 3;
 					res.json(ret);
 					console.log("Failed to get name! Member database is still empty.");
 				}

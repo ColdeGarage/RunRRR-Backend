@@ -101,7 +101,7 @@ exports.read = function(req, res){
 			}
 			else {
 				if (rows.length == 0) {
-					ret.brea = 1;
+					ret.brea = 3;
 					res.json(ret);
 					console.log("Failed! Tool database is still empty.");
 				}
@@ -127,7 +127,7 @@ exports.read = function(req, res){
 			}
 			else {
 				if (rows.length == 0) {
-					ret.brea = 1;
+					ret.brea = 3;
 					res.json(ret);
 					console.log("Failed! Tool database is still empty.");
 				}

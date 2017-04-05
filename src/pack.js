@@ -93,7 +93,7 @@ exports.read = function(req, res){
 	if (pid) {
 		connect.query("SELECT * FROM pack WHERE pid = "+pid, function(err, rows){
 			if (err) {
-				ret.brea = 1;
+				ret.brea = 3;
 				res.json(ret);
 				console.log("Failed! (pid) Pack read with database error.");
 			}
@@ -125,7 +125,7 @@ exports.read = function(req, res){
 			}
 			else {
 				if (rows.length == 0) {
-					ret.brea = 1;
+					ret.brea = 3;
 					res.json(ret);
 					console.log("Failed! Pack database is still empty.");
 				}
