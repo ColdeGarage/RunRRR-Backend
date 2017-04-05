@@ -78,7 +78,7 @@ exports.edit = function(req, res){
 	ret.object = "mission";
 	ret.action = "edit";
 
-	if (mission.mid) {
+	if (mission.mid!=null) {
 		connect.query("UPDATE mission SET ? WHERE mid = "+mission.mid, mission, function(err, result){
 			if (err){
 				ret.brea = 1;
@@ -115,7 +115,7 @@ exports.delete = function(req, res){
 	ret.object = "mission";
 	ret.action = "delete";
 
-	if (mid) {
+	if (mid!=null) {
 		connect.query("DELETE FROM mission WHERE mid = "+mid, function(err, result){
 			if (err){
 				ret.brea = 1;
@@ -152,7 +152,7 @@ exports.read = function(req, res){
 	ret.object = "mission";
 	ret.action = "read";
 
-	if (mid) {
+	if (mid!=null) {
 		connect.query("SELECT * FROM mission WHERE mid = "+mid, function(err, rows){
 			if (err) {
 				ret.brea = 1;

@@ -12,7 +12,7 @@ exports.liveordie = function(req, res){
 	ret.object = "member";
 	ret.action = "liveordie";
 
-	var check = uid && info.status;
+	var check = (uid!=null) && (info.status!=null);
 	if (check) {
 		connect.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, result){
 			if (err){
@@ -57,7 +57,10 @@ exports.update = function(req, res){
 	ret.object = "member";
 	ret.action = "update";
 
-	var check = member.uid && member.position_e && member.position_n
+	var check = 1;
+	for (var key in member) {
+		check = check && (member[key]!=null);
+	}
 	if (check) {
 		connect.query("UPDATE member SET ? WHERE uid = "+member.uid, member, function(err, result){
 			if (err) {
@@ -95,7 +98,7 @@ exports.read = function(req, res){
 	ret.object = "member";
 	ret.action = "read";
 
-	if (uid) {
+	if (uid!=null) {
 		connect.query("SELECT * FROM member WHERE uid = "+uid, function(err, rows){
 			if (err) {
 				ret.brea = 1;
@@ -157,7 +160,7 @@ exports.money = function(req, res){
 	ret.action = "money";
 
 	var info;
-	var check = uid && amount;
+	var check = (uid!=null) && (amount!=null);
 	if (check) {
 		connect.query("SELECT money FROM member WHERE uid = "+uid, function(err, rows){
 			if (err){
@@ -209,22 +212,26 @@ exports.money = function(req, res){
 }
 //get emergency
 exports.callhelp = function(req, res){
-	var uid = req.body.uid;
-	var position_e = req.body.position_e;
-	var position_n = req.body.position_n;
+	var member = new Object;
+	var member.uid = req.body.uid;
+	var member.position_e = req.body.position_e;
+	var member.position_n = req.body.position_n;
 
 	var ret = new Object;
 	ret.uid = req.body.operator_uid;
 	ret.object = "member";
 	ret.action = "callhelp";
 
-	var check = uid && position_e && position_n;
+	var check = 1;
+	for (var key in member) {
+		check = check && (member[key]!=null);
+	}
 	if (check) {
 		ret.brea = 0;
 		console.log("Help!!!");
-		console.log("At ("+position_e+","+position_n+")");
+		console.log("At ("+member.position_e+","+member.position_n+")");
 
-		connect.query("SELECT name FROM member WHERE uid = "+uid, function(err, rows){
+		connect.query("SELECT name FROM member WHERE uid = "+member.uid, function(err, rows){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
@@ -260,7 +267,7 @@ exports.login = function(req, res){
 	ret.object = "member";
 	ret.action = "login";
 
-	var check = email && password;
+	var check = (email!=null) && (password!=null);
 	if (check) {
 		request.get({url:'http://www.ee.nthu.edu.tw/engcamp/api/auth.php?token=nthuee&email='+email+'&id='+password},
 			function optionalCallback(err, httpResponse, body) {

@@ -53,7 +53,7 @@ exports.delete = function(req, res){
 	ret.object = "pack";
 	ret.action = "delete";
 
-	if (pid) {
+	if (pid!=null) {
 		connect.query("DELETE FROM pack WHERE pid = "+pid, function(err, result){
 			if (err){
 				ret.brea = 1;
@@ -90,7 +90,7 @@ exports.read = function(req, res){
 	ret.object = "pack";
 	ret.action = "read";
 
-	if (pid) {
+	if (pid!=null) {
 		connect.query("SELECT * FROM pack WHERE pid = "+pid, function(err, rows){
 			if (err) {
 				ret.brea = 3;

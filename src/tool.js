@@ -55,7 +55,7 @@ exports.delete = function(req, res){
 	ret.object = "tool";
 	ret.action = "delete";
 
-	if (tid) {
+	if (tid!=null) {
 		connect.query("DELETE FROM tool WHERE tid = "+tid, function(err, result){
 			if (err){
 				ret.brea = 1;
@@ -92,7 +92,7 @@ exports.read = function(req, res){
 	ret.object = "tool";
 	ret.action = "read";
 
-	if (tid) {
+	if (tid!=null) {
 		connect.query("SELECT * FROM tool WHERE tid = "+tid, function(err, rows){
 			if (err) {
 				ret.brea = 1;

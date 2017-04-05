@@ -45,7 +45,7 @@ exports.delete = function(req, res){
 	ret.object = "clue";
 	ret.action = "delete";
 
-	if (cid) {
+	if (cid!=null) {
 		connect.query("DELETE FROM clue WHERE cid = "+cid, function(err, result){
 			if (err){
 				ret.brea = 1;
@@ -82,7 +82,7 @@ exports.read = function(req, res){
 	ret.object = "clue";
 	ret.action = "read";
 
-	if (cid) {
+	if (cid!=null) {
 		connect.query("SELECT * FROM clue WHERE cid = "+cid, function(err, rows){
 			if (err) {
 				ret.brea = 1;
