@@ -11,7 +11,8 @@ exports.create = function(req, res){
 	ret.object = "clue";
 	ret.action = "create";
 
-	if (clue.content != null) {
+	var check = (ret.uid!=null) && (clue.content != null);
+	if (check) {
 		connect.query("INSERT INTO clue SET ?", clue, function(err, result){
 			if (err){
 				ret.brea = 1;
@@ -45,7 +46,8 @@ exports.delete = function(req, res){
 	ret.object = "clue";
 	ret.action = "delete";
 
-	if (cid!=null) {
+	var check = (ret.uid!=null) && (cid!=null);
+	if (check) {
 		connect.query("DELETE FROM clue WHERE cid = "+cid, function(err, result){
 			if (err){
 				ret.brea = 1;
@@ -69,7 +71,7 @@ exports.delete = function(req, res){
 	else {
 		ret.brea = 2;
 		res.json(ret);
-		console.log("Failed! Clue delete without cid value.");
+		console.log("Failed! Clue delete without operator_uid or cid.");
 	}
 }
 
@@ -82,54 +84,61 @@ exports.read = function(req, res){
 	ret.object = "clue";
 	ret.action = "read";
 
-	if (cid!=null) {
-		connect.query("SELECT * FROM clue WHERE cid = "+cid, function(err, rows){
-			if (err) {
-				ret.brea = 1;
-				res.json(ret);
-				console.log("Failed! (cid) Clue read with database error.");
-			}
-			else {
-				if (rows.length == 0) {
-					ret.brea = 3;
+	if (ret.uid!=null) {
+		if (cid!=null) {
+			connect.query("SELECT * FROM clue WHERE cid = "+cid, function(err, rows){
+				if (err) {
+					ret.brea = 1;
 					res.json(ret);
-					console.log("Failed! (cid) Clue database is still empty.");
+					console.log("Failed! (cid) Clue read with database error.");
 				}
 				else {
-					ret.brea = 0;
-					ret.payload = {
-						type : "objects",
-						objects : rows
+					if (rows.length == 0) {
+						ret.brea = 3;
+						res.json(ret);
+						console.log("Failed! (cid) Clue database is still empty.");
 					}
+					else {
+						ret.brea = 0;
+						ret.payload = {
+							type : "objects",
+							objects : rows
+						}
+						res.json(ret);
+						console.log("Success! (cid) Clue read successfully.");
+					}
+				} 
+			});
+		}
+		else {
+			connect.query("SELECT * FROM clue", function(err, rows){
+				if (err) {
+					ret.brea = 1;
 					res.json(ret);
-					console.log("Success! (cid) Clue read successfully.");
+					console.log("Failed! Clue read with database error.");
 				}
-			} 
-		});
+				else {
+					if (rows.length == 0) {
+						ret.brea = 3;
+						res.json(ret);
+						console.log("Failed! Clue database is still empty.");
+					}
+					else {
+						ret.brea = 0;
+						ret.payload = {
+							type : "objects",
+							objects : rows
+						}
+						res.json(ret);
+						console.log("Success! Clue read successfully.");
+					}	
+				}
+			});
+		}
 	}
 	else {
-		connect.query("SELECT * FROM clue", function(err, rows){
-			if (err) {
-				ret.brea = 1;
-				res.json(ret);
-				console.log("Failed! Clue read with database error.");
-			}
-			else {
-				if (rows.length == 0) {
-					ret.brea = 3;
-					res.json(ret);
-					console.log("Failed! Clue database is still empty.");
-				}
-				else {
-					ret.brea = 0;
-					ret.payload = {
-						type : "objects",
-						objects : rows
-					}
-					res.json(ret);
-					console.log("Success! Clue read successfully.");
-				}	
-			}
-		});
+		ret.brea = 2;
+		res.json(ret);
+		console.log("Failed! Clue read without operator_uid.")
 	}
 }

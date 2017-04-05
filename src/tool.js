@@ -21,6 +21,7 @@ exports.create = function(req, res){
 	ret.object = "tool";
 	ret.action = "create";
 
+	check = check && (ret.uid!=null);
 	if (check) {
 		connect.query("INSERT INTO tool SET ?", tool, function(err, result){
 			if (err){
@@ -55,7 +56,8 @@ exports.delete = function(req, res){
 	ret.object = "tool";
 	ret.action = "delete";
 
-	if (tid!=null) {
+	var check = (ret.uid!=null) && (tid!=null);
+	if (check) {
 		connect.query("DELETE FROM tool WHERE tid = "+tid, function(err, result){
 			if (err){
 				ret.brea = 1;
@@ -79,7 +81,7 @@ exports.delete = function(req, res){
 	else {
 		ret.brea = 2;
 		res.json(ret);
-		console.log("Failed! Tool delete without tid value");
+		console.log("Failed! Tool delete without operator_uid or tid.");
 	}
 }
 
@@ -92,54 +94,61 @@ exports.read = function(req, res){
 	ret.object = "tool";
 	ret.action = "read";
 
-	if (tid!=null) {
-		connect.query("SELECT * FROM tool WHERE tid = "+tid, function(err, rows){
-			if (err) {
-				ret.brea = 1;
-				res.json(ret);
-				console.log("Failed! (tid) Tool read with database error.");
-			}
-			else {
-				if (rows.length == 0) {
-					ret.brea = 3;
+	if (ret.uid!=null) {
+		if (tid!=null) {
+			connect.query("SELECT * FROM tool WHERE tid = "+tid, function(err, rows){
+				if (err) {
+					ret.brea = 1;
 					res.json(ret);
-					console.log("Failed! (tid) Tool database is still empty.");
+					console.log("Failed! (tid) Tool read with database error.");
 				}
 				else {
-					ret.brea = 0;
-					ret.payload = {
-						type : "objects",
-						objects : rows
+					if (rows.length == 0) {
+						ret.brea = 3;
+						res.json(ret);
+						console.log("Failed! (tid) Tool database is still empty.");
 					}
+					else {
+						ret.brea = 0;
+						ret.payload = {
+							type : "objects",
+							objects : rows
+						}
+						res.json(ret);
+						console.log("Success! (tid) Tool read successfully.");
+					}
+				} 
+			});
+		}
+		else {
+			connect.query("SELECT * FROM tool", function(err, rows){
+				if (err) {
+					ret.brea = 1;
 					res.json(ret);
-					console.log("Success! (tid) Tool read successfully.");
+					console.log("Failed! Tool read with database error.");
 				}
-			} 
-		});
+				else {
+					if (rows.length == 0) {
+						ret.brea = 3;
+						res.json(ret);
+						console.log("Failed! Tool database is still empty.");
+					}
+					else {
+						ret.brea = 0;
+						ret.payload = {
+							type : "objects",
+							objects : rows
+						}
+						res.json(ret);
+						console.log("Success! Tool read successfully.");
+					}	
+				}
+			});
+		}
 	}
 	else {
-		connect.query("SELECT * FROM tool", function(err, rows){
-			if (err) {
-				ret.brea = 1;
-				res.json(ret);
-				console.log("Failed! Tool read with database error.");
-			}
-			else {
-				if (rows.length == 0) {
-					ret.brea = 3;
-					res.json(ret);
-					console.log("Failed! Tool database is still empty.");
-				}
-				else {
-					ret.brea = 0;
-					ret.payload = {
-						type : "objects",
-						objects : rows
-					}
-					res.json(ret);
-					console.log("Success! Tool read successfully.");
-				}	
-			}
-		});
+		ret.brea = 2;
+		res.json(ret);
+		console.log("Failed! Tool read without operator_uid.");
 	}
 }

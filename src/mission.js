@@ -27,6 +27,7 @@ exports.create = function(req, res){
 	ret.object = "mission";
 	ret.action = "create";
 
+	check = check && (ret.uid!=null);
 	if (check) {
 		connect.query("INSERT INTO mission SET ?", mission, function(err, result){
 			if (err){
@@ -78,7 +79,8 @@ exports.edit = function(req, res){
 	ret.object = "mission";
 	ret.action = "edit";
 
-	if (mission.mid!=null) {
+	var check = (ret.uid!=null) && (mission.mid!=null);
+	if (check) {
 		connect.query("UPDATE mission SET ? WHERE mid = "+mission.mid, mission, function(err, result){
 			if (err){
 				ret.brea = 1;
@@ -102,7 +104,7 @@ exports.edit = function(req, res){
 	else {
 		ret.brea = 2;
 		res.json(ret);
-		console.log("Failed! Mission edit without mid value.");
+		console.log("Failed! Mission edit without operator_uid or mid.");
 	}
 }
 
@@ -115,7 +117,8 @@ exports.delete = function(req, res){
 	ret.object = "mission";
 	ret.action = "delete";
 
-	if (mid!=null) {
+	var check = (ret.uid!=null) && (mid!=null);
+	if (check) {
 		connect.query("DELETE FROM mission WHERE mid = "+mid, function(err, result){
 			if (err){
 				ret.brea = 1;
@@ -139,7 +142,7 @@ exports.delete = function(req, res){
 	else {
 		ret.brea = 2;
 		res.json(ret);
-		console.log("Failed! Mission delete without mid value.");
+		console.log("Failed! Mission delete without operator_uid or mid.");
 	}
 }
 
@@ -152,54 +155,61 @@ exports.read = function(req, res){
 	ret.object = "mission";
 	ret.action = "read";
 
-	if (mid!=null) {
-		connect.query("SELECT * FROM mission WHERE mid = "+mid, function(err, rows){
-			if (err) {
-				ret.brea = 1;
-				res.json(ret);
-				console.log("Failed! (mid) Mission read with database error.");
-			}
-			else {
-				if (rows.length == 0) {
-					ret.brea = 3;
+	if (ret.uid!=null) {
+		if (mid!=null) {
+			connect.query("SELECT * FROM mission WHERE mid = "+mid, function(err, rows){
+				if (err) {
+					ret.brea = 1;
 					res.json(ret);
-					console.log("Failed! (mid) Mission database is still empty.");
+					console.log("Failed! (mid) Mission read with database error.");
 				}
 				else {
-					ret.brea = 0;
-					ret.payload = {
-						type : "objects",
-						objects : rows
+					if (rows.length == 0) {
+						ret.brea = 3;
+						res.json(ret);
+						console.log("Failed! (mid) Mission database is still empty.");
 					}
+					else {
+						ret.brea = 0;
+						ret.payload = {
+							type : "objects",
+							objects : rows
+						}
+						res.json(ret);
+						console.log("Success! (mid) Mission read successfully");
+					}
+				} 
+			});
+		}
+		else {
+			connect.query("SELECT * FROM mission", function(err, rows){
+				if (err) {
+					ret.brea = 1;
 					res.json(ret);
-					console.log("Success! (mid) Mission read successfully");
+					console.log("Failed! Mission read with database error.");
 				}
-			} 
-		});
+				else {
+					if (rows.length == 0) {
+						ret.brea = 3;
+						res.json(ret);
+						console.log("Failed! Mission database is still empty.");
+					}
+					else {
+						ret.brea = 0;
+						ret.payload = {
+							type : "objects",
+							objects : rows
+						}
+						res.json(ret);
+						console.log("Success! Mission read successfully");
+					}	
+				}
+			});
+		}
 	}
 	else {
-		connect.query("SELECT * FROM mission", function(err, rows){
-			if (err) {
-				ret.brea = 1;
-				res.json(ret);
-				console.log("Failed! Mission read with database error.");
-			}
-			else {
-				if (rows.length == 0) {
-					ret.brea = 3;
-					res.json(ret);
-					console.log("Failed! Mission database is still empty.");
-				}
-				else {
-					ret.brea = 0;
-					ret.payload = {
-						type : "objects",
-						objects : rows
-					}
-					res.json(ret);
-					console.log("Success! Mission read successfully");
-				}	
-			}
-		});
+		ret.brea = 2;
+		res.json(ret);
+		console.log("Failed! Mission read without operator_uid.");
 	}
 }

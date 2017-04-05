@@ -12,7 +12,7 @@ exports.liveordie = function(req, res){
 	ret.object = "member";
 	ret.action = "liveordie";
 
-	var check = (uid!=null) && (info.status!=null);
+	var check = (ret.uid!=null) && (uid!=null) && (info.status!=null);
 	if (check) {
 		connect.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, result){
 			if (err){
@@ -61,6 +61,7 @@ exports.update = function(req, res){
 	for (var key in member) {
 		check = check && (member[key]!=null);
 	}
+	check = check && (ret.uid!=null);
 	if (check) {
 		connect.query("UPDATE member SET ? WHERE uid = "+member.uid, member, function(err, result){
 			if (err) {
@@ -98,55 +99,62 @@ exports.read = function(req, res){
 	ret.object = "member";
 	ret.action = "read";
 
-	if (uid!=null) {
-		connect.query("SELECT * FROM member WHERE uid = "+uid, function(err, rows){
-			if (err) {
-				ret.brea = 1;
-				res.json(ret);
-				console.log("Failed! (uid) Member read with database error.");
-			}
-			else {
-				if (rows.length == 0) {
-					ret.brea = 3;
+	if (ret.uid!=null) {
+		if (uid!=null) {
+			connect.query("SELECT * FROM member WHERE uid = "+uid, function(err, rows){
+				if (err) {
+					ret.brea = 1;
 					res.json(ret);
-					console.log("Failed! (uid) Member database is still empty.");
+					console.log("Failed! (uid) Member read with database error.");
 				}
 				else {
-					ret.brea = 0;
-					ret.payload = {
-						type : "objects",
-						objects : rows
+					if (rows.length == 0) {
+						ret.brea = 3;
+						res.json(ret);
+						console.log("Failed! (uid) Member database is still empty.");
 					}
+					else {
+						ret.brea = 0;
+						ret.payload = {
+							type : "objects",
+							objects : rows
+						}
+						res.json(ret);
+						console.log("Success! (uid) Member data read successfully.");
+					}
+				} 
+			});
+		}
+		else {
+			connect.query("SELECT * FROM member", function(err, rows){
+				if (err) {
+					ret.brea = 1;
 					res.json(ret);
-					console.log("Success! (uid) Member data read successfully.");
+					console.log("Failed! Member read with database error.");
 				}
-			} 
-		});
+				else {
+					if (rows.length == 0) {
+						ret.brea = 3;
+						res.json(ret);
+						console.log("Failed! Member database is still empty.");
+					}
+					else {
+						ret.brea = 0;
+						ret.payload = {
+							type : "objects",
+							objects : rows
+						}
+						res.json(ret);
+						console.log("Success! Member data read successfully.");
+					}
+				}
+			});
+		}
 	}
 	else {
-		connect.query("SELECT * FROM member", function(err, rows){
-			if (err) {
-				ret.brea = 1;
-				res.json(ret);
-				console.log("Failed! Member read with database error.");
-			}
-			else {
-				if (rows.length == 0) {
-					ret.brea = 3;
-					res.json(ret);
-					console.log("Failed! Member database is still empty.");
-				}
-				else {
-					ret.brea = 0;
-					ret.payload = {
-						type : "objects",
-						objects : rows
-					}
-					res.json(ret);
-					console.log("Success! Member data read successfully.");
-				}
-			}
-		});
+		ret.brea = 2;
+		res.json(ret);
+		console.log("Failed! Member read without operator_uid.");
 	}
 }
 //edit member's money
@@ -160,7 +168,7 @@ exports.money = function(req, res){
 	ret.action = "money";
 
 	var info;
-	var check = (uid!=null) && (amount!=null);
+	var check = (ret.uid!=null) && (uid!=null) && (amount!=null);
 	if (check) {
 		connect.query("SELECT money FROM member WHERE uid = "+uid, function(err, rows){
 			if (err){
@@ -226,6 +234,7 @@ exports.callhelp = function(req, res){
 	for (var key in member) {
 		check = check && (member[key]!=null);
 	}
+	check = check && (ret.uid!=null);
 	if (check) {
 		ret.brea = 0;
 		console.log("Help!!!");

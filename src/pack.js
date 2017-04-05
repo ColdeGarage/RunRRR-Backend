@@ -19,6 +19,7 @@ exports.create = function(req, res){
 	ret.object = "pack";
 	ret.action = "create";
 
+	check = check && (ret.uid!=null);
 	if (check) {
 		connect.query("INSERT INTO pack SET ?", pack, function(err, result){
 			if (err){
@@ -53,7 +54,8 @@ exports.delete = function(req, res){
 	ret.object = "pack";
 	ret.action = "delete";
 
-	if (pid!=null) {
+	var check = (ret.uid!=null) && (pid!=null);
+	if (check) {
 		connect.query("DELETE FROM pack WHERE pid = "+pid, function(err, result){
 			if (err){
 				ret.brea = 1;
@@ -77,7 +79,7 @@ exports.delete = function(req, res){
 	else {
 		ret.brea = 2;
 		res.json(ret);
-		console.log("Failed! Pack delete without pid value.");
+		console.log("Failed! Pack delete without operator_uid or pid.");
 	}
 }
 
@@ -90,54 +92,61 @@ exports.read = function(req, res){
 	ret.object = "pack";
 	ret.action = "read";
 
-	if (pid!=null) {
-		connect.query("SELECT * FROM pack WHERE pid = "+pid, function(err, rows){
-			if (err) {
-				ret.brea = 3;
-				res.json(ret);
-				console.log("Failed! (pid) Pack read with database error.");
-			}
-			else {
-				if (rows.length == 0) {
-					ret.brea = 1;
-					res.json(ret);
-					console.log("Failed! (pid) Pack database is still empty.");
-				}
-				else {
-					ret.brea = 0;
-					ret.payload = {
-						type : "objects",
-						objects : rows
-					}
-					res.json(ret);
-					console.log("Success! Pack read successfully.");
-				}
-			} 
-		});
-	}
-	else {
-		connect.query("SELECT * FROM pack", function(err, rows){
-			if (err) {
-				ret.brea = 1;
-				res.json(ret);
-				console.log("Failed! Pack read with database error.");
-			}
-			else {
-				if (rows.length == 0) {
+	if (ret.uid!=null) {
+		if (pid!=null) {
+			connect.query("SELECT * FROM pack WHERE pid = "+pid, function(err, rows){
+				if (err) {
 					ret.brea = 3;
 					res.json(ret);
-					console.log("Failed! Pack database is still empty.");
+					console.log("Failed! (pid) Pack read with database error.");
 				}
 				else {
-					ret.brea = 0;
-					ret.payload = {
-						type : "objects",
-						objects : rows
+					if (rows.length == 0) {
+						ret.brea = 1;
+						res.json(ret);
+						console.log("Failed! (pid) Pack database is still empty.");
 					}
+					else {
+						ret.brea = 0;
+						ret.payload = {
+							type : "objects",
+							objects : rows
+						}
+						res.json(ret);
+						console.log("Success! Pack read successfully.");
+					}
+				} 
+			});
+		}
+		else {
+			connect.query("SELECT * FROM pack", function(err, rows){
+				if (err) {
+					ret.brea = 1;
 					res.json(ret);
-					console.log("Success! Pack read successfully.");
-				}	
-			}
-		});
+					console.log("Failed! Pack read with database error.");
+				}
+				else {
+					if (rows.length == 0) {
+						ret.brea = 3;
+						res.json(ret);
+						console.log("Failed! Pack database is still empty.");
+					}
+					else {
+						ret.brea = 0;
+						ret.payload = {
+							type : "objects",
+							objects : rows
+						}
+						res.json(ret);
+						console.log("Success! Pack read successfully.");
+					}	
+				}
+			});
+		}
+	}
+	else {
+		ret.brea = 2;
+		res.json(ret);
+		console.log("Failed! Pack read without operator_uid.");
 	}
 }
