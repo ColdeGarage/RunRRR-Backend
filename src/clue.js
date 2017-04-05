@@ -11,7 +11,7 @@ exports.create = function(req, res){
 	ret.object = "clue";
 	ret.action = "create";
 
-	if (content) {
+	if (clue.content) {
 		connect.query("INSERT INTO clue SET ?", clue, function(err, result){
 			if (err){
 				ret.brea = 1;
