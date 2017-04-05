@@ -79,7 +79,7 @@ exports.edit = function(req, res){
 	ret.action = "edit";
 
 	if (mission.mid) {
-		connect.query("UPDATE mission SET ? WHERE mid = "+mid, mission, function(err, result){
+		connect.query("UPDATE mission SET ? WHERE mid = "+mission.mid, mission, function(err, result){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
