@@ -221,7 +221,6 @@ exports.callhelp = function(req, res){
 	var check = uid && position_e && position_n;
 	if (check) {
 		ret.brea = 0;
-		res.json(ret);
 		console.log("Help!!!");
 		console.log("At ("+position_e+","+position_n+")");
 
