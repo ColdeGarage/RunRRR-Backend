@@ -213,9 +213,9 @@ exports.money = function(req, res){
 //get emergency
 exports.callhelp = function(req, res){
 	var member = new Object;
-	var member.uid = req.body.uid;
-	var member.position_e = req.body.position_e;
-	var member.position_n = req.body.position_n;
+	member.uid = req.body.uid;
+	member.position_e = req.body.position_e;
+	member.position_n = req.body.position_n;
 
 	var ret = new Object;
 	ret.uid = req.body.operator_uid;
