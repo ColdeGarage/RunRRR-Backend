@@ -113,7 +113,7 @@ describe('Member Api', function(){
         var req = {'operator_uid':0, 'uid':12};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'member', 'read'))
-        .send(req)
+        .query(req)
         .end(function(err, res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
