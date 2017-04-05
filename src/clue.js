@@ -3,7 +3,8 @@ var connect = db.conn();
 
 //create a new clue
 exports.create = function(req, res){
-	content = req.body.content;
+	var clue = new Object;
+	clue.content = req.body.content;
 
 	var ret = new Object;
 	ret.uid = req.body.operator_uid;
