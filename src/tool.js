@@ -13,7 +13,7 @@ exports.create = function(req, res){
 	//check if post all of the values
 	var check = 1;
 	for (var key in tool) {
-		check = check && (tool[key]==null);
+		check = check && (tool[key]!=null);
 	}
 
 	var ret = new Object;
