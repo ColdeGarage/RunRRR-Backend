@@ -32,24 +32,24 @@ exports.create = function(req, res){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! Mission create with database error.");
 			}
 			else {
 				ret.brea = 0;
-				console.log("create mission successfully");
+				console.log("Success! Mission create successfully.");
 			}
 		});
 		connect.query("SELECT mid FROM mission WHERE title = "+mission.title, function(err, rows){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! Mission mid get with database error.");
 			}
 			else {
 				if (rows.length == 0) {
 					ret.brea = 1;
 					res.json(ret);
-					console.log("empty db");
+					console.log("Failed! Mission database is still empty.");
 				}
 				else {
 					ret.brea = 0;
@@ -59,7 +59,7 @@ exports.create = function(req, res){
 						mid : info.mid
 					}
 					res.json(ret);
-					console.log("get mission id successfully");
+					console.log("Success! Mission mid get successfully.");
 				}
 			}
 		});
@@ -67,7 +67,7 @@ exports.create = function(req, res){
 	else {
 		ret.brea = 2; //if no complete mission values
 		res.json(ret);
-		console.log("uncomplete mission values");
+		console.log("Failed! Mission create with uncomplete values.");
 	}
 }
 
@@ -103,19 +103,19 @@ exports.edit = function(req, res){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! Mission edit with database error.");
 			}
 			else {
 				ret.brea = 0;
 				res.json(ret);
-				console.log("edit mission successfully");
+				console.log("Success! Mission edit successfully");
 			}
 		});
 	}
 	else {
 		ret.brea = 2;
 		res.json(ret);
-		console.log("no mid value");
+		console.log("Failed! Mission edit without mid value.");
 	}
 }
 
@@ -133,19 +133,19 @@ exports.delete = function(req, res){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! Mission delete with database error.");
 			}
 			else {
 				ret.brea = 0;
 				res.json(ret);
-				console.log("delete mission successfully");
+				console.log("Success! Mission delete successfully.");
 			}
 		});
 	}
 	else {
 		ret.brea = 2;
 		res.json(ret);
-		console.log("no mid value")
+		console.log("Failed! Mission delete without mid value.");
 	}
 }
 
@@ -163,13 +163,13 @@ exports.read = function(req, res){
 			if (err) {
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! (mid) Mission read with database error.");
 			}
 			else {
 				if (rows.length == 0) {
 					ret.brea = 1;
 					res.json(ret);
-					console.log("empty db");
+					console.log("Failed! Mission database is still empty.");
 				}
 				else {
 					ret.brea = 0;
@@ -179,7 +179,7 @@ exports.read = function(req, res){
 						objects : info
 					}
 					res.json(ret);
-					console.log("read successfully");
+					console.log("Success! (mid) Mission read successfully");
 				}
 			} 
 		});
@@ -189,13 +189,13 @@ exports.read = function(req, res){
 			if (err) {
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! Mission read with database error.");
 			}
 			else {
 				if (rows.length == 0) {
 					ret.brea = 1;
 					res.json(ret);
-					console.log("empty db");
+					console.log("Failed! Mission database is still empty.");
 				}
 				else {
 					ret.brea = 0;
@@ -205,7 +205,7 @@ exports.read = function(req, res){
 						objects : info
 					}
 					res.json(ret);
-					console.log("read successfully");
+					console.log("Success! Mission read successfully");
 				}	
 			}
 		});

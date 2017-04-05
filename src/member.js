@@ -8,7 +8,7 @@ exports.liveordie = function(req, res){
 	var info = {status : req.body.status};
 
 	var ret = new Object;
-	ret.uid = uid;
+	ret.uid = req.body.operator_uid;
 	ret.object = "member";
 	ret.action = "liveordie";
 
@@ -18,7 +18,7 @@ exports.liveordie = function(req, res){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! Member liveordie with database error.");
 			}
 			else {
 				ret.brea = 0;
@@ -27,14 +27,14 @@ exports.liveordie = function(req, res){
 					status : info.status
 				};
 				res.json(ret);
-				console.log("send successfully");
+				console.log("Success! Member liveordie change successfully.");
 			}
 		});
 	}
 	else {
 		ret.brea = 2;
 		res.json(ret);
-		console.log("uncomplete values");
+		console.log("Failed! Member liveordie with uncomplete values.");
 	}
 }
 
@@ -46,7 +46,7 @@ exports.update = function(req, res){
 	member.position_n = req.body.position_n;
 
 	var ret = new Object;
-	ret.uid = member.uid;
+	ret.uid = req.body.operator_uid;
 	ret.object = "member";
 	ret.action = "update";
 
@@ -56,19 +56,19 @@ exports.update = function(req, res){
 			if (err) {
 				ret.brea = 1;
 				res.json(ret);
-				console.log("update error");
+				console.log("Failed! Member update with database error.");
 			}
 			else {
 				ret.brea = 0;
 				res.json(ret);
-				console.log("update successfully");
+				console.log("Success! Member update successfully.");
 			}
 		});
 	}
 	else {
 		ret.brea = 2;
 		res.json(ret);
-		console.log("uncomplete values");
+		console.log("Failed! Member update with uncomplete values.");
 	}
 }
 
@@ -77,7 +77,7 @@ exports.read = function(req, res){
 	var uid = req.query.uid;
 
 	var ret = new Object;
-	ret.uid = uid;
+	ret.uid = req.query.operator_uid;
 	ret.object = "member";
 	ret.action = "read";
 
@@ -86,13 +86,13 @@ exports.read = function(req, res){
 			if (err) {
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! (uid) Member read with database error.");
 			}
 			else {
 				if (rows.length == 0) {
 					ret.brea = 1;
 					res.json(ret);
-					console.log("empty db");
+					console.log("Failed! Member database is still empty.");
 				}
 				else {
 					ret.brea = 0;
@@ -102,7 +102,7 @@ exports.read = function(req, res){
 						objects : info
 					}
 					res.json(ret);
-					console.log("read successfully");
+					console.log("Success! (uid) Member data read successfully.");
 				}
 			} 
 		});
@@ -112,13 +112,13 @@ exports.read = function(req, res){
 			if (err) {
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! Member read with database error.");
 			}
 			else {
 				if (rows.length == 0) {
 					ret.brea = 1;
 					res.json(ret);
-					console.log("empty db");
+					console.log("Failed! Member database is still empty.");
 				}
 				else {
 					ret.brea = 0;
@@ -128,7 +128,7 @@ exports.read = function(req, res){
 						objects : info
 					}
 					res.json(ret);
-					console.log("read successfully");
+					console.log("Success! Member data read successfully.");
 				}
 			}
 		});
@@ -140,28 +140,29 @@ exports.money = function(req, res){
 	var amount = req.body.money_amount;
 
 	var ret = new Object;
-	ret.uid = uid;
+	ret.uid = req.body.operator_uid;
 	ret.object = "member";
 	ret.action = "money";
 
+	var info;
 	var check = uid && amount;
 	if (check) {
 		connect.query("SELECT money FROM member WHERE uid = "+uid, function(err, rows){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! Member money with database error.(select)");
 			}
 			else {
 				if (rows.length == 0) {
 					ret.brea = 1;
 					res.json(ret);
-					console.log("empty db");
+					console.log("Failed! Member database is still empty.");
 				}
 				else {
 					ret.brea = 0;
-					var info = JSON.parse(rows);
-					console.log("get money successfully");
+					info = JSON.parse(rows);
+					console.log("Success! Member money get successfully.");
 				}
 			}
 		});
@@ -170,19 +171,19 @@ exports.money = function(req, res){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! Member money with database error.(update)");
 			}
 			else {
 				ret.brea = 0;
 				res.json(ret);
-				console.log("update money successfully");
+				console.log("Success! Member money update successfully.");
 			}
 		});
 	}
 	else {
 		ret.brea = 2;
 		res.json(ret);
-		console.log("uncomplete values");
+		console.log("Failed! Member money with uncomplete values.");
 	}
 }
 //get emergency
@@ -192,7 +193,7 @@ exports.callhelp = function(req, res){
 	var position_n = req.body.position_n;
 
 	var ret = new Object;
-	ret.uid = uid;
+	ret.uid = req.body.operator_uid;
 	ret.object = "member";
 	ret.action = "callhelp";
 
@@ -200,12 +201,34 @@ exports.callhelp = function(req, res){
 	if (check) {
 		ret.brea = 0;
 		res.json(ret);
-		console.log("Someone needs help!!!");
+		console.log("Help!!!");
+		console.log("At ("+position_e+","+position_n+")");
+
+		connect.query("SELECT name FROM member WHERE uid = "+uid, function(err, rows){
+			if (err){
+				ret.brea = 1;
+				res.json(ret);
+				console.log("Failed to get name! Member name search with database error.");
+			}
+			else {
+				if (rows.length == 0) {
+					ret.brea = 1;
+					res.json(ret);
+					console.log("Failed to get name! Member database is still empty.");
+				}
+				else {
+					ret.brea = 0;
+					var info = JSON.parse(rows);
+					console.log(info.name+" press the help button!");
+				}
+			}
+		});
 	}
 	else {
 		ret.brea = 2;
 		res.json(ret);
-		console.log("uncomplete values but someone needs help !!!!!")
+		console.log("Someone needs help but send uncomplete values!!!");
+		console.log("Please check if someone really needs help!!!");
 	}
 }
 
@@ -223,7 +246,7 @@ exports.login = function(req, res){
 		request.get({url:'http://www.ee.nthu.edu.tw/engcamp/api/auth.php?token=nthuee&email='+email+'&id='+password},
 			function optionalCallback(err, httpResponse, body) {
 				if (err) {
-					console.error('Login auth access failed:', err);
+					console.error("Failed! Login auth access failed:", err);
 					ret.uid = 0;
 					ret.brea = 1;
 					ret.payload = {
@@ -232,7 +255,7 @@ exports.login = function(req, res){
 					}
 				}
 				else if (httpResponse.statusCode == 200){
-					console.log('Login auth access success. User auth success.');
+					console.log("Success! Login auth access success. User auth success.");
 					var data = JSON.parse(body);
 					ret.uid = data.rid;
 					ret.brea = 0;
@@ -242,7 +265,7 @@ exports.login = function(req, res){
 					}
 				}
 				else{
-					console.log('Login auth access success. User auth failed.');
+					console.log("Failed! Login auth access success. User auth failed.");
 					ret.uid = 0;
 					ret.brea = 0;
 					ret.payload = {
@@ -257,6 +280,6 @@ exports.login = function(req, res){
 	else {
 		ret.brea = 2;
 		res.json(ret);
-		console.log("uncomplete values");
+		console.log("Failed! Login with uncomplete values.");
 	}
 }

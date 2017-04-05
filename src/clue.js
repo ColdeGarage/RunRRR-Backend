@@ -15,24 +15,24 @@ exports.create = function(req, res){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! Clue create with database error.");
 			}
 			else {
 				ret.brea = 0;
-				console.log("create clue successfully");
+				console.log("Success! Clue create successfully.");
 			}
 		});
 		connect.query("SELECT cid FROM clue WHERE content = "+content, function(err, rows){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! Clue cid get with database error.");
 			}
 			else {
 				if (rows.length == 0) {
 					ret.brea = 1;
 					res.json(ret);
-					console.log("empty db");
+					console.log("Failed! Clue database is still empty.");
 				}
 				else {
 					ret.brea = 0;
@@ -42,7 +42,7 @@ exports.create = function(req, res){
 						cid : info.cid
 					}
 					res.json(ret);
-					console.log("get clue id successfully");
+					console.log("Success! Clue cid get successfully.");
 				}
 			}
 		});
@@ -50,7 +50,7 @@ exports.create = function(req, res){
 	else {
 		ret.brea = 2; //if no complete clue values
 		res.json(ret);
-		console.log("uncomplete clue values");
+		console.log("Failed! Clue create with uncomplete values.");
 	}
 }
 
@@ -68,19 +68,19 @@ exports.delete = function(req, res){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! Clue delete with database error.");
 			}
 			else {
 				ret.brea = 0;
 				res.json(ret);
-				console.log("delete clue successfully");
+				console.log("Success! Clue delete successfully.");
 			}
 		});
 	}
 	else {
 		ret.brea = 2;
 		res.json(ret);
-		console.log("no cid value")
+		console.log("Failed! Clue delete without cid value.");
 	}
 }
 
@@ -98,13 +98,13 @@ exports.read = function(req, res){
 			if (err) {
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! (cid) Clue read with database error.");
 			}
 			else {
 				if (rows.length == 0) {
 					ret.brea = 1;
 					res.json(ret);
-					console.log("empty db");
+					console.log("Failed! Clue database is still empty.");
 				}
 				else {
 					ret.brea = 0;
@@ -114,7 +114,7 @@ exports.read = function(req, res){
 						objects : info
 					}
 					res.json(ret);
-					console.log("read successfully");
+					console.log("Success! (cid) Clue read successfully.");
 				}
 			} 
 		});
@@ -124,13 +124,13 @@ exports.read = function(req, res){
 			if (err) {
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! Clue read with database error.");
 			}
 			else {
 				if (rows.length == 0) {
 					ret.brea = 1;
 					res.json(ret);
-					console.log("empty db");
+					console.log("Failed! Clue database is still empty.");
 				}
 				else {
 					ret.brea = 0;
@@ -140,7 +140,7 @@ exports.read = function(req, res){
 						objects : info
 					}
 					res.json(ret);
-					console.log("read successfully");
+					console.log("Success! Clue read successfully.");
 				}	
 			}
 		});

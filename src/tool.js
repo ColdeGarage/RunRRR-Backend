@@ -26,24 +26,24 @@ exports.create = function(req, res){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! Tool create with database error.");
 			}
 			else {
 				ret.brea = 0;
-				console.log("create tool successfully");
+				console.log("Success! Tool create successfully.");
 			}
 		});
 		connect.query("SELECT tid FROM tool WHERE title = "+tool.title, function(err, rows){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! Tool tid get with database error.");
 			}
 			else {
 				if (rows.length == 0) {
 					ret.brea = 1;
 					res.json(ret);
-					console.log("empty db");
+					console.log("Failed! Tool database is still empty.");
 				}
 				else {
 					ret.brea = 0;
@@ -53,7 +53,7 @@ exports.create = function(req, res){
 						tid : info.tid
 					}
 					res.json(ret);
-					console.log("get tool id successfully");
+					console.log("Success! Tool tid get successfully.");
 				}
 			}
 		});
@@ -61,7 +61,7 @@ exports.create = function(req, res){
 	else {
 		ret.brea = 2; //if no complete tool values
 		res.json(ret);
-		console.log("uncomplete tool values");
+		console.log("Failed! Tool create with uncomplete values.");
 	}
 }
 
@@ -79,19 +79,19 @@ exports.delete = function(req, res){
 			if (err){
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! Tool delete with database error.");
 			}
 			else {
 				ret.brea = 0;
 				res.json(ret);
-				console.log("delete tool successfully");
+				console.log("Success! Tool delete successfully.");
 			}
 		});
 	}
 	else {
 		ret.brea = 2;
 		res.json(ret);
-		console.log("no tid value")
+		console.log("Failed! Tool delete without tid value");
 	}
 }
 
@@ -109,13 +109,13 @@ exports.read = function(req, res){
 			if (err) {
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! (tid) Tool read with database error.");
 			}
 			else {
 				if (rows.length == 0) {
 					ret.brea = 1;
 					res.json(ret);
-					console.log("empty db");
+					console.log("Failed! Tool database is still empty.");
 				}
 				else {
 					ret.brea = 0;
@@ -125,7 +125,7 @@ exports.read = function(req, res){
 						objects : info
 					}
 					res.json(ret);
-					console.log("read successfully");
+					console.log("Success! (tid) Tool read successfully.");
 				}
 			} 
 		});
@@ -135,13 +135,13 @@ exports.read = function(req, res){
 			if (err) {
 				ret.brea = 1;
 				res.json(ret);
-				console.log("db error");
+				console.log("Failed! Tool read with database error.");
 			}
 			else {
 				if (rows.length == 0) {
 					ret.brea = 1;
 					res.json(ret);
-					console.log("empty db");
+					console.log("Failed! Tool database is still empty.");
 				}
 				else {
 					ret.brea = 0;
@@ -151,7 +151,7 @@ exports.read = function(req, res){
 						objects : info
 					}
 					res.json(ret);
-					console.log("read successfully");
+					console.log("Success! Tool read successfully.");
 				}	
 			}
 		});
