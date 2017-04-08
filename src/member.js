@@ -14,8 +14,8 @@ exports.liveordie = function(req, res){
 
 	var check = !isNaN(ret.uid) && !isNaN(uid);
 	//parse string to bool and invert
-	if (info.status == "true") info.status = false;
-	else if (info.status == "false") info.status = true;
+	if ((info.status == "true") || (info.status == "1")) info.status = false;
+	else if (info.status == "false" || (info.status == "0")) info.status = true;
 	else check = 0;
 
 	if (check) {
