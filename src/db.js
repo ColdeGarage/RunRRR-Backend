@@ -4,8 +4,8 @@ exports.conn = function connectionHandler(){
 
     var connection = mysql.createConnection({
         host: 'localhost',
-        user: 'root',
-        password: '',
+        user: 'run_for_ee',
+        password: 'runrrrr',
         database: 'run_for_ee'
     });
 
