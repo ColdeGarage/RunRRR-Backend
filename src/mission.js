@@ -10,7 +10,8 @@ exports.create = function(req, res){
 	mission.time_end = req.body.time_end;
 	mission.prize = parseInt(req.body.prize);
 	mission.clue = req.body.clue;
-	mission.class = parseInt(req.body.class);
+	// mission.class = parseInt(req.body.class);
+	mission.class = req.body.class;
 	mission.score = parseInt(req.body.score);
 
 	//check if post all of the values
