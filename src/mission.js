@@ -10,14 +10,15 @@ exports.create = function(req, res){
 	mission.time_end = req.body.time_end;
 	mission.prize = parseInt(req.body.prize);
 	mission.clue = req.body.clue;
-	// mission.class = parseInt(req.body.class);
-	mission.class = req.body.class;
+	mission.class = parseInt(req.body.class);
 	mission.score = parseInt(req.body.score);
 
 	//check if post all of the values
 	var check = 1;
 	for (var key in mission) {
-		check = check && !isNaN(mission[key]);
+		//if not undefined and not NaN
+		var valid = !(isNaN(mission[key]) && (mission[key]==undefined))
+		check = check && valid;
 	}
 	
 	mission.location_e = parseFloat(req.body.location_e);
@@ -76,8 +77,10 @@ exports.edit = function(req, res){
 	var check = !isNaN(ret.uid) && !isNaN(mission.mid);
 	//delete the key that don't send
 	for (var key in mission) {
-		if (isNaN(mission[key])) delete mission[key];
-		else check = 1;
+		//if not undefined and not NaN
+		var valid = !(isNaN(mission[key]) && (mission[key]==undefined))
+		if (valid) check = 1;
+		else delete mission[key];
 	}
 	if (check) {
 		connect.query("UPDATE mission SET ? WHERE mid = "+mission.mid, mission, function(err, result){
