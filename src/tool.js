@@ -7,21 +7,22 @@ exports.create = function(req, res){
 	tool.title = req.body.title;
 	tool.content = req.body.content;
 	tool.url = req.body.url;
-	tool.expire = req.body.expire;
-	tool.price = req.body.price;
+	tool.expire = parseInt(req.body.expire);
+	tool.price = parseInt(req.body.price);
 
 	//check if post all of the values
 	var check = 1;
 	for (var key in tool) {
-		check = check && (tool[key]!=null);
+		var valid = !(isNaN(tool[key]) && (tool[key]==undefined))
+		check = check && valid;
 	}
 
 	var ret = new Object;
-	ret.uid = req.body.operator_uid;
+	ret.uid = parseInt(req.body.operator_uid);
 	ret.object = "tool";
 	ret.action = "create";
 
-	check = check && (ret.uid!=null);
+	check = check && !isNaN(ret.uid);
 	if (check) {
 		connect.query("INSERT INTO tool SET ?", tool, function(err, result){
 			if (err){
@@ -49,14 +50,14 @@ exports.create = function(req, res){
 
 //delete a tool
 exports.delete = function(req, res){
-	var tid = req.body.tid;
+	var tid = parseInt(req.body.tid);
 
 	var ret = new Object;
-	ret.uid = req.body.operator_uid;
+	ret.uid = parseInt(req.body.operator_uid);
 	ret.object = "tool";
 	ret.action = "delete";
 
-	var check = (ret.uid!=null) && (tid!=null);
+	var check = !isNaN(ret.uid) && !isNaN(tid);
 	if (check) {
 		connect.query("DELETE FROM tool WHERE tid = "+tid, function(err, result){
 			if (err){
@@ -94,8 +95,8 @@ exports.read = function(req, res){
 	ret.object = "tool";
 	ret.action = "read";
 
-	if (ret.uid!=null) {
-		if (tid!=null) {
+	if (!isNaN(ret.uid)) {
+		if (!isNaN(tid)) {
 			connect.query("SELECT * FROM tool WHERE tid = "+tid, function(err, rows){
 				if (err) {
 					ret.brea = 1;

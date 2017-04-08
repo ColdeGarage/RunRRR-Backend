@@ -4,22 +4,23 @@ var connect = db.conn();
 //create a backpack
 exports.create = function(req, res){
 	var pack = new Object;
-	pack.uid = req.body.uid;
+	pack.uid = parseInt(req.body.uid);
 	pack.class = req.body.class;
-	pack.id = req.body.id;
+	pack.id = parseInt(req.body.id);
 
 	//check if post all of the values
 	var check = 1;
 	for (var key in pack) {
-		check = check && (pack[key]!=null);
+		var valid = !(isNaN(pack[key]) && (pack[key]==undefined))
+		check = check && valid;
 	}
 
 	var ret = new Object;
-	ret.uid = req.body.operator_uid;
+	ret.uid = parseInt(req.body.operator_uid);
 	ret.object = "pack";
 	ret.action = "create";
 
-	check = check && (ret.uid!=null);
+	check = check && !isNaN(ret.uid);
 	if (check) {
 		connect.query("INSERT INTO pack SET ?", pack, function(err, result){
 			if (err){
@@ -47,14 +48,14 @@ exports.create = function(req, res){
 
 //delete a backpack
 exports.delete = function(req, res){
-	var pid = req.body.pid;
+	var pid = parseInt(req.body.pid);
 
 	var ret = new Object;
-	ret.uid = req.body.operator_uid;
+	ret.uid = parseInt(req.body.operator_uid);
 	ret.object = "pack";
 	ret.action = "delete";
 
-	var check = (ret.uid!=null) && (pid!=null);
+	var check = !isNaN(ret.uid) && !isNaN(pid);
 	if (check) {
 		connect.query("DELETE FROM pack WHERE pid = "+pid, function(err, result){
 			if (err){
@@ -85,15 +86,15 @@ exports.delete = function(req, res){
 
 //read the backpack's information
 exports.read = function(req, res){
-	var pid = req.query.pid;
+	var pid = parseInt(req.query.pid);
 
 	var ret = new Object;
-	ret.uid = req.query.operator_uid;
+	ret.uid = parseInt(req.query.operator_uid);
 	ret.object = "pack";
 	ret.action = "read";
 
-	if (ret.uid!=null) {
-		if (pid!=null) {
+	if (!isNaN(ret.uid)) {
+		if (!isNaN(pid)) {
 			connect.query("SELECT * FROM pack WHERE pid = "+pid, function(err, rows){
 				if (err) {
 					ret.brea = 3;

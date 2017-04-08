@@ -7,11 +7,11 @@ exports.create = function(req, res){
 	clue.content = req.body.content;
 
 	var ret = new Object;
-	ret.uid = req.body.operator_uid;
+	ret.uid = parseInt(req.body.operator_uid);
 	ret.object = "clue";
 	ret.action = "create";
 
-	var check = (ret.uid!=null) && (clue.content != null);
+	var check = !isNaN(ret.uid) && (clue.content != undefined);
 	if (check) {
 		connect.query("INSERT INTO clue SET ?", clue, function(err, result){
 			if (err){
@@ -39,14 +39,14 @@ exports.create = function(req, res){
 
 //delete a clue
 exports.delete = function(req, res){
-	var cid = req.body.cid;
+	var cid = parseInt(req.body.cid);
 
 	var ret = new Object;
-	ret.uid = req.body.operator_uid;
+	ret.uid = parseInt(req.body.operator_uid);
 	ret.object = "clue";
 	ret.action = "delete";
 
-	var check = (ret.uid!=null) && (cid!=null);
+	var check = !isNaN(ret.uid) && !isNaN(cid);
 	if (check) {
 		connect.query("DELETE FROM clue WHERE cid = "+cid, function(err, result){
 			if (err){
@@ -77,15 +77,15 @@ exports.delete = function(req, res){
 
 //read clues
 exports.read = function(req, res){
-	var cid = req.query.cid;
+	var cid = parseInt(req.query.cid);
 
 	var ret = new Object;
-	ret.uid = req.query.operator_uid;
+	ret.uid = parseInt(req.query.operator_uid);
 	ret.object = "clue";
 	ret.action = "read";
 
-	if (ret.uid!=null) {
-		if (cid!=null) {
+	if (!isNaN(ret.uid)) {
+		if (!isNaN(cid)) {
 			connect.query("SELECT * FROM clue WHERE cid = "+cid, function(err, rows){
 				if (err) {
 					ret.brea = 1;
