@@ -4,15 +4,20 @@ var connect = db.conn();
 
 //return member's status
 exports.liveordie = function(req, res){
-	var uid = req.body.uid;
+	var uid = parseInt(req.body.uid);
 	var info = {status : req.body.status};
 
 	var ret = new Object;
-	ret.uid = req.body.operator_uid;
+	ret.uid = parseInt(req.body.operator_uid);
 	ret.object = "member";
 	ret.action = "liveordie";
 
-	var check = (ret.uid!=null) && (uid!=null) && (info.status!=null);
+	var check = isNaN(ret.uid) && isNaN(uid);
+	//parse string to bool and invert
+	if (info.status == "true") info.status = false;
+	else if (info.status == "false") info.status = true;
+	else check = 0;
+
 	if (check) {
 		connect.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, result){
 			if (err){
@@ -48,20 +53,20 @@ exports.liveordie = function(req, res){
 //update member's location
 exports.update = function(req, res){
 	var member = new Object;
-	member.uid = req.body.uid;
-	member.position_e = req.body.position_e;
-	member.position_n = req.body.position_n;
+	member.uid = parseInt(req.body.uid);
+	member.position_e = parseFloat(req.body.position_e);
+	member.position_n = parseFloat(req.body.position_n);
 
 	var ret = new Object;
-	ret.uid = req.body.operator_uid;
+	ret.uid = parseInt(req.body.operator_uid);
 	ret.object = "member";
 	ret.action = "update";
 
 	var check = 1;
 	for (var key in member) {
-		check = check && (member[key]!=null);
+		check = check && isNaN(member[key]);
 	}
-	check = check && (ret.uid!=null);
+	check = check && isNaN(ret.uid);
 	if (check) {
 		connect.query("UPDATE member SET ? WHERE uid = "+member.uid, member, function(err, result){
 			if (err) {
@@ -92,15 +97,15 @@ exports.update = function(req, res){
 
 //return member's information
 exports.read = function(req, res){
-	var uid = req.query.uid;
+	var uid = parseInt(req.query.uid);
 
 	var ret = new Object;
-	ret.uid = req.query.operator_uid;
+	ret.uid = parseInt(req.query.operator_uid);
 	ret.object = "member";
 	ret.action = "read";
 
-	if (ret.uid!=null) {
-		if (uid!=null) {
+	if (isNaN(ret.uid)) {
+		if (isNaN(uid)) {
 			connect.query("SELECT * FROM member WHERE uid = "+uid, function(err, rows){
 				if (err) {
 					ret.brea = 1;
@@ -159,16 +164,16 @@ exports.read = function(req, res){
 }
 //edit member's money
 exports.money = function(req, res){
-	var uid = req.body.uid;
-	var amount = req.body.money_amount;
+	var uid = parseInt(req.body.uid);
+	var amount = parseInt(req.body.money_amount);
 
 	var ret = new Object;
-	ret.uid = req.body.operator_uid;
+	ret.uid = parseInt(req.body.operator_uid);
 	ret.object = "member";
 	ret.action = "money";
 
 	var info;
-	var check = (ret.uid!=null) && (uid!=null) && (amount!=null);
+	var check = isNaN(ret.uid) && isNaN(uid) && isNaN(amount);
 	if (check) {
 		connect.query("SELECT money FROM member WHERE uid = "+uid, function(err, rows){
 			if (err){
@@ -221,20 +226,20 @@ exports.money = function(req, res){
 //get emergency
 exports.callhelp = function(req, res){
 	var member = new Object;
-	member.uid = req.body.uid;
-	member.position_e = req.body.position_e;
-	member.position_n = req.body.position_n;
+	member.uid = parseInt(req.body.uid);
+	member.position_e = parseFloat(req.body.position_e);
+	member.position_n = parseFloat(req.body.position_n);
 
 	var ret = new Object;
-	ret.uid = req.body.operator_uid;
+	ret.uid = parseInt(req.body.operator_uid);
 	ret.object = "member";
 	ret.action = "callhelp";
 
 	var check = 1;
 	for (var key in member) {
-		check = check && (member[key]!=null);
+		check = check && isNaN(member[key]);
 	}
-	check = check && (ret.uid!=null);
+	check = check && isNaN(ret.uid);
 	if (check) {
 		ret.brea = 0;
 		console.log("Help!!!");
