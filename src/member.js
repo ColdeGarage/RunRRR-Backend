@@ -12,7 +12,7 @@ exports.liveordie = function(req, res){
 	ret.object = "member";
 	ret.action = "liveordie";
 
-	var check = isNaN(ret.uid) && isNaN(uid);
+	var check = !isNaN(ret.uid) && !isNaN(uid);
 	//parse string to bool and invert
 	if (info.status == "true") info.status = false;
 	else if (info.status == "false") info.status = true;
@@ -64,9 +64,9 @@ exports.update = function(req, res){
 
 	var check = 1;
 	for (var key in member) {
-		check = check && isNaN(member[key]);
+		check = check && !isNaN(member[key]);
 	}
-	check = check && isNaN(ret.uid);
+	check = check && !isNaN(ret.uid);
 	if (check) {
 		connect.query("UPDATE member SET ? WHERE uid = "+member.uid, member, function(err, result){
 			if (err) {
@@ -104,8 +104,8 @@ exports.read = function(req, res){
 	ret.object = "member";
 	ret.action = "read";
 
-	if (isNaN(ret.uid)) {
-		if (isNaN(uid)) {
+	if (!isNaN(ret.uid)) {
+		if (!isNaN(uid)) {
 			connect.query("SELECT * FROM member WHERE uid = "+uid, function(err, rows){
 				if (err) {
 					ret.brea = 1;
@@ -173,7 +173,7 @@ exports.money = function(req, res){
 	ret.action = "money";
 
 	var info;
-	var check = isNaN(ret.uid) && isNaN(uid) && isNaN(amount);
+	var check = !isNaN(ret.uid) && !isNaN(uid) && !isNaN(amount);
 	if (check) {
 		connect.query("SELECT money FROM member WHERE uid = "+uid, function(err, rows){
 			if (err){
@@ -237,9 +237,9 @@ exports.callhelp = function(req, res){
 
 	var check = 1;
 	for (var key in member) {
-		check = check && isNaN(member[key]);
+		check = check && !isNaN(member[key]);
 	}
-	check = check && isNaN(ret.uid);
+	check = check && !isNaN(ret.uid);
 	if (check) {
 		ret.brea = 0;
 		console.log("Help!!!");
