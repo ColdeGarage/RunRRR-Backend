@@ -88,10 +88,10 @@ exports.delete = function(req, res){
 
 //read tools
 exports.read = function(req, res){
-	var tid = req.query.tid;
+	var tid = parseInt(req.query.tid);
 
 	var ret = new Object;
-	ret.uid = req.query.operator_uid;
+	ret.uid = parseInt(req.query.operator_uid);
 	ret.object = "tool";
 	ret.action = "read";
 
