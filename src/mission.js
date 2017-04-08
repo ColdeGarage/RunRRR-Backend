@@ -80,8 +80,7 @@ exports.edit = function(req, res){
 	for (var key in mission) {
 		//if not undefined and not NaN
 		var valid = !(isNaN(mission[key]) && (mission[key]==undefined))
-		if (valid) check = 1;
-		else delete mission[key];
+		if (!valid) delete mission[key];
 	}
 	if (check) {
 		connect.query("UPDATE mission SET ? WHERE mid = "+mission.mid, mission, function(err, result){
