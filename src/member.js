@@ -297,7 +297,7 @@ exports.login = function(req, res){
 				else if (httpResponse.statusCode == 200){
 					console.log("Success! Login auth access success. User auth success.");
 					var data = JSON.parse(body);
-					ret.uid = data.rid;
+					ret.uid = parseInt(data.rid);
 					ret.brea = 0;
 					ret.payload = {
 						type : "Attribute Name",
