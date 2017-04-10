@@ -253,7 +253,7 @@ describe('Mission Api', function(){
     it('/POST create', function(done) { 
         var req = {'operator_uid':12, 'title':'Test Mission', 'content':'This is a test mission.',
                    'time_start':'2017-06-13 04:22:23', 'time_end':'2017-06-13 04:32:23',
-                   'prize':250, 'clue':12, 'class':0, 'score':100,
+                   'prize':250, 'clue':12, 'class':'MAIN', 'score':100,
                    'location_e':123.33, 'location_n':25.32};
         chai.request(HOST)
         .post(path.join(HOST_PREFIX, 'mission', 'create'))
@@ -373,7 +373,7 @@ describe('Mission Api', function(){
                 mission.should.have.property('time_end').to.be.a('string');
                 mission.should.have.property('prize').to.be.a('number');
                 mission.should.have.property('clue').to.be.a('number');
-                mission.should.have.property('class').to.be.a('number');
+                mission.should.have.property('class').to.be.a('string');
                 mission.should.have.property('score').to.be.a('number');
                 mission.should.have.property('location_e').to.be.a('number');
                 mission.should.have.property('location_n').to.be.a('number');
@@ -405,7 +405,7 @@ describe('Mission Api', function(){
                 mission.should.have.property('time_end').to.be.a('string');
                 mission.should.have.property('prize').to.be.a('number');
                 mission.should.have.property('clue').to.be.a('number');
-                mission.should.have.property('class').to.be.a('number');
+                mission.should.have.property('class').to.be.a('string');
                 mission.should.have.property('score').to.be.a('number');
                 mission.should.have.property('location_e').to.be.a('number');
                 mission.should.have.property('location_n').to.be.a('number');
@@ -899,7 +899,7 @@ describe('Clue Api', function(){
 
 describe('Pack Api', function(){
     it('/POST create', function(done) { 
-        var req = {'operator_uid':12, 'uid':'13', 'class':0, 'id':13};
+        var req = {'operator_uid':12, 'uid':'13', 'class':'TOOL', 'id':13};
         chai.request(HOST)
         .post(path.join(HOST_PREFIX, 'pack', 'create'))
         .send(req)
@@ -981,7 +981,7 @@ describe('Pack Api', function(){
             for (pack in res.body.payload.Objects){
                 pack.should.have.property('pid').eql(8);
                 pack.should.have.property('uid').eql(12);
-                pack.should.have.property('class').to.be.a('number');
+                pack.should.have.property('class').to.be.a('string');
                 pack.should.have.property('id').to.be.a('number');
             }
             done();
@@ -1006,7 +1006,7 @@ describe('Pack Api', function(){
             for (pack in res.body.payload.Objects){
                 pack.should.have.property('pid').to.be.a('number');
                 pack.should.have.property('uid').eql(12);
-                pack.should.have.property('class').to.be.a('number');
+                pack.should.have.property('class').to.be.a('string');
                 pack.should.have.property('id').to.be.a('number');
             }
             done();
