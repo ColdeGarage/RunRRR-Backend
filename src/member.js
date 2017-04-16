@@ -1,7 +1,8 @@
 var db = require('./db.js');
 var request = require('request');
 var connect = db.conn();
-
+//get timezone(UTC+8) offset
+var timezone = (new Date).getTimezoneOffset();
 //return member's status
 exports.liveordie = function(req, res){
 	var uid = parseInt(req.body.uid);
@@ -22,12 +23,14 @@ exports.liveordie = function(req, res){
 		connect.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, result){
 			if (err){
 				ret.brea = 1;
+				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
 				console.log("Failed! Member liveordie with database error.");
 			}
 			else {
 				if (result.changeRows) {
 					ret.brea = 0;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					ret.payload = {
 						type : "Attribute Name",
 						status : info.status
@@ -37,6 +40,7 @@ exports.liveordie = function(req, res){
 				}
 				else {
 					ret.brea = 3;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Failed! Member liveordie database has nothing to change.");
 				}
@@ -45,6 +49,7 @@ exports.liveordie = function(req, res){
 	}
 	else {
 		ret.brea = 2;
+		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 		console.log("Failed! Member liveordie with uncomplete values.");
 	}
@@ -71,17 +76,20 @@ exports.update = function(req, res){
 		connect.query("UPDATE member SET ? WHERE uid = "+member.uid, member, function(err, result){
 			if (err) {
 				ret.brea = 1;
+				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
 				console.log("Failed! Member update with database error.");
 			}
 			else {
 				if (result.changeRows) {
 					ret.brea = 0;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Success! Member update successfully.");
 				}
 				else {
 					ret.brea = 3;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Failed! Member database has nothing to change.");
 				}
@@ -90,6 +98,7 @@ exports.update = function(req, res){
 	}
 	else {
 		ret.brea = 2;
+		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 		console.log("Failed! Member update with uncomplete values.");
 	}
@@ -109,17 +118,20 @@ exports.read = function(req, res){
 			connect.query("SELECT * FROM member WHERE uid = "+uid, function(err, rows){
 				if (err) {
 					ret.brea = 1;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Failed! (uid) Member read with database error.");
 				}
 				else {
 					if (rows.length == 0) {
 						ret.brea = 3;
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
 						console.log("Failed! (uid) Member database is still empty.");
 					}
 					else {
 						ret.brea = 0;
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						ret.payload = {
 							type : "objects",
 							objects : rows
@@ -134,17 +146,20 @@ exports.read = function(req, res){
 			connect.query("SELECT * FROM member", function(err, rows){
 				if (err) {
 					ret.brea = 1;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Failed! Member read with database error.");
 				}
 				else {
 					if (rows.length == 0) {
 						ret.brea = 3;
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
 						console.log("Failed! Member database is still empty.");
 					}
 					else {
 						ret.brea = 0;
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						ret.payload = {
 							type : "objects",
 							objects : rows
@@ -158,6 +173,7 @@ exports.read = function(req, res){
 	}
 	else {
 		ret.brea = 2;
+		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 		console.log("Failed! Member read without operator_uid.");
 	}
@@ -178,12 +194,14 @@ exports.money = function(req, res){
 		connect.query("SELECT money FROM member WHERE uid = "+uid, function(err, rows){
 			if (err){
 				ret.brea = 1;
+				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
 				console.log("Failed! Member money get with database error.");
 			}
 			else {
 				if (rows.length == 0) {
 					ret.brea = 3;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Failed! Member database is still empty.");
 				}
@@ -199,17 +217,20 @@ exports.money = function(req, res){
 			connect.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, result){
 				if (err){
 					ret.brea = 1;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Failed! Member money update with database error.");
 				}
 				else {
 					if (result.changeRows) {
 						ret.brea = 0;
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
 						console.log("Success! Member money update successfully.");	
 					}
 					else {
 						ret.brea = 3;
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
 						console.log("Failed! Member money database has nothing to change.");
 					}
@@ -219,6 +240,7 @@ exports.money = function(req, res){
 	}
 	else {
 		ret.brea = 2;
+		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 		console.log("Failed! Member money with uncomplete values.");
 	}
@@ -248,17 +270,21 @@ exports.callhelp = function(req, res){
 		connect.query("SELECT name FROM member WHERE uid = "+member.uid, function(err, rows){
 			if (err){
 				ret.brea = 1;
+				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
 				console.log("Failed to get name! Member name search with database error.");
 			}
 			else {
 				if (rows.length == 0) {
 					ret.brea = 3;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Failed to get name! Member database is still empty.");
 				}
 				else {
 					ret.brea = 0;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
+					res.json(ret);
 					console.log(rows.name+" press the help button!");
 				}
 			}
@@ -266,6 +292,7 @@ exports.callhelp = function(req, res){
 	}
 	else {
 		ret.brea = 2;
+		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 		console.log("Someone needs help but send uncomplete values!!!");
 		console.log("Please check if someone really needs help!!!");
@@ -313,12 +340,14 @@ exports.login = function(req, res){
 						correct : 1
 					}
 				}
+				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
 			}
 		);
 	}
 	else {
 		ret.brea = 2;
+		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 		console.log("Failed! Login with uncomplete values.");
 	}
