@@ -21,7 +21,7 @@ exports.liveordie = function(req, res){
 	else check = 0;
 
 	if (check) {
-		connection.query("SELECT * FROM member WHERE uid = "+member.uid, function(err, rows){
+		connection.query("SELECT * FROM member WHERE uid = "+uid, function(err, rows){
 			if (err) {
 				ret.brea = 1;
 				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
