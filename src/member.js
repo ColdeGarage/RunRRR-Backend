@@ -1,4 +1,5 @@
 var db = require('./db.js');
+var request = require('request')
 var connection = db.conn();
 
 var timezone = (new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
