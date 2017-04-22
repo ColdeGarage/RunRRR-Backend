@@ -1,6 +1,8 @@
 var db = require("./db.js");
 var connection = db.conn();
 
+var timezone = (new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
+
 //create a new mission
 exports.create = function(req, res){
 	var mission = new Object;
