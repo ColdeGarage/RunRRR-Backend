@@ -1,5 +1,5 @@
 var db = require('./db.js');
-var connect = db.conn();
+var connection = db.conn();
 
 var timezone = (new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
 
@@ -15,7 +15,7 @@ exports.create = function(req, res){
 
 	var check = !isNaN(ret.uid) && (clue.content != undefined);
 	if (check) {
-		connect.query("INSERT INTO clue SET ?", clue, function(err, result){
+		connection.query("INSERT INTO clue SET ?", clue, function(err, result){
 			if (err){
 				ret.brea = 1;
 				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
@@ -53,7 +53,7 @@ exports.delete = function(req, res){
 
 	var check = !isNaN(ret.uid) && !isNaN(cid);
 	if (check) {
-		connect.query("DELETE FROM clue WHERE cid = "+cid, function(err, result){
+		connection.query("DELETE FROM clue WHERE cid = "+cid, function(err, result){
 			if (err){
 				ret.brea = 1;
 				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
@@ -95,7 +95,7 @@ exports.read = function(req, res){
 
 	if (!isNaN(ret.uid)) {
 		if (!isNaN(cid)) {
-			connect.query("SELECT * FROM clue WHERE cid = "+cid, function(err, rows){
+			connection.query("SELECT * FROM clue WHERE cid = "+cid, function(err, rows){
 				if (err) {
 					ret.brea = 1;
 					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
@@ -123,7 +123,7 @@ exports.read = function(req, res){
 			});
 		}
 		else {
-			connect.query("SELECT * FROM clue", function(err, rows){
+			connection.query("SELECT * FROM clue", function(err, rows){
 				if (err) {
 					ret.brea = 1;
 					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);

@@ -1,5 +1,5 @@
 var db = require('./db.js');
-var connect = db.conn();
+var connection = db.conn();
 
 var timezone = (new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
 
@@ -25,7 +25,7 @@ exports.create = function(req, res){
 	}
 	check = check && !isNaN(ret.uid);
 	if (check) {
-		connect.query("INSERT INTO tool SET ?", tool, function(err, result){
+		connection.query("INSERT INTO tool SET ?", tool, function(err, result){
 			if (err){
 				ret.brea = 1;
 				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
@@ -63,7 +63,7 @@ exports.delete = function(req, res){
 
 	var check = !isNaN(ret.uid) && !isNaN(tid);
 	if (check) {
-		connect.query("DELETE FROM tool WHERE tid = "+tid, function(err, result){
+		connection.query("DELETE FROM tool WHERE tid = "+tid, function(err, result){
 			if (err){
 				ret.brea = 1;
 				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
@@ -105,7 +105,7 @@ exports.read = function(req, res){
 
 	if (!isNaN(ret.uid)) {
 		if (!isNaN(tid)) {
-			connect.query("SELECT * FROM tool WHERE tid = "+tid, function(err, rows){
+			connection.query("SELECT * FROM tool WHERE tid = "+tid, function(err, rows){
 				if (err) {
 					ret.brea = 1;
 					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
@@ -133,7 +133,7 @@ exports.read = function(req, res){
 			});
 		}
 		else {
-			connect.query("SELECT * FROM tool", function(err, rows){
+			connection.query("SELECT * FROM tool", function(err, rows){
 				if (err) {
 					ret.brea = 1;
 					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);

@@ -1,5 +1,5 @@
 var db = require("./db.js");
-var connect = db.conn();
+var connection = db.conn();
 
 //create a new mission
 exports.create = function(req, res){
@@ -139,7 +139,7 @@ exports.delete = function(req, res){
 
 	var check = !isNaN(ret.uid) && !isNaN(mid);
 	if (check) {
-		connect.query("DELETE FROM mission WHERE mid = "+mid, function(err, result){
+		connection.query("DELETE FROM mission WHERE mid = "+mid, function(err, result){
 			if (err){
 				ret.brea = 1;
 				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
@@ -181,7 +181,7 @@ exports.read = function(req, res){
 
 	if (!isNaN(ret.uid)) {
 		if (!isNaN(mid)) {
-			connect.query("SELECT * FROM mission WHERE mid = "+mid, function(err, rows){
+			connection.query("SELECT * FROM mission WHERE mid = "+mid, function(err, rows){
 				if (err) {
 					ret.brea = 1;
 					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
@@ -209,7 +209,7 @@ exports.read = function(req, res){
 			});
 		}
 		else {
-			connect.query("SELECT * FROM mission", function(err, rows){
+			connection.query("SELECT * FROM mission", function(err, rows){
 				if (err) {
 					ret.brea = 1;
 					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
