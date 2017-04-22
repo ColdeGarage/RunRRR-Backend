@@ -979,7 +979,7 @@ describe('Pack Api', function(){
             done();
         });
     });
-    it('/GET read(with cid)', function(done) { 
+    it('/GET read(with pid)', function(done) { 
         var req = {'operator_uid':12, 'pid':1};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'pack', 'read'))
@@ -1005,7 +1005,7 @@ describe('Pack Api', function(){
             done();
         });
     });
-    it('/GET read(with out cid)', function(done) { 
+    it('/GET read(with out pid)', function(done) { 
         var req = {'operator_uid':12};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'pack', 'read'))
