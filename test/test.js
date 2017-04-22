@@ -13,14 +13,14 @@ chai.use(chaiHttp);
 
 describe('Member Api', function(){
     it('/PUT liveordie', function(done) { 
-        var req = {'operator_uid':0, 'uid':12, 'status':1};
+        var req = {'operator_uid':0, 'uid':289, 'status':0};
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'liveordie'))
         .send(req)
         .end(function(err, res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
-            res.body.should.be.a('object');
+            res.body.should.be.an('object');
             res.body.should.have.property('uid').eql(0);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('liveordie');
@@ -28,31 +28,33 @@ describe('Member Api', function(){
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Attribute Name');
             res.body.payload.should.have.property('status').eql(1);
+            
             done();
         });
     });
-    it('/PUT liveordie(uncomplete request)', function(done) { 
+    it('/PUT liveordie(Uncomplete request)', function(done) { 
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'liveordie'))
         .end(function(err, res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
-            res.body.should.be.a('object');
+            res.body.should.be.an('object');
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('liveordie');
             res.body.should.have.property('brea').eql(2);
+            
             done();
         });
     });
     it('/PUT update', function(done) { 
-        var req = {'operator_uid':0, 'uid':12, 'status':1, 'position_e':'120.13', 'position_n':'23.456'};
+        var req = {'operator_uid':0, 'uid':289, 'position_e':'120.992135', 'position_n':'24.795156'};
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'update'))
         .send(req)
         .end(function(err, res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
-            res.body.should.be.a('object');
+            res.body.should.be.an('object');
             res.body.should.have.property('uid').eql(0);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('update');
@@ -60,7 +62,7 @@ describe('Member Api', function(){
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Attribute Name');
             res.body.payload.should.have.property('valid_area').eql(1);
-
+            
             done();
         });
     });
@@ -70,16 +72,16 @@ describe('Member Api', function(){
         .end(function(err, res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
-            res.body.should.be.a('object');
+            res.body.should.be.an('object');
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('update');
             res.body.should.have.property('brea').eql(2);
-
+            
             done();
         });
     });
     it('/PUT callhelp', function(done) { 
-        var req = {'operator_uid':0, 'uid':12, 'status':1, 'position_e':'120.13', 'position_n':'23.456'};
+        var req = {'operator_uid':0, 'uid':289, 'status':1, 'position_e':'120.13', 'position_n':'23.456'};
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'callhelp'))
         .send(req)
@@ -91,7 +93,7 @@ describe('Member Api', function(){
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('callhelp');
             res.body.should.have.property('brea').to.be.an('number');
-
+            
             done();
         });
     });
@@ -105,12 +107,12 @@ describe('Member Api', function(){
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('callhelp');
             res.body.should.have.property('brea').eql(2);
-
+            
             done();
         });
     });
     it('/GET read(with uid)', function(done) { 
-        var req = {'operator_uid':0, 'uid':12};
+        var req = {'operator_uid':0, 'uid':289};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'member', 'read'))
         .query(req)
@@ -135,6 +137,7 @@ describe('Member Api', function(){
                 member.should.have.property('score').to.be.an('number');
                 member.should.have.property('name').to.be.an('string');
             }
+            
             done();
         });
     });
@@ -163,6 +166,7 @@ describe('Member Api', function(){
                 member.should.have.property('score').to.be.an('number');
                 member.should.have.property('name').to.be.an('string');
             }
+            
             done();
         });
     });
@@ -176,12 +180,12 @@ describe('Member Api', function(){
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('read');
             res.body.should.have.property('brea').eql(2);
-
+            
             done();
         });
     });
     it('/POST login', function(done) { 
-        var req = {'email':'abcd@gmail.com', 'password':'xxxxx'};
+        var req = {'email':'qmo123@gmail.com', 'password':'S123456789'};
         chai.request(HOST)
         .post(path.join(HOST_PREFIX, 'member', 'login'))
         .send(req)
@@ -196,7 +200,7 @@ describe('Member Api', function(){
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Attribute Name');
             res.body.payload.should.have.property('correct').to.be.a('number');
-
+            
             done();
         });
     });
@@ -210,12 +214,12 @@ describe('Member Api', function(){
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('login');
             res.body.should.have.property('brea').eql(2);
-
+            
             done();
         });
     });
     it('/PUT money', function(done) { 
-        var req = {'operator_uid':0, 'uid':12, 'money_amount':-50};
+        var req = {'operator_uid':0, 'uid':289, 'money_amount':50};
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'money'))
         .send(req)
@@ -247,8 +251,7 @@ describe('Member Api', function(){
     });
 });
 
-
-
+var test_mid;
 describe('Mission Api', function(){
     it('/POST create', function(done) { 
         var req = {'operator_uid':12, 'title':'Test Mission', 'content':'This is a test mission.',
@@ -259,6 +262,8 @@ describe('Mission Api', function(){
         .post(path.join(HOST_PREFIX, 'mission', 'create'))
         .send(req)
         .end(function(err, res) {
+            test_mid = res.body.mid;
+            
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
@@ -269,6 +274,7 @@ describe('Mission Api', function(){
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Attribute Name');
             res.body.payload.should.have.property('mid').to.be.a('number');
+                        
             done();
         });
     });
@@ -282,11 +288,12 @@ describe('Mission Api', function(){
             res.body.should.have.property('object').eql('mission');
             res.body.should.have.property('action').eql('create');
             res.body.should.have.property('brea').eql(2);
+            
             done();
         });
     });
     it('/PUT edit', function(done) { 
-        var req = {'operator_uid':12, 'mid':11, 'content':'modified Test mission'};
+        var req = {'operator_uid':12, 'mid':test_mid, 'content':'modified Test mission'};
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'mission', 'edit'))
         .send(req)
@@ -318,7 +325,7 @@ describe('Mission Api', function(){
         });
     });
     it('/DEL delete', function(done) { 
-        var req = {'operator_uid':12, 'mid':10};
+        var req = {'operator_uid':12, 'mid':test_mid};
         chai.request(HOST)
         .delete(path.join(HOST_PREFIX, 'mission', 'delete'))
         .send(req)
@@ -349,7 +356,7 @@ describe('Mission Api', function(){
         });
     });
     it('/GET read(with mid)', function(done) { 
-        var req = {'operator_uid':12, 'mid':11};
+        var req = {'operator_uid':12, 'mid':1};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'mission', 'read'))
         .query(req)
@@ -378,6 +385,7 @@ describe('Mission Api', function(){
                 mission.should.have.property('location_e').to.be.a('number');
                 mission.should.have.property('location_n').to.be.a('number');
             }
+            
             done();
         });
     });
@@ -410,6 +418,7 @@ describe('Mission Api', function(){
                 mission.should.have.property('location_e').to.be.a('number');
                 mission.should.have.property('location_n').to.be.a('number');
             }
+            
             done();
         });
     });
@@ -428,7 +437,6 @@ describe('Mission Api', function(){
         });
     });
 });
-
 
 describe('Report Api', function(){
     it('/POST create', function(done) { 
@@ -632,6 +640,7 @@ describe('Report Api', function(){
     });
 });
 
+var test_tid;
 describe('Tool Api', function(){
     it('/POST create', function(done) { 
         var req = {'operator_uid':12, 'title':'Test tool', 'content':'This is a test tool'
@@ -640,6 +649,8 @@ describe('Tool Api', function(){
         .post(path.join(HOST_PREFIX, 'tool', 'create'))
         .send(req)
         .end(function(err, res) {
+            test_tid = res.body.tid;
+
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
@@ -650,6 +661,7 @@ describe('Tool Api', function(){
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Attribute Name');
             res.body.payload.should.have.property('tid').to.be.a('number');
+            
             done();
         });
     });
@@ -663,11 +675,12 @@ describe('Tool Api', function(){
             res.body.should.have.property('object').eql('tool');
             res.body.should.have.property('action').eql('create');
             res.body.should.have.property('brea').eql(2);
+            
             done();
         });
     });
     it('/DEL delete', function(done) { 
-        var req = {'operator_uid':12, 'tid':8};
+        var req = {'operator_uid':12, 'tid':test_tid};
         chai.request(HOST)
         .delete(path.join(HOST_PREFIX, 'tool', 'delete'))
         .send(req)
@@ -698,7 +711,7 @@ describe('Tool Api', function(){
         });
     });
     it('/GET read(with tid)', function(done) { 
-        var req = {'operator_uid':12, 'tid':11};
+        var req = {'operator_uid':12, 'tid':1};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'tool', 'read'))
         .query(req)
@@ -722,6 +735,7 @@ describe('Tool Api', function(){
                 tool.should.have.property('expire').to.be.a('number');
                 tool.should.have.property('price').to.be.a('number');
             }
+            
             done();
         });
     });
@@ -768,7 +782,7 @@ describe('Tool Api', function(){
     });
 });
 
-
+var test_cid;
 describe('Clue Api', function(){
     it('/POST create', function(done) { 
         var req = {'operator_uid':12, 'content':'This is a test clue'};
@@ -776,6 +790,8 @@ describe('Clue Api', function(){
         .post(path.join(HOST_PREFIX, 'clue', 'create'))
         .send(req)
         .end(function(err, res) {
+            test_cid = res.body.cid;            
+
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
@@ -803,7 +819,7 @@ describe('Clue Api', function(){
         });
     });
     it('/DEL delete', function(done) { 
-        var req = {'operator_uid':12, 'cid':8};
+        var req = {'operator_uid':12, 'cid':test_cid};
         chai.request(HOST)
         .delete(path.join(HOST_PREFIX, 'clue', 'delete'))
         .send(req)
@@ -834,7 +850,7 @@ describe('Clue Api', function(){
         });
     });
     it('/GET read(with cid)', function(done) { 
-        var req = {'operator_uid':12, 'cid':8};
+        var req = {'operator_uid':12, 'cid':1};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'clue', 'read'))
         .query(req)
@@ -896,7 +912,7 @@ describe('Clue Api', function(){
     });
 });
 
-
+var test_pid;
 describe('Pack Api', function(){
     it('/POST create', function(done) { 
         var req = {'operator_uid':12, 'uid':'13', 'class':'TOOL', 'id':13};
@@ -904,6 +920,8 @@ describe('Pack Api', function(){
         .post(path.join(HOST_PREFIX, 'pack', 'create'))
         .send(req)
         .end(function(err, res) {
+            test_pid = res.body.pid;
+
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
@@ -931,7 +949,7 @@ describe('Pack Api', function(){
         });
     });
     it('/DEL delete', function(done) { 
-        var req = {'operator_uid':12, 'pid':3};
+        var req = {'operator_uid':12, 'pid':test_pid};
         chai.request(HOST)
         .delete(path.join(HOST_PREFIX, 'pack', 'delete'))
         .send(req)
@@ -962,7 +980,7 @@ describe('Pack Api', function(){
         });
     });
     it('/GET read(with cid)', function(done) { 
-        var req = {'operator_uid':12, 'pid':8};
+        var req = {'operator_uid':12, 'pid':1};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'pack', 'read'))
         .query(req)
