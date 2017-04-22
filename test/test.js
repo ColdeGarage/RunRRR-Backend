@@ -126,9 +126,9 @@ describe('Member Api', function(){
             res.body.should.have.property('brea').eql(0);
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Objects');
-            res.body.payload.should.have.property('Objects').to.be.an('array');
-            res.body.payload.Objects.length.should.eql(1);
-            for (member in res.body.payload.Objects){
+            res.body.payload.should.have.property('objects').to.be.an('array');
+            res.body.payload.objects.length.should.eql(1);
+            for (member in res.body.payload.objects){
                 member.should.have.property('uid').to.be.an('number');
                 member.should.have.property('money').to.be.an('number');
                 member.should.have.property('status').to.be.an('number');
@@ -156,8 +156,8 @@ describe('Member Api', function(){
             res.body.should.have.property('brea').eql(0);
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Objects');
-            res.body.payload.should.have.property('Objects').to.be.an('array');
-            for (member in res.body.payload.Objects){
+            res.body.payload.should.have.property('objects').to.be.an('array');
+            for (member in res.body.payload.objects){
                 member.should.have.property('uid').to.be.an('number');
                 member.should.have.property('money').to.be.an('number');
                 member.should.have.property('status').to.be.an('number');
@@ -370,9 +370,9 @@ describe('Mission Api', function(){
             res.body.should.have.property('brea').eql(0);
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Objects');
-            res.body.payload.should.have.property('Objects').to.be.an('array');
-            res.body.payload.Objects.length.should.eql(1);
-            for (mission in res.body.payload.Objects){
+            res.body.payload.should.have.property('objects').to.be.an('array');
+            res.body.payload.objects.length.should.eql(1);
+            for (mission in res.body.payload.objects){
                 mission.should.have.property('mid').to.be.a('number');
                 mission.should.have.property('title').to.be.a('string');
                 mission.should.have.property('content').to.be.a('string');
@@ -404,8 +404,8 @@ describe('Mission Api', function(){
             res.body.should.have.property('brea').eql(0);
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Objects');
-            res.body.payload.should.have.property('Objects').to.be.an('array');
-            for (mission in res.body.payload.Objects){
+            res.body.payload.should.have.property('objects').to.be.an('array');
+            for (mission in res.body.payload.objects){
                 mission.should.have.property('mid').to.be.a('number');
                 mission.should.have.property('title').to.be.a('string');
                 mission.should.have.property('content').to.be.a('string');
@@ -584,9 +584,9 @@ describe('Report Api', function(){
             res.body.should.have.property('brea').eql(0);
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Objects');
-            res.body.payload.should.have.property('Objects').to.be.an('array');
-            res.body.payload.Objects.length.should.eql(1);
-            for (report in res.body.payload.Objects){
+            res.body.payload.should.have.property('objects').to.be.an('array');
+            res.body.payload.objects.length.should.eql(1);
+            for (report in res.body.payload.objects){
                 report.should.have.property('rid').eql(11);
                 report.should.have.property('uid').eql(12);
                 report.should.have.property('mid').to.be.a('number');
@@ -612,8 +612,8 @@ describe('Report Api', function(){
             res.body.should.have.property('brea').eql(0);
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Objects');
-            res.body.payload.should.have.property('Objects').to.be.an('array');
-            for (report in res.body.payload.Objects){
+            res.body.payload.should.have.property('objects').to.be.an('array');
+            for (report in res.body.payload.objects){
                 report.should.have.property('rid').to.be.a('number');
                 report.should.have.property('uid').eql(12);
                 report.should.have.property('mid').to.be.a('number');
@@ -725,9 +725,9 @@ describe('Tool Api', function(){
             res.body.should.have.property('brea').eql(0);
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Objects');
-            res.body.payload.should.have.property('Objects').to.be.an('array');
-            res.body.payload.Objects.length.should.eql(1);
-            for (tool in res.body.payload.Objects){
+            res.body.payload.should.have.property('objects').to.be.an('array');
+            res.body.payload.objects.length.should.eql(1);
+            for (tool in res.body.payload.objects){
                 tool.should.have.property('tid').eql(11);
                 tool.should.have.property('title').to.be.a('string');
                 tool.should.have.property('content').to.be.a('string');
@@ -754,8 +754,8 @@ describe('Tool Api', function(){
             res.body.should.have.property('brea').eql(0);
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Objects');
-            res.body.payload.should.have.property('Objects').to.be.an('array');
-            for (tool in res.body.payload.Objects){
+            res.body.payload.should.have.property('objects').to.be.an('array');
+            for (tool in res.body.payload.objects){
                 tool.should.have.property('tid').to.be.a('number');
                 tool.should.have.property('title').to.be.a('string');
                 tool.should.have.property('content').to.be.a('string');
@@ -864,9 +864,9 @@ describe('Clue Api', function(){
             res.body.should.have.property('brea').eql(0);
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Objects');
-            res.body.payload.should.have.property('Objects').to.be.an('array');
-            res.body.payload.Objects.length.should.eql(1);
-            for (clue in res.body.payload.Objects){
+            res.body.payload.should.have.property('objects').to.be.an('array');
+            res.body.payload.objects.length.should.eql(1);
+            for (clue in res.body.payload.objects){
                 clue.should.have.property('cid').eql(8);
                 clue.should.have.property('content').to.be.a('string');
             }
@@ -888,8 +888,8 @@ describe('Clue Api', function(){
             res.body.should.have.property('brea').eql(0);
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Objects');
-            res.body.payload.should.have.property('Objects').to.be.an('array');
-            for (clue in res.body.payload.Objects){
+            res.body.payload.should.have.property('objects').to.be.an('array');
+            for (clue in res.body.payload.objects){
                 clue.should.have.property('cid').to.be.a('number');
                 clue.should.have.property('content').to.be.a('string');
             }
@@ -994,9 +994,9 @@ describe('Pack Api', function(){
             res.body.should.have.property('brea').eql(0);
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Objects');
-            res.body.payload.should.have.property('Objects').to.be.an('array');
-            res.body.payload.Objects.length.should.eql(1);
-            for (pack in res.body.payload.Objects){
+            res.body.payload.should.have.property('objects').to.be.an('array');
+            res.body.payload.objects.length.should.eql(1);
+            for (pack in res.body.payload.objects){
                 pack.should.have.property('pid').eql(8);
                 pack.should.have.property('uid').eql(12);
                 pack.should.have.property('class').to.be.a('string');
@@ -1020,8 +1020,8 @@ describe('Pack Api', function(){
             res.body.should.have.property('brea').eql(0);
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Objects');
-            res.body.payload.should.have.property('Objects').to.be.an('array');
-            for (pack in res.body.payload.Objects){
+            res.body.payload.should.have.property('objects').to.be.an('array');
+            for (pack in res.body.payload.objects){
                 pack.should.have.property('pid').to.be.a('number');
                 pack.should.have.property('uid').eql(12);
                 pack.should.have.property('class').to.be.a('string');
