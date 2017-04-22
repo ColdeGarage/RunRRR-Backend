@@ -200,7 +200,7 @@ exports.read = function(req, res){
 					else {
 						ret.brea = 0;
 						ret.payload = {
-							type : "objects",
+							type : "Objects",
 							objects : rows
 						}
 						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
@@ -228,7 +228,7 @@ exports.read = function(req, res){
 					else {
 						ret.brea = 0;
 						ret.payload = {
-							type : "objects",
+							type : "Objects",
 							objects : rows
 						}
 						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
