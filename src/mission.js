@@ -31,9 +31,10 @@ exports.create = function(req, res){
 
 	check = check && !isNaN(ret.uid);
 	if (check) {
-		connect.query("INSERT INTO mission SET ?", mission, function(err, result){
+		connection.query("INSERT INTO mission SET ?", mission, function(err, result){
 			if (err){
 				ret.brea = 1;
+				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
 				console.log("Failed! Mission create with database error.");
 			}
@@ -43,6 +44,7 @@ exports.create = function(req, res){
 					type : "Attribute Name",
 					mid : result.insertId
 				}
+				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
 				console.log("Success! Mission create successfully.");
 			}
@@ -50,6 +52,7 @@ exports.create = function(req, res){
 	}
 	else {
 		ret.brea = 2; //if no complete mission values
+		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 		console.log("Failed! Mission create with uncomplete values.");
 	}
@@ -83,28 +86,43 @@ exports.edit = function(req, res){
 		if (!valid) delete mission[key];
 	}
 	if (check) {
-		connect.query("UPDATE mission SET ? WHERE mid = "+mission.mid, mission, function(err, result){
-			if (err){
+		connection.query("SELECT * FROM mission WHERE mid = "+mid, function(err, rows){
+			if (err) {
 				ret.brea = 1;
+				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
-				console.log("Failed! Mission edit with database error.");
+				console.log("Failed! (edit)Mission find with database error.");
 			}
 			else {
-				if (result.changeRows) {
-					ret.brea = 0;
+				if (rows.length == 0) {
+					ret.brea = 3;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
-					console.log("Success! Mission edit successfully");
+					console.log("Failed! Mission database is still empty.");
 				}
 				else {
-					ret.brea = 3;
-					res.json(ret);
-					console.log("Failed! Mission database has nothing to edit.");
+					connection.query("UPDATE mission SET ? WHERE mid = "+mission.mid, mission, function(err, result){
+						if (err){
+							ret.brea = 1;
+							ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
+							res.json(ret);
+							console.log("Failed! Mission edit with database error.");
+						}
+						else {
+							ret.brea = 0;
+							ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
+							res.json(ret);
+							if (result.changedRows) console.log("Success! Mission edit successfully.");
+							else console.log("Success! Success! But member information remains the same.");
+						}
+					});
 				}
-			}
+			} 
 		});
 	}
 	else {
 		ret.brea = 2;
+		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 		console.log("Failed! Mission edit without operator_uid or mid.");
 	}
@@ -124,17 +142,20 @@ exports.delete = function(req, res){
 		connect.query("DELETE FROM mission WHERE mid = "+mid, function(err, result){
 			if (err){
 				ret.brea = 1;
+				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
 				console.log("Failed! Mission delete with database error.");
 			}
 			else {
 				if (result.affectedRows) {
 					ret.brea = 0;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Success! Mission delete successfully.");
 				}
 				else {
 					ret.brea = 3;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Failed! Mission database has nothing to delete.");
 				}
@@ -143,6 +164,7 @@ exports.delete = function(req, res){
 	}
 	else {
 		ret.brea = 2;
+		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 		console.log("Failed! Mission delete without operator_uid or mid.");
 	}
@@ -162,12 +184,14 @@ exports.read = function(req, res){
 			connect.query("SELECT * FROM mission WHERE mid = "+mid, function(err, rows){
 				if (err) {
 					ret.brea = 1;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Failed! (mid) Mission read with database error.");
 				}
 				else {
 					if (rows.length == 0) {
 						ret.brea = 3;
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
 						console.log("Failed! (mid) Mission database is still empty.");
 					}
@@ -177,6 +201,7 @@ exports.read = function(req, res){
 							type : "objects",
 							objects : rows
 						}
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
 						console.log("Success! (mid) Mission read successfully");
 					}
@@ -187,12 +212,14 @@ exports.read = function(req, res){
 			connect.query("SELECT * FROM mission", function(err, rows){
 				if (err) {
 					ret.brea = 1;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Failed! Mission read with database error.");
 				}
 				else {
 					if (rows.length == 0) {
 						ret.brea = 3;
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
 						console.log("Failed! Mission database is still empty.");
 					}
@@ -202,6 +229,7 @@ exports.read = function(req, res){
 							type : "objects",
 							objects : rows
 						}
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
 						console.log("Success! Mission read successfully");
 					}	
@@ -211,6 +239,7 @@ exports.read = function(req, res){
 	}
 	else {
 		ret.brea = 2;
+		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 		console.log("Failed! Mission read without operator_uid.");
 	}

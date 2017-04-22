@@ -1,8 +1,8 @@
 var db = require('./db.js');
-var request = require('request');
-var connect = db.conn();
-//get timezone(UTC+8) offset
-var timezone = (new Date).getTimezoneOffset();
+var connection = db.conn();
+
+var timezone = (new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
+
 //return member's status
 exports.liveordie = function(req, res){
 	var uid = parseInt(req.body.uid);
@@ -20,29 +20,40 @@ exports.liveordie = function(req, res){
 	else check = 0;
 
 	if (check) {
-		connect.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, result){
-			if (err){
+		connection.query("SELECT * FROM member WHERE uid = "+member.uid, function(err, rows){
+			if (err) {
 				ret.brea = 1;
 				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
-				console.log("Failed! Member liveordie with database error.");
+				console.log("Failed! (update)Member find with database error.");
 			}
 			else {
-				if (result.changeRows) {
-					ret.brea = 0;
-					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-					ret.payload = {
-						type : "Attribute Name",
-						status : info.status
-					};
-					res.json(ret);
-					console.log("Success! Member liveordie change successfully.");
-				}
-				else {
+				if (rows.length == 0) {
 					ret.brea = 3;
 					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
-					console.log("Failed! Member liveordie database has nothing to change.");
+					console.log("Failed! (uid) Member database is still empty.");
+				}
+				else{
+					connection.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, result){
+						if (err){
+							ret.brea = 1;
+							ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
+							res.json(ret);
+							console.log("Failed! Member liveordie with database error.");
+						}
+						else {
+							ret.brea = 0;
+							ret.payload = {
+								type : "Attribute Name",
+								status : info.status
+							};
+							ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
+							res.json(ret);
+							if (result.changedRows) console.log("Success! Member liveordie change successfully.");
+							else console.log("Success! But member liveordie has nothing to change.");
+						}
+					});
 				}
 			}
 		});
@@ -73,27 +84,42 @@ exports.update = function(req, res){
 	}
 	check = check && !isNaN(ret.uid);
 	if (check) {
-		connect.query("UPDATE member SET ? WHERE uid = "+member.uid, member, function(err, result){
+		connection.query("SELECT * FROM member WHERE uid = "+member.uid, function(err, rows){
 			if (err) {
 				ret.brea = 1;
 				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
-				console.log("Failed! Member update with database error.");
+				console.log("Failed! (update)Member find with database error.");
 			}
 			else {
-				if (result.changeRows) {
-					ret.brea = 0;
-					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-					res.json(ret);
-					console.log("Success! Member update successfully.");
-				}
-				else {
+				if (rows.length == 0) {
 					ret.brea = 3;
 					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
-					console.log("Failed! Member database has nothing to change.");
+					console.log("Failed! (uid) Member database is still empty.");
 				}
-			}
+				else{
+					connection.query("UPDATE member SET ? WHERE uid = "+member.uid, member, function(err, result){
+						if (err) {
+							ret.brea = 1;
+							ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
+							res.json(ret);
+							console.log("Failed! Member update with database error.");
+						}
+						else {
+							ret.brea = 0;
+							ret.payload = {
+								type : "Attribute Name",
+								valid_area : 1
+							}
+							ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
+							res.json(ret);
+							if (result.changedRows) console.log("Success! Member update successfully.");
+							else console.log("Success! But member information remains the same.");
+						}
+					});
+				}
+			} 
 		});
 	}
 	else {
@@ -115,7 +141,7 @@ exports.read = function(req, res){
 
 	if (!isNaN(ret.uid)) {
 		if (!isNaN(uid)) {
-			connect.query("SELECT * FROM member WHERE uid = "+uid, function(err, rows){
+			connection.query("SELECT * FROM member WHERE uid = "+uid, function(err, rows){
 				if (err) {
 					ret.brea = 1;
 					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
@@ -131,11 +157,11 @@ exports.read = function(req, res){
 					}
 					else {
 						ret.brea = 0;
-						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						ret.payload = {
 							type : "objects",
 							objects : rows
 						}
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
 						console.log("Success! (uid) Member data read successfully.");
 					}
@@ -143,7 +169,7 @@ exports.read = function(req, res){
 			});
 		}
 		else {
-			connect.query("SELECT * FROM member", function(err, rows){
+			connection.query("SELECT * FROM member", function(err, rows){
 				if (err) {
 					ret.brea = 1;
 					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
@@ -159,11 +185,11 @@ exports.read = function(req, res){
 					}
 					else {
 						ret.brea = 0;
-						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						ret.payload = {
 							type : "objects",
 							objects : rows
 						}
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
 						console.log("Success! Member data read successfully.");
 					}
@@ -191,7 +217,7 @@ exports.money = function(req, res){
 	var info;
 	var check = !isNaN(ret.uid) && !isNaN(uid) && !isNaN(amount);
 	if (check) {
-		connect.query("SELECT money FROM member WHERE uid = "+uid, function(err, rows){
+		connection.query("SELECT money FROM member WHERE uid = "+uid, function(err, rows){
 			if (err){
 				ret.brea = 1;
 				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
@@ -203,40 +229,27 @@ exports.money = function(req, res){
 					ret.brea = 3;
 					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
-					console.log("Failed! Member database is still empty.");
+					console.log("Failed! (money)Member database is still empty.");
 				}
 				else {
 					ret.brea = 0;
 					info = rows;
-					console.log("Success! Member money get successfully.");
+					connection.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, result){
+						if (err){
+							ret.brea = 1;
+							console.log("Failed! Member money update with database error.");
+						}
+						else {
+							ret.brea = 0;
+							ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
+							res.json(ret);
+							if (result.changedRows) console.log("Success! Member money update successfully.");
+							else console.log("Success! But member money has nothing to change.");
+						}
+					});
 				}
 			}
 		});
-		if (ret.brea == 0) {
-			info.money = info.money + amount;
-			connect.query("UPDATE member SET ? WHERE uid = "+uid, info, function(err, result){
-				if (err){
-					ret.brea = 1;
-					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-					res.json(ret);
-					console.log("Failed! Member money update with database error.");
-				}
-				else {
-					if (result.changeRows) {
-						ret.brea = 0;
-						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-						res.json(ret);
-						console.log("Success! Member money update successfully.");	
-					}
-					else {
-						ret.brea = 3;
-						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-						res.json(ret);
-						console.log("Failed! Member money database has nothing to change.");
-					}
-				}
-			});
-		}
 	}
 	else {
 		ret.brea = 2;
@@ -267,7 +280,7 @@ exports.callhelp = function(req, res){
 		console.log("Help!!!");
 		console.log("At ("+member.position_e+","+member.position_n+")");
 
-		connect.query("SELECT name FROM member WHERE uid = "+member.uid, function(err, rows){
+		connection.query("SELECT name FROM member WHERE uid = "+member.uid, function(err, rows){
 			if (err){
 				ret.brea = 1;
 				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);

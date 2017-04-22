@@ -1,6 +1,8 @@
 var db = require('./db.js');
 var connect = db.conn();
 
+var timezone = (new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
+
 //create a new tool
 exports.create = function(req, res){
 	var tool = new Object;
@@ -10,23 +12,23 @@ exports.create = function(req, res){
 	tool.expire = parseInt(req.body.expire);
 	tool.price = parseInt(req.body.price);
 
+	var ret = new Object;
+	ret.uid = parseInt(req.body.operator_uid);
+	ret.object = "tool";
+	ret.action = "create";
+
 	//check if post all of the values
 	var check = 1;
 	for (var key in tool) {
 		var valid = !(isNaN(tool[key]) && (tool[key]==undefined))
 		check = check && valid;
 	}
-
-	var ret = new Object;
-	ret.uid = parseInt(req.body.operator_uid);
-	ret.object = "tool";
-	ret.action = "create";
-
 	check = check && !isNaN(ret.uid);
 	if (check) {
 		connect.query("INSERT INTO tool SET ?", tool, function(err, result){
 			if (err){
 				ret.brea = 1;
+				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
 				console.log("Failed! Tool create with database error.");
 			}
@@ -36,6 +38,7 @@ exports.create = function(req, res){
 					type : "Attribute Name",
 					tid : result.insertId
 				}
+				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
 				console.log("Success! Tool create successfully.");
 			}
@@ -43,6 +46,7 @@ exports.create = function(req, res){
 	}
 	else {
 		ret.brea = 2; //if no complete tool values
+		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 		console.log("Failed! Tool create with uncomplete values.");
 	}
@@ -62,17 +66,20 @@ exports.delete = function(req, res){
 		connect.query("DELETE FROM tool WHERE tid = "+tid, function(err, result){
 			if (err){
 				ret.brea = 1;
+				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
 				console.log("Failed! Tool delete with database error.");
 			}
 			else {
 				if (result.affectedRows) {
 					ret.brea = 0;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Success! Tool delete successfully.");
 				}
 				else {
 					ret.brea = 3;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Failed! Tool database has nothing to delete.");
 				}
@@ -81,6 +88,7 @@ exports.delete = function(req, res){
 	}
 	else {
 		ret.brea = 2;
+		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 		console.log("Failed! Tool delete without operator_uid or tid.");
 	}
@@ -100,12 +108,14 @@ exports.read = function(req, res){
 			connect.query("SELECT * FROM tool WHERE tid = "+tid, function(err, rows){
 				if (err) {
 					ret.brea = 1;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Failed! (tid) Tool read with database error.");
 				}
 				else {
 					if (rows.length == 0) {
 						ret.brea = 3;
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
 						console.log("Failed! (tid) Tool database is still empty.");
 					}
@@ -115,6 +125,7 @@ exports.read = function(req, res){
 							type : "objects",
 							objects : rows
 						}
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
 						console.log("Success! (tid) Tool read successfully.");
 					}
@@ -125,12 +136,14 @@ exports.read = function(req, res){
 			connect.query("SELECT * FROM tool", function(err, rows){
 				if (err) {
 					ret.brea = 1;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Failed! Tool read with database error.");
 				}
 				else {
 					if (rows.length == 0) {
 						ret.brea = 3;
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
 						console.log("Failed! Tool database is still empty.");
 					}
@@ -140,6 +153,7 @@ exports.read = function(req, res){
 							type : "objects",
 							objects : rows
 						}
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
 						console.log("Success! Tool read successfully.");
 					}	
@@ -149,6 +163,7 @@ exports.read = function(req, res){
 	}
 	else {
 		ret.brea = 2;
+		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 		console.log("Failed! Tool read without operator_uid.");
 	}

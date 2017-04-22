@@ -1,6 +1,8 @@
 var db = require('./db.js');
 var connect = db.conn();
 
+var timezone = (new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
+
 //create a new clue
 exports.create = function(req, res){
 	var clue = new Object;
@@ -16,6 +18,7 @@ exports.create = function(req, res){
 		connect.query("INSERT INTO clue SET ?", clue, function(err, result){
 			if (err){
 				ret.brea = 1;
+				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
 				console.log("Failed! Clue create with database error.");
 			}
@@ -25,6 +28,7 @@ exports.create = function(req, res){
 					type : "Attribute Name",
 					cid : result.insertId
 				}
+				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
 				console.log("Success! Clue create successfully.");
 			}
@@ -32,6 +36,7 @@ exports.create = function(req, res){
 	}
 	else {
 		ret.brea = 2; //if no complete clue values
+		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 		console.log("Failed! Clue create with uncomplete values.");
 	}
@@ -51,17 +56,20 @@ exports.delete = function(req, res){
 		connect.query("DELETE FROM clue WHERE cid = "+cid, function(err, result){
 			if (err){
 				ret.brea = 1;
+				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
 				console.log("Failed! Clue delete with database error.");
 			}
 			else {
 				if (result.affectedRows) {
 					ret.brea = 0;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Success! Clue delete successfully.");
 				}
 				else {
 					ret.brea = 3;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Failed! Clue database has nothing to delete.");
 				}
@@ -70,6 +78,7 @@ exports.delete = function(req, res){
 	}
 	else {
 		ret.brea = 2;
+		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 		console.log("Failed! Clue delete without operator_uid or cid.");
 	}
@@ -89,12 +98,14 @@ exports.read = function(req, res){
 			connect.query("SELECT * FROM clue WHERE cid = "+cid, function(err, rows){
 				if (err) {
 					ret.brea = 1;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Failed! (cid) Clue read with database error.");
 				}
 				else {
 					if (rows.length == 0) {
 						ret.brea = 3;
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
 						console.log("Failed! (cid) Clue database is still empty.");
 					}
@@ -104,6 +115,7 @@ exports.read = function(req, res){
 							type : "objects",
 							objects : rows
 						}
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
 						console.log("Success! (cid) Clue read successfully.");
 					}
@@ -114,12 +126,14 @@ exports.read = function(req, res){
 			connect.query("SELECT * FROM clue", function(err, rows){
 				if (err) {
 					ret.brea = 1;
+					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
 					console.log("Failed! Clue read with database error.");
 				}
 				else {
 					if (rows.length == 0) {
 						ret.brea = 3;
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
 						console.log("Failed! Clue database is still empty.");
 					}
@@ -129,6 +143,7 @@ exports.read = function(req, res){
 							type : "objects",
 							objects : rows
 						}
+						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
 						console.log("Success! Clue read successfully.");
 					}	
@@ -138,6 +153,7 @@ exports.read = function(req, res){
 	}
 	else {
 		ret.brea = 2;
+		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 		console.log("Failed! Clue read without operator_uid.")
 	}
