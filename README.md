@@ -7,6 +7,16 @@ Source code of the project. <br>
 * `main.js` : RESTful API Reqest Handler
 * `object.js`: Object definition of each *object*, such as *member*, *mission* etc.
 
+### Start the server (temporarily)
+1. Go to EECS822.
+2. ssh NAS with your account.
+3. type `node ../howard19192828/RunRRR-Backend/src/main.js` in terminal.
+4. Console prints out `[INFO] Success when connecting to db` as starting the server successfully.
+
+### API URL (temporarily)
+Call the API with URL when you're at EECS822. <br>
+URL : `192.168.0.2:8081/api/v1/object/action`
+
 ## API Return Template
 The API will return in JSON format.
 Every return JSON should include the following 4 entries.<br>
@@ -23,7 +33,7 @@ In some read api, if not designate id, it will return a list of items.
 ### Payload foramt
 There are always 2 entries in payload.
 * `type`: Type of payload, either `Attribute Name` or `Objects`
-* `*attribute name*`: Value of corresponding *`attribute name`*, where *`attribute name`* can be `status`,  `mid`, `tid` etc. **Only exists when `type` be `Attribute Name`**.
+* *`attribute name`*: Value of corresponding *`attribute name`*, where *`attribute name`* can be `status`,  `mid`, `tid` etc. **Only exists when `type` be `Attribute Name`**.
 * `Objects`: Whole objects attributes key/value pair.
 
 ### Examples
@@ -34,7 +44,7 @@ Return JSON of  `/api/v1/member/callhelp`
   "uid": 86,
   "object": "member",
   "action": "callhelp",
-  "brea": 0,
+  "brea": 0
 }
 ```
 
@@ -72,8 +82,10 @@ Return JSON of  `/api/v1/mission/read`(requesting mid 12)
                             "time_end": "14:23",
                             "price": 1500,
                             "clue": 8,
-                            "class": 0,
-                            "score": 20
+                            "class": "MAIN",
+                            "score": 20,
+                            "location_e": 120.995106,
+                            "location_n": 24.794090
                         }
         ]
   }     
@@ -99,8 +111,10 @@ Return JSON of  `/api/v1/mission/read` (No designate mid
                             "time_end": "14:23",
                             "price": 1500,
                             "clue": 8,
-                            "class": 0,
-                            "score": 20
+                            "class": "MAIN",
+                            "score": 20,
+                            "location_e": 120.995106,
+                            "location_n": 24.794090
                         },
                         {
                             "mid": 15,
@@ -110,8 +124,10 @@ Return JSON of  `/api/v1/mission/read` (No designate mid
                             "time_end": "14:30",
                             "price": 1100,
                             "clue": 10,
-                            "class": 1,
-                            "score": 10
+                            "class": "SUB",
+                            "score": 10,
+                            "location_e": 0,
+                            "location_n": 0
                         }
         ]
   }
