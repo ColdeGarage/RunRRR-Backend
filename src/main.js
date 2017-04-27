@@ -3,18 +3,21 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var member = require('./member.js');
 var mission = require('./mission.js');
+var path = require('path');
 var clue = require('./clue.js');
 var pack = require('./pack.js');
 var tool = require('./tool.js');
 var report = require('./report.js');
 var config = require('./config.json');
-var PORT = config.port
+
+var PORT = config.port;
 var HOST = config.host;
 var HOST_PREFIX = config.host_prefix;
+var FILE_PREFIX = config.file_prefix;
 
 var app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ limit:'10mb', extended: true }));
+app.use(bodyParser.json({limit: '10mb'}));
 
 app.post(HOST_PREFIX+'/member/login', member.login);
 app.put(HOST_PREFIX+'/member/liveordie', member.liveordie);
@@ -46,6 +49,10 @@ app.post(HOST_PREFIX+'/pack/create', pack.create);
 app.delete(HOST_PREFIX+'/pack/delete', pack.delete);
 app.get(HOST_PREFIX+'/pack/read', pack.read);
 
+app.get(HOST_PREFIX+'/download/:type/:filename', function(req, res){
+    console.log("Getting file" + req.params.type + '/' + req.params.filename);
+    res.sendfile(path.join(FILE_PREFIX, req.params.type, req.params.filename));
+});
 var server = app.listen(PORT, function () {
     var port =  server.address().port;
     console.log("Start Server at " + port);
