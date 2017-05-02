@@ -1,4 +1,6 @@
-var db = require('./db.js');
+var path = require('path');
+var ROOT_PATH = path.resolve(process.env.NODE_PATH)
+var db = require(path.join(ROOT_PATH, 'src/db.js'));
 var connection = db.conn();
 
 var timezone = (new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
@@ -12,8 +14,8 @@ exports.create = function(req, res){
 
 	var ret = new Object;
 	ret.uid = parseInt(req.body.operator_uid);
-	ret.object = "pack";
-	ret.action = "create";
+	ret.object = 'pack';
+	ret.action = 'create';
 
 	//check if post all of the values
 	var check = 1;
@@ -23,22 +25,22 @@ exports.create = function(req, res){
 	}
 	check = check && !isNaN(ret.uid);
 	if (check) {
-		connection.query("INSERT INTO pack SET ?", pack, function(err, result){
+		connection.query('INSERT INTO pack SET ?', pack, function(err, result){
 			if (err){
 				ret.brea = 1;
 				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
-				console.log("Failed! Pack create with database error.");
+				console.log('Failed! /pack/create (uid='+pack.uid+') with database error:', err);
 			}
 			else {
 				ret.brea = 0;
 				ret.payload = {
-					type : "Attribute Name",
+					type : 'Attribute Name',
 					pid : result.insertId
 				}
 				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
-				console.log("Success! Pack create successfully.");
+				console.log('Success! /pack/create (uid='+pack.uid+') (pid='+result.insertId+').');
 			}
 		});
 	}
@@ -46,7 +48,7 @@ exports.create = function(req, res){
 		ret.brea = 2; //if no complete pack values
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
-		console.log("Failed! Pack create with uncomplete values.");
+		console.log('Failed! /pack/create without operator_uid or some values in object.');
 	}
 }
 
@@ -56,30 +58,30 @@ exports.delete = function(req, res){
 
 	var ret = new Object;
 	ret.uid = parseInt(req.body.operator_uid);
-	ret.object = "pack";
-	ret.action = "delete";
+	ret.object = 'pack';
+	ret.action = 'delete';
 
 	var check = !isNaN(ret.uid) && !isNaN(pid);
 	if (check) {
-		connection.query("DELETE FROM pack WHERE pid = "+pid, function(err, result){
+		connection.query('DELETE FROM pack WHERE pid = '+pid, function(err, result){
 			if (err){
 				ret.brea = 1;
 				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
-				console.log("Failed! Pack delete with database error.");
+				console.log('Failed! /pack/delete (pid='+pid+') with database error:', err);
 			}
 			else {
 				if (result.affectedRows) {
 					ret.brea = 0;
 					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
-					console.log("Success! Pack delete successfully.");
+					console.log('Success! /pack/delete (pid='+pid+') successfully.');
 				}
 				else {
 					ret.brea = 3;
 					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
-					console.log("Failed! Pack database has nothing to delete.");
+					console.log('Failed! /pack/delete (pid='+pid+') is not in database.');
 				}
 			}
 		});
@@ -88,72 +90,72 @@ exports.delete = function(req, res){
 		ret.brea = 2;
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
-		console.log("Failed! Pack delete without operator_uid or pid.");
+		console.log('Failed! /pack/delete without operator_uid or pid.');
 	}
 }
 
 //read the backpack's information
 exports.read = function(req, res){
-	var pid = parseInt(req.query.pid);
+	var uid = parseInt(req.query.uid);
 
 	var ret = new Object;
 	ret.uid = parseInt(req.query.operator_uid);
-	ret.object = "pack";
-	ret.action = "read";
+	ret.object = 'pack';
+	ret.action = 'read';
 
 	if (!isNaN(ret.uid)) {
-		if (!isNaN(pid)) {
-			connection.query("SELECT * FROM pack WHERE pid = "+pid, function(err, rows){
+		if (!isNaN(uid)) {
+			connection.query('SELECT * FROM pack WHERE uid = '+uid, function(err, rows){
 				if (err) {
 					ret.brea = 3;
 					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
-					console.log("Failed! (pid) Pack read with database error.");
+					console.log('Failed! /pack/read (uid='+uid+') with database error:', err);
 				}
 				else {
 					if (rows.length == 0) {
 						ret.brea = 1;
 						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
-						console.log("Failed! (pid) Pack database is still empty.");
+						console.log('Failed! /pack/read (uid='+uid+') is not in database.');
 					}
 					else {
 						ret.brea = 0;
 						ret.payload = {
-							type : "Objects",
+							type : 'Objects',
 							objects : rows
 						}
 						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
-						console.log("Success! Pack read successfully.");
+						console.log('Success! /pack/read (uid='+uid+') successfully.');
 					}
 				} 
 			});
 		}
 		else {
-			connection.query("SELECT * FROM pack", function(err, rows){
+			connection.query('SELECT * FROM pack', function(err, rows){
 				if (err) {
 					ret.brea = 1;
 					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
-					console.log("Failed! Pack read with database error.");
+					console.log('Failed! /pack/read with database error:', err);
 				}
 				else {
 					if (rows.length == 0) {
 						ret.brea = 3;
 						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
-						console.log("Failed! Pack database is still empty.");
+						console.log('Failed! /pack/read database is still empty.');
 					}
 					else {
 						ret.brea = 0;
 						ret.payload = {
-							type : "Objects",
+							type : 'Objects',
 							objects : rows
 						}
 						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
-						console.log("Success! Pack read successfully.");
+						console.log('Success! /pack/read successfully.');
 					}	
 				}
 			});
@@ -163,6 +165,6 @@ exports.read = function(req, res){
 		ret.brea = 2;
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
-		console.log("Failed! Pack read without operator_uid.");
+		console.log('Failed! /pack/read without operator_uid.');
 	}
 }
