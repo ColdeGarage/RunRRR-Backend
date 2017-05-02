@@ -1,13 +1,17 @@
 var mysql = require('mysql');
+var path = require('path');
+var ROOT_PATH = path.resolve(process.env.NODE_PATH)
+if (process.env.NODE_ENV === 'production'){
+    var config = require(path.join(ROOT_PATH, 'src/config_production.json'));
+} else if (process.env.NODE_ENV === 'test') {
+    var config = require(path.join(ROOT_PATH, 'src/config_staging.json'));
+} else {
+    throw 'Environment setting error! Please set NODE_ENV Environment variable';
+}
 
 exports.conn = function connectionHandler(){
 
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'run_for_ee',
-        password: 'runrrrr',
-        database: 'run_for_ee'
-    });
+    var connection = mysql.createConnection(config.database);
 
     connection.connect(function(err){
         if(err){

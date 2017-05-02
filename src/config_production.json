@@ -1,0 +1,14 @@
+{
+    "host_prefix":"/api/v1.1",
+    "port":8081,
+    "host":"localhost",
+    "file_prefix":"data",
+    "image_dir":"/img",
+    "map_dir":"/map",
+    "database":{
+    	"host":"localhost",
+    	"user":"run_for_ee",
+    	"password": "runrrrr",
+    	"database":"run_for_ee"
+    }
+}

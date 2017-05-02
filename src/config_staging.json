@@ -1,0 +1,13 @@
+{
+    "host_prefix":"/api/v1.1",
+    "port":3000,
+    "host":"localhost",
+    "file_prefix":"/test/data",
+    "image_dir":"/img",
+    "map_dir":"/map",
+    "database":{
+    	"user":"run_for_ee",
+    	"password": "runrrrr",
+    	"database":"run_for_ee"
+    }
+}

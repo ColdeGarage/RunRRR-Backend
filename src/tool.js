@@ -1,4 +1,6 @@
-var db = require('./db.js');
+var path = require('path');
+var ROOT_PATH = path.resolve(process.env.NODE_PATH)
+var db = require(path.join(ROOT_PATH, 'src/db.js'));
 var connection = db.conn();
 
 var timezone = (new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
@@ -14,8 +16,8 @@ exports.create = function(req, res){
 
 	var ret = new Object;
 	ret.uid = parseInt(req.body.operator_uid);
-	ret.object = "tool";
-	ret.action = "create";
+	ret.object = 'tool';
+	ret.action = 'create';
 
 	//check if post all of the values
 	var check = 1;
@@ -25,22 +27,22 @@ exports.create = function(req, res){
 	}
 	check = check && !isNaN(ret.uid);
 	if (check) {
-		connection.query("INSERT INTO tool SET ?", tool, function(err, result){
+		connection.query('INSERT INTO tool SET ?', tool, function(err, result){
 			if (err){
 				ret.brea = 1;
 				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
-				console.log("Failed! Tool create with database error.");
+				console.log('Failed! /tool/create with database error:', err);
 			}
 			else {
 				ret.brea = 0;
 				ret.payload = {
-					type : "Attribute Name",
+					type : 'Attribute Name',
 					tid : result.insertId
 				}
 				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
-				console.log("Success! Tool create successfully.");
+				console.log('Success! /tool/create (tid='+result.insertId+') successfully.');
 			}
 		});
 	}
@@ -48,7 +50,7 @@ exports.create = function(req, res){
 		ret.brea = 2; //if no complete tool values
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
-		console.log("Failed! Tool create with uncomplete values.");
+		console.log('Failed! /toolcreate without operator_uid or some values in object.');
 	}
 }
 
@@ -58,30 +60,30 @@ exports.delete = function(req, res){
 
 	var ret = new Object;
 	ret.uid = parseInt(req.body.operator_uid);
-	ret.object = "tool";
-	ret.action = "delete";
+	ret.object = 'tool';
+	ret.action = 'delete';
 
 	var check = !isNaN(ret.uid) && !isNaN(tid);
 	if (check) {
-		connection.query("DELETE FROM tool WHERE tid = "+tid, function(err, result){
+		connection.query('DELETE FROM tool WHERE tid = '+tid, function(err, result){
 			if (err){
 				ret.brea = 1;
 				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 				res.json(ret);
-				console.log("Failed! Tool delete with database error.");
+				console.log('Failed! /tool/delete (tid='+tid+') with database error:', err);
 			}
 			else {
 				if (result.affectedRows) {
 					ret.brea = 0;
 					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
-					console.log("Success! Tool delete successfully.");
+					console.log('Success! /tool/delete (tid='+tid+') successfully.');
 				}
 				else {
 					ret.brea = 3;
 					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
-					console.log("Failed! Tool database has nothing to delete.");
+					console.log('Failed! /tool/delete (tid='+tid+') is not in database.');
 				}
 			}
 		});
@@ -90,7 +92,7 @@ exports.delete = function(req, res){
 		ret.brea = 2;
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
-		console.log("Failed! Tool delete without operator_uid or tid.");
+		console.log('Failed! /tool/delete without operator_uid or tid.');
 	}
 }
 
@@ -100,62 +102,62 @@ exports.read = function(req, res){
 
 	var ret = new Object;
 	ret.uid = parseInt(req.query.operator_uid);
-	ret.object = "tool";
-	ret.action = "read";
+	ret.object = 'tool';
+	ret.action = 'read';
 
 	if (!isNaN(ret.uid)) {
 		if (!isNaN(tid)) {
-			connection.query("SELECT * FROM tool WHERE tid = "+tid, function(err, rows){
+			connection.query('SELECT * FROM tool WHERE tid = '+tid, function(err, rows){
 				if (err) {
 					ret.brea = 1;
 					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
-					console.log("Failed! (tid) Tool read with database error.");
+					console.log('Failed! /tool/read (tid='+tid+') with database error:', err);
 				}
 				else {
 					if (rows.length == 0) {
 						ret.brea = 3;
 						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
-						console.log("Failed! (tid) Tool database is still empty.");
+						console.log('Failed! /tool/read (tid='+tid+') is not in database.');
 					}
 					else {
 						ret.brea = 0;
 						ret.payload = {
-							type : "Objects",
+							type : 'Objects',
 							objects : rows
 						}
 						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
-						console.log("Success! (tid) Tool read successfully.");
+						console.log('Success! /tool/read (tid='+tid+') successfully.');
 					}
 				} 
 			});
 		}
 		else {
-			connection.query("SELECT * FROM tool", function(err, rows){
+			connection.query('SELECT * FROM tool', function(err, rows){
 				if (err) {
 					ret.brea = 1;
 					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 					res.json(ret);
-					console.log("Failed! Tool read with database error.");
+					console.log('Failed! /tool/read with database error:', err);
 				}
 				else {
 					if (rows.length == 0) {
 						ret.brea = 3;
 						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
-						console.log("Failed! Tool database is still empty.");
+						console.log('Failed! /tool/read database is still empty.');
 					}
 					else {
 						ret.brea = 0;
 						ret.payload = {
-							type : "Objects",
+							type : 'Objects',
 							objects : rows
 						}
 						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 						res.json(ret);
-						console.log("Success! Tool read successfully.");
+						console.log('Success! /tool/read successfully.');
 					}	
 				}
 			});
@@ -165,6 +167,6 @@ exports.read = function(req, res){
 		ret.brea = 2;
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
-		console.log("Failed! Tool read without operator_uid.");
+		console.log('Failed! /tool/read without operator_uid.');
 	}
 }

@@ -6,5 +6,5 @@ Please first install the depencency
 ## Start Testing
 Type the following in project dir
 ```shell
-path_to_project$ ./node_modules/mocha/bin/mocha
+path_to_project$ npm test
 ```
