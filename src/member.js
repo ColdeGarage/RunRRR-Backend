@@ -621,4 +621,6 @@ exports.login = function(req, res){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 	});
+
+	fire.emit('check');
 }
