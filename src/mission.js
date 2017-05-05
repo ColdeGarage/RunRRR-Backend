@@ -1,12 +1,18 @@
+var events = require('events');
 var path = require('path');
 var ROOT_PATH = path.resolve(process.env.NODE_PATH)
 var db = require(path.join(ROOT_PATH, 'src/db.js'));
 var connection = db.conn();
 
-var timezone = (new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
+const timezone = (new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
 
 //create a new mission
 exports.create = function(req, res){
+	var fire = new events.EventEmitter;
+
+	var operator_uid = parseInt(req.body.operator_uid);
+	var token = req.body.token;
+
 	var mission = new Object;
 	mission.title = req.body.title;
 	mission.content = req.body.content;
@@ -16,31 +22,66 @@ exports.create = function(req, res){
 	mission.clue = req.body.clue;
 	mission.class = req.body.class;
 	mission.score = parseInt(req.body.score);
-
-	//check if post all of the values
-	var check = 1;
-	for (var key in mission) {
-		//if not undefined and not NaN
-		var valid = !(isNaN(mission[key]) && (mission[key]==undefined))
-		check = check && valid;
-	}
-	
 	mission.location_e = parseFloat(req.body.location_e);
 	mission.location_n = parseFloat(req.body.location_n);
 
 	var ret = new Object;
-	ret.uid = parseInt(req.body.operator_uid);
+	ret.uid = operator_uid;
 	ret.object = 'mission';
 	ret.action = 'create';
 
-	check = check && !isNaN(ret.uid);
-	if (check) {
-		connection.query('INSERT INTO mission SET ?', mission, function(err, result){
+	fire.on('check', function(){
+		//check if post all of the values
+		var check = !isNaN(operator_uid) && (token!=undefined);
+		for (var key in mission) {
+			if (key!=location_n || key!=location_e){
+				//if not undefined and not NaN
+				var valid = !(isNaN(mission[key]) && (mission[key]==undefined));
+				check = check && valid;
+			}
+		}
+
+		if (check){
+			fire.emit('auth');
+		}
+		else {
+			ret.brea = 2;
+			console.log('Failed! /mission/create without operator_uid, \
+				token, or some values in object.');
+
+			fire.emit('send');
+		}
+	});
+	fire.on('auth', function(){
+		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
+		function(err, rows){
+			if (err) {
+				ret.brea = 1;
+				console.log('Failed! /mission/create auth with db error: ',
+					err);
+				
+				fire.emit('send');
+			}
+			else if (token==rows[0].token && rows[0].auth_code>0) {
+				fire.emit('search');
+			}
+			else {
+				ret.brea = 4;
+				console.log('Failed! /mission/create \
+					(operator_uid='+operator_uid+') auth failed.');
+				
+				fire.emit('send');
+			}
+		});
+	});
+	fire.on('search', function(){
+		connection.query('INSERT INTO mission SET ?', mission,
+		function(err, result){
 			if (err){
 				ret.brea = 1;
-				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-				res.json(ret);
 				console.log('Failed! /mission/create with database error:', err);
+
+				fire.emit('send');
 			}
 			else {
 				ret.brea = 0;
@@ -48,22 +89,26 @@ exports.create = function(req, res){
 					type : 'Attribute Name',
 					mid : result.insertId
 				}
-				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-				res.json(ret);
 				console.log('Success! /mission/create (mid='+result.insertId+') successfully.');
 			}
+			fire.emit('send');
 		});
-	}
-	else {
-		ret.brea = 2; //if no complete mission values
+	});
+	fire.on('send', function(){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
-		console.log('Failed! /mission/create without operator_uid or some values in object.');
-	}
+	});
+
+	fire.emit('check');
 }
 
 //edit mission content
 exports.edit = function(req, res){
+	var fire = new events.EventEmitter;
+
+	var operator_uid = parseInt(req.body.operator_uid);
+	var token = req.body.token;
+
 	var mission = new Object;
 	mission.mid = parseInt(req.body.mid);
 	mission.title = req.body.title;
@@ -77,176 +122,288 @@ exports.edit = function(req, res){
 	mission.location_e = parseFloat(req.body.location_e);
 	mission.location_n = parseFloat(req.body.location_n);
 
+	//delete the key that don't send
+	for (var key in mission) {
+		var invalid = isNaN(mission[key]) || (mission[key]==undefined);
+		if (invalid) delete mission[key];
+	}
+
 	var ret = new Object;
 	ret.uid = parseInt(req.body.operator_uid);
 	ret.object = 'mission';
 	ret.action = 'edit';
 
-	var check = !isNaN(ret.uid) && !isNaN(mission.mid);
-	//delete the key that don't send
-	for (var key in mission) {
-		//if not undefined and not NaN
-		var invalid = isNaN(mission[key]) || (mission[key]==undefined)
-		if (invalid) delete mission[key];
-	}
-	if (check) {
-		connection.query('SELECT * FROM mission WHERE mid = '+mission.mid, function(err, rows){
+	fire.on('check', function(){
+		var check = !isNaN(operator_uid) &&
+			(token!=undefined) && !isNaN(mission.mid);
+
+		if (check) {
+			fire.emit('auth');
+		}
+		else {
+			ret.brea = 2;
+			console.log('Failed! /mission/edit without operator_uid or mid.');
+
+			fire.emit('send');
+		}
+	});
+	fire.on('auth', function(){
+		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
+		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-				res.json(ret);
-				console.log('Failed! /mission/edit (mid='+mission.mid+') find with database error:', err);
+				console.log('Failed! /mission/edit auth with db error: ',
+					err);
+				
+				fire.emit('send');
+			}
+			else if (token==rows[0].token && rows[0].auth_code>0) {
+				fire.emit('search');
 			}
 			else {
-				if (rows.length == 0) {
-					ret.brea = 3;
-					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-					res.json(ret);
-					console.log('Failed! /mission/edit (mid='+mission.mid+') is not in database.');
-				}
-				else {
-					connection.query('UPDATE mission SET ? WHERE mid = '+mission.mid, mission, function(err, result){
-						if (err){
-							ret.brea = 1;
-							ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-							res.json(ret);
-							console.log('Failed! /mission/edit (mid='+mission.mid+') with database error:', err);
-						}
-						else {
-							ret.brea = 0;
-							ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-							res.json(ret);
-							if (result.changedRows) 
-								console.log('Success! /mission/edit (mid='+mission.mid+') successfully.');
-							else 
-								console.log('Success! /mission/edit (mid='+mission.mid+') doesn\'t change.');
-						}
-					});
-				}
-			} 
+				ret.brea = 4;
+				console.log('Failed! /mission/edit \
+					(operator_uid='+operator_uid+') auth failed.');
+				
+				fire.emit('send');
+			}
 		});
-	}
-	else {
-		ret.brea = 2;
+	});
+	fire.on('search', function(){
+		connection.query('SELECT * FROM mission WHERE mid = '+mission.mid,
+		function(err, rows){
+			if (err) {
+				ret.brea = 1;
+				console.log('Failed! /mission/edit (mid='+mission.mid+') \
+					find with database error:', err);
+
+				fire.emit('send');
+			}
+			else if (rows.length == 0) {
+				ret.brea = 3;
+				console.log('Failed! /mission/edit (mid='+mission.mid+') \
+					is not in database.');
+
+				fire.emit('send');
+			}
+			else {
+				fire.emit('update');
+			}
+		});
+	});
+	fire.on('update', function(){
+		connection.query('UPDATE mission SET ? WHERE mid = '+mission.mid, mission,
+		function(err, result){
+			if (err){
+				ret.brea = 1;
+				console.log('Failed! /mission/edit (mid='+mission.mid+') \
+					with database error:', err);
+			}
+			else {
+				ret.brea = 0;
+				if (result.changedRows) 
+					console.log('Success! /mission/edit (mid='+mission.mid+') \
+						successfully.');
+				else 
+					console.log('Success! /mission/edit (mid='+mission.mid+') \
+						doesn\'t change.');
+			}
+			fire.emit('send');
+		});
+	});
+	fire.on('send', function(){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
-		console.log('Failed! /mission/edit without operator_uid or mid.');
-	}
+	});
+
+	fire.emit('check');
 }
 
 //delete mission
 exports.delete = function(req, res){
+	var fire = new events.EventEmitter;
+
+	var operator_uid = parseInt(req.body.operator_uid);
+	var token = req.body.token;
+
 	var mid = parseInt(req.body.mid);
 
 	var ret = new Object;
-	ret.uid = parseInt(req.body.operator_uid);
+	ret.uid = operator_uid;
 	ret.object = 'mission';
 	ret.action = 'delete';
 
-	var check = !isNaN(ret.uid) && !isNaN(mid);
-	if (check) {
-		connection.query('DELETE FROM mission WHERE mid = '+mid, function(err, result){
-			if (err){
+	fire.on('check', function(){
+		var check = !isNaN(operator_uid) && 
+			(token!=undefined) && !isNaN(mid);
+
+		if (check) {
+			fire.emit('auth');
+		}
+		else {
+			ret.brea = 2;
+			console.log('Failed! /mission/delete without operator_uid or mid.');
+
+			fire.emit('send');
+		}
+	});
+	fire.on('auth', function(){
+		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
+		function(err, rows){
+			if (err) {
 				ret.brea = 1;
-				ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-				res.json(ret);
-				console.log('Failed! /mission/delete (mid='+mid+') with database error:', err);
+				console.log('Failed! /mission/delete auth with db error: ',
+					err);
+				
+				fire.emit('send');
+			}
+			else if (token==rows[0].token && rows[0].auth_code>0) {
+				fire.emit('search');
 			}
 			else {
-				if (result.affectedRows) {
-					ret.brea = 0;
-					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-					res.json(ret);
-					console.log('Success! /mission/delete (mid='+mid+') successfully.');
-				}
-				else {
-					ret.brea = 3;
-					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-					res.json(ret);
-					console.log('Failed! /mission/delete (mid='+mid+') is not in database.');
-				}
+				ret.brea = 4;
+				console.log('Failed! /mission/delete \
+					(operator_uid='+operator_uid+') auth failed.');
+				
+				fire.emit('send');
 			}
 		});
-	}
-	else {
-		ret.brea = 2;
+	});
+	fire.on('delete', function(){
+		connection.query('DELETE FROM mission WHERE mid = '+mid,
+		function(err, result){
+			if (err){
+				ret.brea = 1;
+				console.log('Failed! /mission/delete (mid='+mid+') \
+					with database error:', err);
+			}
+			else if (result.affectedRows) {
+				ret.brea = 0;
+				console.log('Success! /mission/delete (mid='+mid+') \
+					successfully.');
+			}
+			else {
+				ret.brea = 3;
+				console.log('Failed! /mission/delete (mid='+mid+') \
+					is not in database.');
+			}
+
+			fire.emit('send');
+		});
+	});
+	fire.on('send', function(){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
-		console.log('Failed! /mission/delete without operator_uid or mid.');
-	}
+	});
+
+	fire.emit('check');
 }
 
 //get missions' information
 exports.read = function(req, res){
+	var fire = new events.EventEmitter;
+
+	var operator_uid = parseInt(req.body.operator_uid);
+	var token = req.body.token;
+
 	var mid = parseInt(req.query.mid);
 
 	var ret = new Object;
-	ret.uid = parseInt(req.query.operator_uid);
+	ret.uid = operator_uid;
 	ret.object = 'mission';
 	ret.action = 'read';
 
-	if (!isNaN(ret.uid)) {
-		if (!isNaN(mid)) {
-			connection.query('SELECT * FROM mission WHERE mid = '+mid, function(err, rows){
-				if (err) {
-					ret.brea = 1;
-					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-					res.json(ret);
-					console.log('Failed! /mission/read (mid='+mid+') with database error:', err);
-				}
-				else {
-					if (rows.length == 0) {
-						ret.brea = 3;
-						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-						res.json(ret);
-						console.log('Failed! /mission/read (mid='+mid+') is not in database.');
-					}
-					else {
-						ret.brea = 0;
-						ret.payload = {
-							type : 'Objects',
-							objects : rows
-						}
-						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-						res.json(ret);
-						console.log('Success! /mission/read (mid='+mid+') successfully');
-					}
-				} 
-			});
+	fire.on('check', function(){
+		var check = !isNaN(operator_uid) &&
+			(secret.token!=undefined);
+
+		if (check) {
+			fire.emit('auth');
 		}
 		else {
-			connection.query('SELECT * FROM mission', function(err, rows){
-				if (err) {
-					ret.brea = 1;
-					ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-					res.json(ret);
-					console.log('Failed! /mission/read with database error:', err);
-				}
-				else {
-					if (rows.length == 0) {
-						ret.brea = 3;
-						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-						res.json(ret);
-						console.log('Failed! /mission/read database is still empty.');
-					}
-					else {
-						ret.brea = 0;
-						ret.payload = {
-							type : 'Objects',
-							objects : rows
-						}
-						ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-						res.json(ret);
-						console.log('Success! /mission/read successfully');
-					}	
-				}
-			});
+			ret.brea = 2;
+			console.log('Failed! /mission/read without operator_uid.');
+			
+			fire.emit('send');
 		}
-	}
-	else {
-		ret.brea = 2;
+	});
+	fire.on('auth', function(){
+		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
+		function(err, rows){
+			if (err) {
+				ret.brea = 1;
+				console.log('Failed! /mission/read auth with db error: ', err);
+				
+				fire.emit('send');
+			}
+			else if ((token==rows[0].token) && (rows[0].auth_code!=null)) {
+				if (!isNaN(mid))
+					fire.emit('search_mid');
+				else 
+					fire.emit('search');
+			}
+			else {
+				ret.brea = 4;
+				console.log('Failed! /mission/read (uid='+operator_uid+') \
+					auth failed.');
+				
+				fire.emit('send');
+			}
+		});
+	});
+	fire.on('search_mid', function(){
+		connection.query('SELECT * FROM mission WHERE mid = '+mid,
+		function(err, rows){
+			if (err) {
+				ret.brea = 1;
+				console.log('Failed! /mission/read (mid='+mid+') \
+					with database error:', err);
+			}
+			else if (rows.length == 0) {
+				ret.brea = 3;
+				console.log('Failed! /mission/read (mid='+mid+') \
+					is not in database.');
+			}
+			else {
+				ret.brea = 0;
+				ret.payload = {
+					type : 'Objects',
+					objects : rows
+				}
+				console.log('Success! /mission/read (mid='+mid+') \
+					successfully');
+			}
+
+			fire.emit('send');
+		});
+	});
+	fire.on('search', function(){
+		connection.query('SELECT * FROM mission',
+		function(err, rows){
+			if (err) {
+				ret.brea = 1;
+				console.log('Failed! /mission/read with database error:', err);
+			}
+			else if (rows.length == 0) {
+				ret.brea = 3;
+				console.log('Failed! /mission/read database is still empty.');
+			}
+			else {
+				ret.brea = 0;
+				ret.payload = {
+					type : 'Objects',
+					objects : rows
+				}
+				console.log('Success! /mission/read successfully');
+			}
+
+			fire.emit('send');
+		});
+	});
+	fire.on('send', function(){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
-		console.log('Failed! /mission/read without operator_uid.');
-	}
+	});
+
+	fire.emit('check');
 }

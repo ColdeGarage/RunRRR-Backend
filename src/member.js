@@ -1,9 +1,9 @@
-var request = require('request')
+var request = require('request');
+var events = require('events');
 var path = require('path');
 var ROOT_PATH = path.resolve(process.env.NODE_PATH)
 var db = require(path.join(ROOT_PATH, 'src/db.js'));
 var connection = db.conn();
-var events = require('events');
 
 const timezone = (new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
 
@@ -29,7 +29,7 @@ exports.liveordie = function(req, res){
 	ret.object = 'member';
 	ret.action = 'liveordie';
 
-	fire.on('check', ()=>{
+	fire.on('check', function(){
 		var check = !isNaN(operator_uid) &&
 			(token != undefined) &&
 			!isNaN(uid) &&
@@ -46,7 +46,7 @@ exports.liveordie = function(req, res){
 			fire.emit('send');
 		}
 	});
-	fire.on('auth', ()=>{		
+	fire.on('auth', function(){		
 		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
 		function(err, rows){
 			if (err) {
@@ -62,13 +62,13 @@ exports.liveordie = function(req, res){
 			else {
 				ret.brea = 4;
 				console.log('Failed! /member/liveordie \
-					(operator_uid='+operator_uid+')auth failed.');
+					(operator_uid='+operator_uid+') auth failed.');
 				
 				fire.emit('send');
 			}
 		});
 	});
-	fire.on('search', ()=>{
+	fire.on('search', function(){
 		connection.query('SELECT * FROM member WHERE uid = '+uid,
 		function(err, rows){
 			if (err) {
@@ -90,7 +90,7 @@ exports.liveordie = function(req, res){
 			}
 		});
 	});
-	fire.on('update', ()=>{
+	fire.on('update', function(){
 		connection.query('UPDATE member SET ? WHERE uid = '+uid, info,
 		function(err, result){
 			if (err){
@@ -115,7 +115,7 @@ exports.liveordie = function(req, res){
 			fire.emit('send');
 		});
 	});
-	fire.on('send', ()=>{
+	fire.on('send', function(){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 	});
@@ -140,7 +140,7 @@ exports.update = function(req, res){
 	ret.object = 'member';
 	ret.action = 'update';
 
-	fire.on('check', ()=>{
+	fire.on('check', function(){
 		var check = !isNaN(operator_uid) && (token!=undefined);
 		for (var key in member) {
 			check = check && !isNaN(member[key]);
@@ -157,7 +157,7 @@ exports.update = function(req, res){
 			fire.emit('send');
 		}
 	});
-	fire.on('auth', ()=>{
+	fire.on('auth', function(){
 		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
 		function(err, rows){
 			if (err) {
@@ -179,7 +179,7 @@ exports.update = function(req, res){
 			}
 		});
 	});
-	fire.on('search', ()=>{
+	fire.on('search', function(){
 		connection.query('SELECT * FROM member WHERE uid = '+member.uid,
 		function(err, rows){
 			if (err) {
@@ -199,7 +199,7 @@ exports.update = function(req, res){
 			}
 		});
 	});
-	fire.on('update', ()=>{
+	fire.on('update', function(){
 		connection.query('UPDATE member SET ? WHERE uid = '+member.uid, member,
 		function(err, result){
 			if (err) {
@@ -224,7 +224,7 @@ exports.update = function(req, res){
 			fire.emit('send');
 		});
 	});
-	fire.on('send',()=>{
+	fire.on('send',function(){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 	});
@@ -246,7 +246,7 @@ exports.read = function(req, res){
 	ret.object = 'member';
 	ret.action = 'read';
 
-	fire.on('check', ()=>{
+	fire.on('check', function(){
 		var check = !isNaN(operator_uid) &&
 			(secret.token!=undefined);
 
@@ -260,7 +260,7 @@ exports.read = function(req, res){
 			fire.emit('send');
 		}
 	});
-	fire.on('auth', ()=>{
+	fire.on('auth', function(){
 		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
 		function(err, rows){
 			if (err) {
@@ -284,7 +284,7 @@ exports.read = function(req, res){
 			}
 		});
 	});
-	fire.on('search_uid', ()=>{
+	fire.on('search_uid', function(){
 		connection.query('SELECT * FROM member WHERE uid = '+uid,
 		function(err, rows){
 			if (err) {
@@ -309,7 +309,7 @@ exports.read = function(req, res){
 			fire.emit('send');
 		});
 	});
-	fire.on('search', ()=>{
+	fire.on('search', function(){
 		connection.query('SELECT * FROM member',
 		function(err, rows){
 			if (err) {
@@ -332,7 +332,7 @@ exports.read = function(req, res){
 			fire.emit('send');
 		});
 	});
-	fire.on('send', ()=>{
+	fire.on('send', function(){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 	});
@@ -354,7 +354,7 @@ exports.money = function(req, res){
 	ret.object = 'member';
 	ret.action = 'money';
 
-	fire.on('check', ()=>{
+	fire.on('check', function(){
 		var check = !isNaN(operator_uid) &&
 			(secret.token!=undefined) &&
 			!isNaN(uid) &&
@@ -370,7 +370,7 @@ exports.money = function(req, res){
 			fire.emit('send');
 		}
 	});
-	fire.on('auth', ()=>{
+	fire.on('auth', function(){
 		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
 		function(err, rows){
 			if (err) {
@@ -392,7 +392,7 @@ exports.money = function(req, res){
 		});
 	});
 	var info;
-	fire.on('search', ()=>{
+	fire.on('search', function(){
 		connection.query('SELECT money FROM member WHERE uid = '+uid,
 		function(err, rows){
 			if (err){
@@ -416,7 +416,7 @@ exports.money = function(req, res){
 			}
 		});
 	});
-	fire.on('update', ()=>{
+	fire.on('update', function(){
 		connection.query('UPDATE member SET ? WHERE uid = '+uid, info,
 		function(err, result){
 			if (err){
@@ -436,7 +436,7 @@ exports.money = function(req, res){
 			fire.emit('send');
 		});
 	});
-	fire.on('send', ()=>{
+	fire.on('send', function(){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 	});
@@ -461,7 +461,7 @@ exports.callhelp = function(req, res){
 	ret.object = 'member';
 	ret.action = 'callhelp';
 
-	fire.on('check', ()=>{
+	fire.on('check', function(){
 		var check = !isNaN(operator_uid) && (secret.token!=undefined);
 		for (var key in member) {
 			check = check && !isNaN(member[key]);
@@ -478,7 +478,7 @@ exports.callhelp = function(req, res){
 			fire.emit('send');
 		}
 	});
-	fire.on('auth', ()=>{
+	fire.on('auth', function(){
 		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
 		function(err, rows){
 			if (err) {
@@ -500,7 +500,7 @@ exports.callhelp = function(req, res){
 			}
 		});
 	});
-	fire.on('search', ()=>{
+	fire.on('search', function(){
 		connection.query('SELECT name FROM member WHERE uid = '+member.uid,
 		function(err, rows){
 			if (err){
@@ -520,7 +520,7 @@ exports.callhelp = function(req, res){
 			fire.emit('send');
 		});
 	});
-	fire.on('send', ()=>{
+	fire.on('send', function(){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 		console.log('******Help!!!******');
@@ -542,7 +542,7 @@ exports.login = function(req, res){
 
 	var secret = new Object;
 
-	fire.on('check', ()=>{
+	fire.on('check', function(){
 		var check = !isNaN(operator_uid) && (secret.token!=undefined) &&
 			(email!=null) && (password!=null);
 		if (check){
@@ -556,7 +556,7 @@ exports.login = function(req, res){
 			fire.emit('send');
 		}
 	});
-	fire.on('auth', ()=>{
+	fire.on('auth', function(){
 		var URL = 'http://www.ee.nthu.edu.tw/engcamp/api/auth.php';
 		request.get({url:URL+'?token=nthuee&email='+email+'&id='+password},
 			function optionalCallback(err, httpResponse, body) {
@@ -603,7 +603,7 @@ exports.login = function(req, res){
 			}
 		);
 	});
-	fire.on('store', ()=>{
+	fire.on('store', function(){
 		connection.query('INSERT INTO token SET ?', secret,
 		function(err, result){
 			if (err){
@@ -617,7 +617,7 @@ exports.login = function(req, res){
 			fire.emit('send');
 		});
 	});
-	fire.on('send', ()=>{
+	fire.on('send', function(){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 	});
