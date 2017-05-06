@@ -47,7 +47,7 @@ exports.create = function(req, res){
 		else {
 			ret.brea = 2;
 			console.log('Failed! /mission/create without operator_uid, \
-				token, or some values in object.');
+				token or some values in object.');
 
 			fire.emit('send');
 		}
@@ -63,7 +63,7 @@ exports.create = function(req, res){
 				fire.emit('send');
 			}
 			else if (token==rows[0].token && rows[0].auth_code>0) {
-				fire.emit('search');
+				fire.emit('create');
 			}
 			else {
 				ret.brea = 4;
@@ -74,7 +74,7 @@ exports.create = function(req, res){
 			}
 		});
 	});
-	fire.on('search', function(){
+	fire.on('create', function(){
 		connection.query('INSERT INTO mission SET ?', mission,
 		function(err, result){
 			if (err){
@@ -89,7 +89,8 @@ exports.create = function(req, res){
 					type : 'Attribute Name',
 					mid : result.insertId
 				}
-				console.log('Success! /mission/create (mid='+result.insertId+') successfully.');
+				console.log('Success! /mission/create \
+					(mid='+result.insertId+') successfully.');
 			}
 			fire.emit('send');
 		});
@@ -142,7 +143,8 @@ exports.edit = function(req, res){
 		}
 		else {
 			ret.brea = 2;
-			console.log('Failed! /mission/edit without operator_uid or mid.');
+			console.log('Failed! /mission/edit without operator_uid, \
+				token or mid.');
 
 			fire.emit('send');
 		}
@@ -208,6 +210,7 @@ exports.edit = function(req, res){
 					console.log('Success! /mission/edit (mid='+mission.mid+') \
 						doesn\'t change.');
 			}
+
 			fire.emit('send');
 		});
 	});
@@ -242,7 +245,8 @@ exports.delete = function(req, res){
 		}
 		else {
 			ret.brea = 2;
-			console.log('Failed! /mission/delete without operator_uid or mid.');
+			console.log('Failed! /mission/delete without operator_uid, \
+				token or mid.');
 
 			fire.emit('send');
 		}
@@ -258,7 +262,7 @@ exports.delete = function(req, res){
 				fire.emit('send');
 			}
 			else if (token==rows[0].token && rows[0].auth_code>0) {
-				fire.emit('search');
+				fire.emit('delete');
 			}
 			else {
 				ret.brea = 4;
@@ -314,8 +318,7 @@ exports.read = function(req, res){
 	ret.action = 'read';
 
 	fire.on('check', function(){
-		var check = !isNaN(operator_uid) &&
-			(secret.token!=undefined);
+		var check = !isNaN(operator_uid) && (secret.token!=undefined);
 
 		if (check) {
 			fire.emit('auth');

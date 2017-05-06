@@ -41,7 +41,7 @@ exports.liveordie = function(req, res){
 		else {
 			ret.brea = 2;
 			console.log('Failed! /member/liveordie without operator_uid, \
-				token, uid, or status.');
+				token, uid or status.');
 
 			fire.emit('send');
 		}
@@ -152,7 +152,7 @@ exports.update = function(req, res){
 		else {
 			ret.brea = 2;
 			console.log('Failed! /member/update without operator_uid, \
-				token, position_n, or position_e.');
+				token, position_n or position_e.');
 			
 			fire.emit('send');
 		}
@@ -255,7 +255,8 @@ exports.read = function(req, res){
 		}
 		else {
 			ret.brea = 2;
-			console.log('Failed! /member/read without operator_uid or token.');
+			console.log('Failed! /member/read without operator_uid, \
+				token or token.');
 			
 			fire.emit('send');
 		}
@@ -365,7 +366,7 @@ exports.money = function(req, res){
 		else {
 			ret.brea = 2;
 			console.log('Failed! /member/money without operator_uid, \
-				token, uid, or money_amount.');
+				token, uid or money_amount.');
 
 			fire.emit('send');
 		}
@@ -473,7 +474,7 @@ exports.callhelp = function(req, res){
 		else {
 			ret.brea = 2;
 			console.log('Failed! /member/liveordie without operator_uid, \
-				token, uid, or location.');
+				token, uid or location.');
 
 			fire.emit('send');
 		}
@@ -551,7 +552,7 @@ exports.login = function(req, res){
 		else {
 			ret.brea = 2;
 			console.log('Failed! /member/login without operator_uid, \
-				token, email, or password.');
+				token, email or password.');
 
 			fire.emit('send');
 		}
