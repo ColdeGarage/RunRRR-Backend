@@ -183,6 +183,7 @@ exports.check = function(req, res){
 			else {
 				fire.emit('update');
 			}
+		});
 	});
 	fire.on('update', function(){
 		connection.query('UPDATE report SET ? WHERE rid = '+report.rid, report,
