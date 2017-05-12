@@ -34,7 +34,7 @@ describe('Member Api', function(){
         .post(path.join(HOST_PREFIX, 'member', 'login'))
         .send(req)
         .end(function(err, res) {
-            player_uid = res.body.uid;
+            player_uid = res.body.rid;
             player_token = res.body.token;
         });
     });
@@ -49,7 +49,7 @@ describe('Member Api', function(){
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.an('object');
-            res.body.should.have.property('uid').eql(0);
+            res.body.should.have.property('uid').eql(ADMIN_UID);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('liveordie');
             res.body.should.have.property('brea').eql(0);
@@ -105,7 +105,7 @@ describe('Member Api', function(){
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.an('object');
-            res.body.should.have.property('uid').eql(0);
+            res.body.should.have.property('uid').eql(player_uid);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('update');
             res.body.should.have.property('brea').eql(0);
@@ -162,7 +162,7 @@ describe('Member Api', function(){
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
-            res.body.should.have.property('uid').eql(0);
+            res.body.should.have.property('uid').eql(player_uid);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('callhelp');
             res.body.should.have.property('brea').to.be.an('number');
@@ -214,7 +214,7 @@ describe('Member Api', function(){
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
-            res.body.should.have.property('uid').eql(0);
+            res.body.should.have.property('uid').eql(ADMIN_UID);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('read');
             res.body.should.have.property('brea').eql(0);
@@ -245,7 +245,7 @@ describe('Member Api', function(){
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
-            res.body.should.have.property('uid').eql(0);
+            res.body.should.have.property('uid').eql(ADMIN_UID);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('read');
             res.body.should.have.property('brea').eql(0);
@@ -326,7 +326,7 @@ describe('Member Api', function(){
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
-            res.body.should.have.property('uid').eql(0);
+            res.body.should.have.property('uid').eql(ADMIN_UID);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('money');
             res.body.should.have.property('brea').eql(0);
