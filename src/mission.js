@@ -62,7 +62,7 @@ exports.create = function(req, res){
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth_code>0) {
+			else if (token==rows[0].token && rows[0].auth_level>10) {
 				fire.emit('create');
 			}
 			else {
@@ -159,7 +159,7 @@ exports.edit = function(req, res){
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth_code>0) {
+			else if (token==rows[0].token && rows[0].auth_level>10) {
 				fire.emit('search');
 			}
 			else {
@@ -261,7 +261,7 @@ exports.delete = function(req, res){
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth_code>0) {
+			else if (token==rows[0].token && rows[0].auth_level>10) {
 				fire.emit('delete');
 			}
 			else {
@@ -339,7 +339,7 @@ exports.read = function(req, res){
 				
 				fire.emit('send');
 			}
-			else if ((token==rows[0].token) && (rows[0].auth_code!=null)) {
+			else if ((token==rows[0].token) && (rows[0].auth_level>=10)) {
 				if (!isNaN(mid))
 					fire.emit('search_mid');
 				else 

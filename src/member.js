@@ -56,7 +56,7 @@ exports.liveordie = function(req, res){
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth_code>0) {
+			else if (token==rows[0].token && rows[0].auth_level>10) {
 				fire.emit('search');
 			}
 			else {
@@ -167,7 +167,7 @@ exports.update = function(req, res){
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth_code==0) {
+			else if (token==rows[0].token && rows[0].auth_level==10) {
 				fire.emit('search');
 			}
 			else {
@@ -270,7 +270,7 @@ exports.read = function(req, res){
 				
 				fire.emit('send');
 			}
-			else if ((token==rows[0].token) && (rows[0].auth_code!=null)) {
+			else if ((token==rows[0].token) && (rows[0].auth_level>=10)) {
 				if (!isNaN(uid))
 					fire.emit('search_uid');
 				else 
@@ -380,7 +380,7 @@ exports.money = function(req, res){
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth_code>0) {
+			else if (token==rows[0].token && rows[0].auth_level>10) {
 					fire.emit('search');
 			}
 			else {
@@ -489,7 +489,7 @@ exports.callhelp = function(req, res){
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth_code>0) {
+			else if (token==rows[0].token && rows[0].auth_level>10) {
 					fire.emit('search');
 			}
 			else {
@@ -584,7 +584,7 @@ exports.login = function(req, res){
 					secret = {
 						uid: ret.uid,
 						token: data.token,
-						auth_code: data.auth_code
+						auth_level: data.auth_level
 					}
 					fire.emit('store');
 				}
