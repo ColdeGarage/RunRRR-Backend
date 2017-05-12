@@ -54,22 +54,22 @@ exports.create = function(req, res){
 		}
 	});
 	fire.on('auth', function(){
-		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
+		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /tool/create auth with db error: ',
+				console.log('Failed! /tool/create auth_level with db error: ',
 					err);
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth>10) {
+			else if (token==rows[0].token && rows[0].auth_level>10) {
 				fire.emit('create');
 			}
 			else {
 				ret.brea = 4;
 				console.log('Failed! /tool/create \
-					(operator_uid='+operator_uid+') auth failed.');
+					(operator_uid='+operator_uid+') auth_level failed.');
 				
 				fire.emit('send');
 			}
@@ -141,22 +141,22 @@ exports.delete = function(req, res){
 		}
 	});
 	fire.on('auth', function(){
-		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
+		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /tool/delete auth with db error: ',
+				console.log('Failed! /tool/delete auth_level with db error: ',
 					err);
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth>10) {
+			else if (token==rows[0].token && rows[0].auth_level>10) {
 				fire.emit('delete');
 			}
 			else {
 				ret.brea = 4;
 				console.log('Failed! /tool/delete \
-					(operator_uid='+operator_uid+') auth failed.');
+					(operator_uid='+operator_uid+') auth_level failed.');
 				
 				fire.emit('send');
 			}
@@ -207,7 +207,7 @@ exports.read = function(req, res){
 	ret.action = 'read';
 
 	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && (secret.token!=undefined);
+		var check = !isNaN(operator_uid) && (auth.token!=undefined);
 
 		if (check) {
 			fire.emit('auth');
@@ -220,16 +220,16 @@ exports.read = function(req, res){
 		}
 	});
 	fire.on('auth', function(){
-		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
+		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /tool/read auth with db error: ',
+				console.log('Failed! /tool/read auth_level with db error: ',
 					err);
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth>10) {
+			else if (token==rows[0].token && rows[0].auth_level>10) {
 				if (!isNaN(uid))
 					fire.emit('search_tid');
 				else
@@ -238,7 +238,7 @@ exports.read = function(req, res){
 			else {
 				ret.brea = 4;
 				console.log('Failed! /tool/read \
-					(operator_uid='+operator_uid+') auth failed.');
+					(operator_uid='+operator_uid+') auth_level failed.');
 				
 				fire.emit('send');
 			}
