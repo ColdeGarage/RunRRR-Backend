@@ -18,9 +18,30 @@ var conn = db.conn();
 
 chai.use(chaiHttp);
 
+const ADMIN_UID = 87;
+const ADMIN_TOKEN = 'a1b2c3d4e5f6g7h8i9j0k';
+const EMAIL = 'qmo123@gmail.com';
+const PASS = 'S123456789';
+
 describe('Member Api', function(){
+    var player_uid;
+    var player_token;
+
+    before(function(){
+        var req = {'email':EMAIL, 'password':PASS};
+        
+        chai.request(HOST)
+        .post(path.join(HOST_PREFIX, 'member', 'login'))
+        .send(req)
+        .end(function(err, res) {
+            player_uid = res.body.uid;
+            token = res.body.token;
+        });
+    });
+
     it('/PUT liveordie', function(done) { 
-        var req = {'operator_uid':0, 'uid':289, 'status':0};
+        var req = {'operator_uid':ADMIN_UID, 'token':ADMIN_TOKEN, 'uid':player_uid, 'status':0};
+        
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'liveordie'))
         .send(req)
@@ -55,8 +76,28 @@ describe('Member Api', function(){
             done();
         });
     });
+    it('/PUT liveordie(Failed authentication)', function(done) {
+        var req = {'operator_uid':player_uid, 'token':player_token, 'uid':player_uid, 'status':0};
+
+        chai.request(HOST)
+        .put(path.join(HOST_PREFIX, 'member', 'liveordie'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.an('object');
+            res.body.should.have.property('object').eql('member');
+            res.body.should.have.property('action').eql('liveordie');
+            res.body.should.have.property('brea').eql(4);
+            res.body.should.have.property('server_time').to.be.a('string');
+            
+            done();
+        });
+    });
     it('/PUT update', function(done) { 
-        var req = {'operator_uid':0, 'uid':289, 'position_e':'120.992135', 'position_n':'24.795156'};
+        var req = {'operator_uid':player_uid, 'token':player_token,'uid':player_uid, 
+            'position_e':'120.992135', 'position_n':'24.795156'};
+        
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'update'))
         .send(req)
@@ -91,8 +132,29 @@ describe('Member Api', function(){
             done();
         });
     });
+    it('/PUT update(Failed authentication)', function(done) { 
+        var req = {'operator_uid':player_uid, 'token':player_token, 'uid':player_uid, 
+            'position_e':'120.992135', 'position_n':'24.795156'};
+        
+        chai.request(HOST)
+        .put(path.join(HOST_PREFIX, 'member', 'update'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.an('object');
+            res.body.should.have.property('object').eql('member');
+            res.body.should.have.property('action').eql('update');
+            res.body.should.have.property('brea').eql(4);
+            res.body.should.have.property('server_time').to.be.a('string');
+            
+            done();
+        });
+    });
     it('/PUT callhelp', function(done) { 
-        var req = {'operator_uid':0, 'uid':289, 'status':1, 'position_e':'120.13', 'position_n':'23.456'};
+        var req = {'operator_uid':player_uid, 'token':player_token, 'uid':player_uid, 
+            'status':1, 'position_e':'120.13', 'position_n':'23.456'};
+        
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'callhelp'))
         .send(req)
@@ -124,8 +186,27 @@ describe('Member Api', function(){
             done();
         });
     });
+    it('/PUT callhelp(Failed authentication)', function(done) { 
+        var req = {'operator_uid':ADMIN_UID, 'token':ADMIN_TOKEN, 'uid':player_uid, 
+            'status':1, 'position_e':'120.13', 'position_n':'23.456'};
+        
+        chai.request(HOST)
+        .put(path.join(HOST_PREFIX, 'member', 'callhelp'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('member');
+            res.body.should.have.property('action').eql('callhelp');
+            res.body.should.have.property('brea').eql(4);
+            res.body.should.have.property('server_time').to.be.a('string');
+            
+            done();
+        });
+    });
     it('/GET read(with uid)', function(done) { 
-        var req = {'operator_uid':0, 'uid':289};
+        var req = {'operator_uid':ADMIN_UID, 'token':ADMIN_TOKEN, 'uid':player_uid};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'member', 'read'))
         .query(req)
@@ -156,7 +237,7 @@ describe('Member Api', function(){
         });
     });
     it('/GET read(with out uid)', function(done) { 
-        var req = {'operator_uid':0};
+        var req = {'operator_uid':ADMIN_UID, 'token':ADMIN_TOKEN};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'member', 'read'))
         .query(req)
@@ -201,7 +282,7 @@ describe('Member Api', function(){
         });
     });
     it('/POST login', function(done) { 
-        var req = {'email':'qmo123@gmail.com', 'password':'S123456789'};
+        var req = {'email':EMAIL, 'password':PASS};
         chai.request(HOST)
         .post(path.join(HOST_PREFIX, 'member', 'login'))
         .send(req)
@@ -237,7 +318,7 @@ describe('Member Api', function(){
         });
     });
     it('/PUT money', function(done) { 
-        var req = {'operator_uid':0, 'uid':289, 'money_amount':50};
+        var req = {'operator_uid':ADMIN_UID, 'uid':ADMIN_TOKEN, 'money_amount':50};
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'money'))
         .send(req)
@@ -858,11 +939,18 @@ describe('Tool Api', function(){
                 res.body.payload.objects[tool].should.have.property('price').to.be.a('number');
             }
             
-            done();
+            chai.request(HOST)
+            .get(path.join(HOST_PREFIX, 'download', 'img', res.body.payload.objects[0][url]))
+            .end(function(err, res) {
+                expect(res).to.have.status(200);
+                expect(res.headers['content-length']).to.be.a('string').eql('7207');
+
+                done();
+            });
         });
     });
     it('/GET read(with out tid)', function(done) { 
-        var req = {'operator_uid':12};
+        var req = {'operator_uid':10};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'tool', 'read'))
         .query(req)
@@ -930,7 +1018,7 @@ describe('Clue Api', function(){
         })
     })
     it('/POST create', function(done) { 
-        var req = {'operator_uid':12, 'content':'This is a test clue'};
+        var req = {'operator_uid':10, 'content':'This is a test clue'};
         chai.request(HOST)
         .post(path.join(HOST_PREFIX, 'clue', 'create'))
         .send(req)
@@ -965,7 +1053,7 @@ describe('Clue Api', function(){
         });
     });
     it('/DEL delete', function(done) { 
-        var req = {'operator_uid':12, 'cid':test_cid};
+        var req = {'operator_uid':10, 'cid':test_cid};
         chai.request(HOST)
         .delete(path.join(HOST_PREFIX, 'clue', 'delete'))
         .send(req)
