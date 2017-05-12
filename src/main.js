@@ -56,7 +56,7 @@ app.delete(HOST_PREFIX+'/pack/delete', pack.delete);
 app.get(HOST_PREFIX+'/pack/read', pack.read);
 
 app.get(HOST_PREFIX+'/download/:type/:filename', function(req, res){
-    console.log("Getting file" + req.params.type + '/' + req.params.filename);
+    console.log("Getting file " + req.params.type + '/' + req.params.filename);
     filename = path.join(ROOT_PATH, FILE_PREFIX, req.params.type, req.params.filename);
     if (fs.existsSync(filename)){
 		console.log('Sending file ' + filename);
