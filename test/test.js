@@ -35,7 +35,7 @@ describe('Member Api', function(){
         .send(req)
         .end(function(err, res) {
             player_uid = res.body.uid;
-            token = res.body.token;
+            player_token = res.body.token;
         });
     });
 
@@ -351,7 +351,7 @@ describe('Member Api', function(){
         });
     });
 });
-
+/////
 
 var test_mid = '';
 describe('Mission Api', function(){
