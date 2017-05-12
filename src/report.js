@@ -51,22 +51,22 @@ exports.create = function(req, res){
 		}
 	});
 	fire.on('auth', function(){
-		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
+		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /report/create auth with db error: ',
+				console.log('Failed! /report/create auth_level with db error: ',
 					err);
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth==10) {
+			else if (token==rows[0].token && rows[0].auth_level==10) {
 				fire.emit('create');
 			}
 			else {
 				ret.brea = 4;
 				console.log('Failed! /report/create \
-					(operator_uid='+operator_uid+') auth failed.');
+					(operator_uid='+operator_uid+') auth_level failed.');
 				
 				fire.emit('send');
 			}
@@ -142,22 +142,22 @@ exports.check = function(req, res){
 		}
 	});
 	fire.on('auth', function(){
-		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
+		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /report/check auth with db error: ',
+				console.log('Failed! /report/check auth_level with db error: ',
 					err);
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth>10) {
+			else if (token==rows[0].token && rows[0].auth_level>10) {
 				fire.emit('search');
 			}
 			else {
 				ret.brea = 4;
 				console.log('Failed! /report/check \
-					(operator_uid='+operator_uid+') auth failed.');
+					(operator_uid='+operator_uid+') auth_level failed.');
 				
 				fire.emit('send');
 			}
@@ -250,22 +250,22 @@ exports.edit = function(req, res){
 		}
 	});
 	fire.on('auth', function(){
-		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
+		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /report/edit auth with db error: ',
+				console.log('Failed! /report/edit auth_level with db error: ',
 					err);
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth==10) {
+			else if (token==rows[0].token && rows[0].auth_level==10) {
 				fire.emit('search');
 			}
 			else {
 				ret.brea = 4;
 				console.log('Failed! /report/edit \
-					(operator_uid='+operator_uid+') auth failed.');
+					(operator_uid='+operator_uid+') auth_level failed.');
 				
 				fire.emit('send');
 			}
@@ -361,22 +361,22 @@ exports.delete = function(req, res){
 		}
 	});
 	fire.on('auth', function(){
-		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
+		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /report/delete auth with db error: ',
+				console.log('Failed! /report/delete auth_level with db error: ',
 					err);
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth>10) {
+			else if (token==rows[0].token && rows[0].auth_level>10) {
 				fire.emit('delete');
 			}
 			else {
 				ret.brea = 4;
 				console.log('Failed! /report/delete \
-					(operator_uid='+operator_uid+') auth failed.');
+					(operator_uid='+operator_uid+') auth_level failed.');
 				
 				fire.emit('send');
 			}
@@ -446,26 +446,26 @@ exports.read = function(req, res){
 	fire.on('auth', function(){
 		
 
-		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
+		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /report/read auth with db error: ',
+				console.log('Failed! /report/read auth_level with db error: ',
 					err);
 				
 				fire.emit('send');
 			}
 			else if (token==rows[0].token) {
-				if (rows[0].auth>10 && !isNaN(mid)){
+				if (rows[0].auth_level>10 && !isNaN(mid)){
 					fire.emit('search_mid');
 				}
-				else if (rows[0].auth==10 && !isNaN(uid)){
+				else if (rows[0].auth_level==10 && !isNaN(uid)){
 					fire.emit('search_uid');
 				}
 				else {
 					ret.brea = 4;
 					console.log('Failed! /report/read (operator_uid='+
-						operator_uid+') auth and attribute not match.');
+						operator_uid+') auth_level and attribute not match.');
 
 					fire.emit('send');
 				}
@@ -473,7 +473,7 @@ exports.read = function(req, res){
 			else {
 				ret.brea = 4;
 				console.log('Failed! /report/read \
-					(operator_uid='+operator_uid+') auth failed.');
+					(operator_uid='+operator_uid+') auth_level failed.');
 				
 				fire.emit('send');
 			}

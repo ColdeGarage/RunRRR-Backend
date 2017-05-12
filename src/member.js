@@ -47,22 +47,22 @@ exports.liveordie = function(req, res){
 		}
 	});
 	fire.on('auth', function(){		
-		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
+		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /member/liveordie auth with db error: ',
+				console.log('Failed! /member/liveordie auth_level with db error: ',
 					err);
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth>10) {
+			else if (token==rows[0].token && rows[0].auth_level>10) {
 				fire.emit('search');
 			}
 			else {
 				ret.brea = 4;
 				console.log('Failed! /member/liveordie \
-					(operator_uid='+operator_uid+') auth failed.');
+					(operator_uid='+operator_uid+') auth_level failed.');
 				
 				fire.emit('send');
 			}
@@ -158,22 +158,22 @@ exports.update = function(req, res){
 		}
 	});
 	fire.on('auth', function(){
-		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
+		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /member/update auth with db error: ',
+				console.log('Failed! /member/update auth_level with db error: ',
 					err);
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth==10) {
+			else if (token==rows[0].token && rows[0].auth_level==10) {
 				fire.emit('search');
 			}
 			else {
 				ret.brea = 4;
 				console.log('Failed! /member/update (uid='+operator_uid+') \
-					auth failed.');
+					auth_level failed.');
 				
 				fire.emit('send');
 			}
@@ -248,7 +248,7 @@ exports.read = function(req, res){
 
 	fire.on('check', function(){
 		var check = !isNaN(operator_uid) &&
-			(secret.token!=undefined);
+			(auth.token!=undefined);
 
 		if (check) {
 			fire.emit('auth');
@@ -262,15 +262,15 @@ exports.read = function(req, res){
 		}
 	});
 	fire.on('auth', function(){
-		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
+		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /member/read auth with db error: ', err);
+				console.log('Failed! /member/read auth_level with db error: ', err);
 				
 				fire.emit('send');
 			}
-			else if ((token==rows[0].token) && (rows[0].auth>=10)) {
+			else if ((token==rows[0].token) && (rows[0].auth_level>=10)) {
 				if (!isNaN(uid))
 					fire.emit('search_uid');
 				else 
@@ -279,7 +279,7 @@ exports.read = function(req, res){
 			else {
 				ret.brea = 4;
 				console.log('Failed! /member/read (uid='+operator_uid+') \
-					auth failed.');
+					auth_level failed.');
 				
 				fire.emit('send');
 			}
@@ -357,7 +357,7 @@ exports.money = function(req, res){
 
 	fire.on('check', function(){
 		var check = !isNaN(operator_uid) &&
-			(secret.token!=undefined) &&
+			(auth.token!=undefined) &&
 			!isNaN(uid) &&
 			!isNaN(amount);
 		if (check){
@@ -372,21 +372,21 @@ exports.money = function(req, res){
 		}
 	});
 	fire.on('auth', function(){
-		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
+		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /member/money auth with db error: ', err);
+				console.log('Failed! /member/money auth_level with db error: ', err);
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth>10) {
+			else if (token==rows[0].token && rows[0].auth_level>10) {
 					fire.emit('search');
 			}
 			else {
 				ret.brea = 4;
 				console.log('Failed! /member/money (uid='+operator_uid+') \
-					auth failed.');
+					auth_level failed.');
 				
 				fire.emit('send');
 			}
@@ -463,7 +463,7 @@ exports.callhelp = function(req, res){
 	ret.action = 'callhelp';
 
 	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && (secret.token!=undefined);
+		var check = !isNaN(operator_uid) && (auth.token!=undefined);
 		for (var key in member) {
 			check = check && !isNaN(member[key]);
 		}
@@ -480,22 +480,22 @@ exports.callhelp = function(req, res){
 		}
 	});
 	fire.on('auth', function(){
-		connection.query('SELECT * FROM secret WHERE uid = '+operator_uid,
+		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /member/callhelp auth with db error: ',
+				console.log('Failed! /member/callhelp auth_level with db error: ',
 					err);
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth>10) {
+			else if (token==rows[0].token && rows[0].auth_level>10) {
 					fire.emit('search');
 			}
 			else {
 				ret.brea = 4;
 				console.log('Failed! /member/callhelp (uid='+operator_uid+') \
-					auth failed.');
+					auth_level failed.');
 				
 				fire.emit('send');
 			}
@@ -530,7 +530,7 @@ exports.callhelp = function(req, res){
 	fire.emit('check');
 }
 
-// Login auth
+// Login auth_level
 exports.login = function(req, res){
 	var fire = new events.EventEmitter;
 
@@ -544,8 +544,7 @@ exports.login = function(req, res){
 	var secret = new Object;
 
 	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && (secret.token!=undefined) &&
-			(email!=null) && (password!=null);
+		var check = (email!=null) && (password!=null);
 		if (check){
 			fire.emit('auth');
 		}
@@ -558,14 +557,14 @@ exports.login = function(req, res){
 		}
 	});
 	fire.on('auth', function(){
-		var URL = 'http://www.ee.nthu.edu.tw/engcamp/api/auth.php';
+		var URL = 'http://www.ee.nthu.edu.tw/engcamp/api/auth_level.php';
 		request.get({url:URL+'?token=nthuee&email='+email+'&id='+password},
 			function optionalCallback(err, httpResponse, body) {
 				if (err) {
 					ret.uid = 0;
 					ret.brea = 1;
 					console.log('Failed! (email='+email+') \
-						Login auth access failed:', err);
+						Login auth_level access failed:', err);
 
 					fire.emit('send');
 				}
@@ -578,13 +577,13 @@ exports.login = function(req, res){
 						correct : 0
 					}
 					console.log('Success! (email='+email+') \
-						Login auth access success. \
-						User (uid='+data.rid+') auth success.');
+						Login auth_level access success. \
+						User (uid='+data.rid+') auth_level success.');
 					
 					secret = {
 						uid: ret.uid,
 						token: data.token,
-						auth: data.auth
+						auth_level: data.auth
 					}
 					fire.emit('search');
 				}
@@ -596,8 +595,8 @@ exports.login = function(req, res){
 						correct : 1
 					}
 					console.log('Failed! (email='+email+') \
-						Login auth access success. \
-						User auth failed.');
+						Login auth_level access success. \
+						User auth_level failed.');
 
 					fire.emit('send');
 				}
@@ -605,7 +604,7 @@ exports.login = function(req, res){
 		);
 	});
 	fire.on('search', function(){
-		connection.query('SELECT * FROM secret WHERE uid = '+ret.uid,
+		connection.query('SELECT * FROM auth WHERE uid = '+ret.uid,
 		function(err, rows){
 			if (err){
 				ret.brea = 1;
@@ -628,7 +627,7 @@ exports.login = function(req, res){
 		function(err, result){
 			if (err){
 				ret.brea = 1;
-				console.log('Failed! /member/login store secret into \
+				console.log('Failed! /member/login store auth into \
 					db error:', err);
 			}
 			else {
@@ -642,7 +641,7 @@ exports.login = function(req, res){
 	});
 	fire.on('update', function(){
 		secret.time = new Date((new Date).getTime()-timezone*60*1000);
-		connection.query('UPDATE secret SET ? WHERE uid = '+ret.uid, secret,
+		connection.query('UPDATE auth SET ? WHERE uid = '+ret.uid, secret,
 		function(err, result){
 			if (err){
 				ret.brea = 1;

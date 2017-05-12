@@ -34,7 +34,7 @@ describe('Member Api', function(){
         .post(path.join(HOST_PREFIX, 'member', 'login'))
         .send(req)
         .end(function(err, res) {
-            player_uid = res.body.rid;
+            player_uid = res.body.uid;
             player_token = res.body.token;
         });
     });
