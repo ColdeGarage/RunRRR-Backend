@@ -586,7 +586,7 @@ exports.login = function(req, res){
 						token: data.token,
 						auth_level: data.auth_level
 					}
-					fire.emit('store');
+					fire.emit('search');
 				}
 				else{
 					ret.uid = 0;
@@ -604,7 +604,26 @@ exports.login = function(req, res){
 			}
 		);
 	});
-	fire.on('store', function(){
+	fire.on('search', function(){
+		connection.query('SELECT * FROM secret WHERE uid = '+ret.uid,
+		function(err, rows){
+			if (err){
+				ret.brea = 1;
+				console.log('Failed! /member/login (uid='+ret.uid+') \
+					find with database error:' ,err);
+			}
+			else if (rows.length == 0) {
+				fire.emit('insert');
+			}
+			else {
+				fire.emit('update');
+			}
+
+			fire.emit('send');
+		});
+	});
+	fire.on('insert', function(){
+		secret.time = new Date((new Date).getTime()-timezone*60*1000);
 		connection.query('INSERT INTO token SET ?', secret,
 		function(err, result){
 			if (err){
@@ -614,7 +633,28 @@ exports.login = function(req, res){
 			}
 			else {
 				ret.brea = 0;
+				console.log('Success! /member/login (uid='+ret.uid+') \
+					insert token.');
 			}
+
+			fire.emit('send');
+		});
+	});
+	fire.on('update', function(){
+		secret.time = new Date((new Date).getTime()-timezone*60*1000);
+		connection.query('UPDATE secret SET ? WHERE uid = '+ret.uid, secret,
+		function(err, result){
+			if (err){
+				ret.brea = 1;
+				console.log('Failed! /member/login (uid='+ret.uid+') \
+					with database error:', err);
+			}
+			else {
+				ret.brea = 0;
+				console.log('Success! /member/login (uid='+ret.uid+') \
+					update token.');
+			}
+
 			fire.emit('send');
 		});
 	});
