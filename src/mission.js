@@ -341,7 +341,10 @@ exports.read = function(req, res){
 				if (!isNaN(mid))
 					fire.emit('search_mid');
 				else 
-					fire.emit('search');
+					if (rows[0].auth_level==10)
+						fire.emit('search_time');
+					else 
+						fire.emit('search');
 			}
 			else {
 				ret.brea = 4;
@@ -373,6 +376,30 @@ exports.read = function(req, res){
 				}
 				console.log('Success! /mission/read (mid='+mid+') '
 					+'successfully');
+			}
+
+			fire.emit('send');
+		});
+	});
+	fire.on('search_time', function(){
+		connection.query('SELECT * FROM mission WHERE time_start <'
+			+ new Date((new Date).getTime()-timezone*60*1000),
+		function(err, rows){
+			if (err) {
+				ret.brea = 1;
+				console.log('Failed! /mission/read with database error:', err);
+			}
+			else if (rows.length == 0) {
+				ret.brea = 3;
+				console.log('Failed! /mission/read database is still empty.');
+			}
+			else {
+				ret.brea = 0;
+				ret.payload = {
+					type : 'Objects',
+					objects : rows
+				}
+				console.log('Success! /mission/read successfully');
 			}
 
 			fire.emit('send');
