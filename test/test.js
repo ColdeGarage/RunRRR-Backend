@@ -286,42 +286,6 @@ describe('Member Api', function(){
             done();
         });
     });
-    it('/POST login', function(done) { 
-        var req = {'email':EMAIL, 'password':PASS};
-        chai.request(HOST)
-        .post(path.join(HOST_PREFIX, 'member', 'login'))
-        .send(req)
-        .end(function(err, res) {
-            expect(res).to.have.status(200);
-            expect(res).to.be.json;
-            res.body.should.be.a('object');
-            res.body.should.have.property('uid').to.be.a('number');
-            res.body.should.have.property('object').eql('member');
-            res.body.should.have.property('action').eql('login');
-            res.body.should.have.property('brea').eql(0);
-            res.body.should.have.property('server_time').to.be.a('string');
-            res.body.should.have.property('payload');
-            res.body.payload.should.have.property('type').eql('Attribute Name');
-            res.body.payload.should.have.property('correct').to.be.a('number');
-            
-            done();
-        });
-    });
-    it('/POST login(Uncomplete request)', function(done) { 
-        chai.request(HOST)
-        .post(path.join(HOST_PREFIX, 'member', 'login'))
-        .end(function(err, res) {
-            expect(res).to.have.status(200);
-            expect(res).to.be.json;
-            res.body.should.be.a('object');
-            res.body.should.have.property('object').eql('member');
-            res.body.should.have.property('action').eql('login');
-            res.body.should.have.property('brea').eql(2);
-            res.body.should.have.property('server_time').to.be.a('string');
-            
-            done();
-        });
-    });
     it('/PUT money', function(done) { 
         var req = {'operator_uid':ADMIN_UID, 'token':ADMIN_TOKEN, 'uid':player_uid, 'money_amount':50};
         chai.request(HOST)
@@ -370,6 +334,42 @@ describe('Member Api', function(){
             res.body.should.have.property('brea').eql(4);
             res.body.should.have.property('server_time').to.be.a('string');
 
+            done();
+        });
+    });
+    it('/POST login', function(done) { 
+        var req = {'email':EMAIL, 'password':PASS};
+        chai.request(HOST)
+        .post(path.join(HOST_PREFIX, 'member', 'login'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').to.be.a('number');
+            res.body.should.have.property('object').eql('member');
+            res.body.should.have.property('action').eql('login');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('server_time').to.be.a('string');
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Attribute Name');
+            res.body.payload.should.have.property('correct').to.be.a('number');
+            
+            done();
+        });
+    });
+    it('/POST login(Uncomplete request)', function(done) { 
+        chai.request(HOST)
+        .post(path.join(HOST_PREFIX, 'member', 'login'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('member');
+            res.body.should.have.property('action').eql('login');
+            res.body.should.have.property('brea').eql(2);
+            res.body.should.have.property('server_time').to.be.a('string');
+            
             done();
         });
     });

@@ -182,7 +182,7 @@ exports.read = function(req, res){
 	ret.action = 'read';
 
 	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && (auth.token!=undefined);
+		var check = !isNaN(operator_uid) && (token!=undefined);
 
 		if (check) {
 			fire.emit('auth');
