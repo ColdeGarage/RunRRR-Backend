@@ -28,13 +28,14 @@ describe('Member Api', function(){
     var player_uid;
     var player_token;
 
-    before(function(donedone){
+    before(function(done){
         var req = {'email':EMAIL, 'password':PASS};
         var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
         request.post({url: url, form: req},
         function(err, httpResponse, body){
-            player_uid = body.uid;
-            player_token = body.token;
+            var player = JSON.parse(body);
+            player_uid = player.uid;
+            player_token = player.token;
 
             done();
         });
@@ -384,8 +385,9 @@ describe('Mission Api', function(){
         var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
         request.post({url: url, form: req},
         function(err, httpResponse, body){
-            player_uid = body.uid;
-            player_token = body.token;
+            var player = JSON.parse(body);
+            player_uid = player.uid;
+            player_token = player.token;
 
             done();
         });
@@ -678,8 +680,9 @@ describe('Report Api', function(){
         var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
         request.post({url: url, form: req},
         function(err, httpResponse, body){
-            player_uid = body.uid;
-            player_token = body.token;
+            var player = JSON.parse(body);
+            player_uid = player.uid;
+            player_token = player.token;
 
             done();
         });
@@ -1011,8 +1014,9 @@ describe('Tool Api', function(){
         var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
         request.post({url: url, form: req},
         function(err, httpResponse, body){
-            player_uid = body.uid;
-            player_token = body.token;
+            var player = JSON.parse(body);
+            player_uid = player.uid;
+            player_token = player.token;
 
             done();
         });
@@ -1248,8 +1252,9 @@ describe('Clue Api', function(){
         var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
         request.post({url: url, form: req},
         function(err, httpResponse, body){
-            player_uid = body.uid;
-            player_token = body.token;
+            var player = JSON.parse(body);
+            player_uid = player.uid;
+            player_token = player.token;
 
             done();
         });
@@ -1456,8 +1461,9 @@ describe('Pack Api', function(){
         var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
         request.post({url: url, form: req},
         function(err, httpResponse, body){
-            player_uid = body.uid;
-            player_token = body.token;
+            var player = JSON.parse(body);
+            player_uid = player.uid;
+            player_token = player.token;
 
             done();
         });
