@@ -415,7 +415,7 @@ describe('Mission Api', function(){
         })
     });
     it('/POST create', function(done) { 
-        var req = {'operator_uid':ADMIN_UID,, 'token':ADMIN_TOKEN, 'title':'Test Mission',
+        var req = {'operator_uid':ADMIN_UID, 'token':ADMIN_TOKEN, 'title':'Test Mission',
                    'content':'This is a test mission.',
                    'time_start':'2017-06-13 04:22:23', 'time_end':'2017-06-13 04:32:23',
                    'prize':250, 'clue':12, 'class':'MAIN', 'score':100,
@@ -455,7 +455,7 @@ describe('Mission Api', function(){
         });
     });
     it('/POST create(Failed authentication)', function(done) { 
-        var req = {'operator_uid':player_uid,, 'token':player_token, 'title':'Test Mission',
+        var req = {'operator_uid':player_uid, 'token':player_token, 'title':'Test Mission',
                    'content':'This is a test mission.',
                    'time_start':'2017-06-13 04:22:23', 'time_end':'2017-06-13 04:32:23',
                    'prize':250, 'clue':12, 'class':'MAIN', 'score':100,
@@ -748,7 +748,7 @@ describe('Report Api', function(){
         });
     });
     it('/POST create(Failed authentication)', function(done) { 
-        var req = {'operator_uid':ADMIN_UID, 'token':ADMIN_TOKEN 'mid':-1, 'image':base64_image};
+        var req = {'operator_uid':ADMIN_UID, 'token':ADMIN_TOKEN, 'mid':-1, 'image':base64_image};
         chai.request(HOST)
         .post(path.join(HOST_PREFIX, 'report', 'create'))
         .send(req)
