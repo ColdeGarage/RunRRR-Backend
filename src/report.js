@@ -103,9 +103,8 @@ exports.create = function(req, res){
 		});
 	});
 	fire.on('send', function(){
-		ret.brea = 2;
-		console.log('Failed! /report/create without operator_uid, '
-			+'token, mid or image.');	
+		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
+		res.json(ret);	
 	});
 
 	fire.emit('check');

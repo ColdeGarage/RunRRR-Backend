@@ -205,7 +205,7 @@ exports.read = function(req, res){
 				fire.emit('send');
 			}
 			else if (token==rows[0].token && rows[0].auth_level>=10) {
-				if (!isNaN(uid))
+				if (!isNaN(cid))
 					fire.emit('search_cid');
 				else
 					fire.emit('search');

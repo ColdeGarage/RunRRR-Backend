@@ -80,8 +80,6 @@ exports.create = function(req, res){
 			if (err){
 				ret.brea = 1;
 				console.log('Failed! /mission/create with database error:', err);
-
-				fire.emit('send');
 			}
 			else {
 				ret.brea = 0;
