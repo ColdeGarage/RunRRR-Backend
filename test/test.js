@@ -1398,7 +1398,7 @@ describe('Clue Api', function(){
 
 describe('Pack Api', function(){
     var test_pid;
-    beforeEach(function(){
+    beforeEach(function(done){
         var test_pack = {'uid':-1, 'class':'TOOL', 'id':13};
 
         conn.query('INSERT INTO pack SET ?', test_pack, function(err, result){
@@ -1407,6 +1407,8 @@ describe('Pack Api', function(){
             } else {
                 test_pid = result.insertId;
             }
+            
+            done();
         });
 
     });
