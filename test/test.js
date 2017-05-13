@@ -24,23 +24,24 @@ const ADMIN_TOKEN = 'a1b2c3d4e5f6g7h8i9j0k';
 const EMAIL = 'qmo123@gmail.com';
 const PASS = 'S123456789';
 
-describe('Member Api', function(){
-    var player_uid;
-    var player_token;
+var player_uid;
+var player_token;
 
-    before(function(done){
-        var req = {'email':EMAIL, 'password':PASS};
-        var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
-        request.post({url: url, form: req},
-        function(err, httpResponse, body){
-            var player = JSON.parse(body);
-            player_uid = player.uid;
-            player_token = player.token;
+before(function(done){
+    var req = {'email':EMAIL, 'password':PASS};
+    var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
+    request.post({url: url, form: req},
+    function(err, httpResponse, body){
+        var player = JSON.parse(body);
+        player_uid = player.uid;
+        player_token = player.token;
 
-            done();
-        });
+        done();
     });
+});
 
+
+describe('Member Api', function(){
     it('/PUT liveordie', function(done) { 
         var req = {'operator_uid':ADMIN_UID, 'token':ADMIN_TOKEN, 'uid':player_uid, 'status':0};
         
@@ -337,61 +338,61 @@ describe('Member Api', function(){
             done();
         });
     });
-    it('/POST login', function(done) { 
-        var req = {'email':EMAIL, 'password':PASS};
-        chai.request(HOST)
-        .post(path.join(HOST_PREFIX, 'member', 'login'))
-        .send(req)
-        .end(function(err, res) {
-            expect(res).to.have.status(200);
-            expect(res).to.be.json;
-            res.body.should.be.a('object');
-            res.body.should.have.property('uid').to.be.a('number');
-            res.body.should.have.property('object').eql('member');
-            res.body.should.have.property('action').eql('login');
-            res.body.should.have.property('brea').eql(0);
-            res.body.should.have.property('server_time').to.be.a('string');
-            res.body.should.have.property('payload');
-            res.body.payload.should.have.property('type').eql('Attribute Name');
-            res.body.payload.should.have.property('correct').to.be.a('number');
+    // it('/POST login', function(done) { 
+    //     var req = {'email':EMAIL, 'password':PASS};
+    //     chai.request(HOST)
+    //     .post(path.join(HOST_PREFIX, 'member', 'login'))
+    //     .send(req)
+    //     .end(function(err, res) {
+    //         expect(res).to.have.status(200);
+    //         expect(res).to.be.json;
+    //         res.body.should.be.a('object');
+    //         res.body.should.have.property('uid').to.be.a('number');
+    //         res.body.should.have.property('object').eql('member');
+    //         res.body.should.have.property('action').eql('login');
+    //         res.body.should.have.property('brea').eql(0);
+    //         res.body.should.have.property('server_time').to.be.a('string');
+    //         res.body.should.have.property('payload');
+    //         res.body.payload.should.have.property('type').eql('Attribute Name');
+    //         res.body.payload.should.have.property('correct').to.be.a('number');
             
-            done();
-        });
-    });
-    it('/POST login(Uncomplete request)', function(done) { 
-        chai.request(HOST)
-        .post(path.join(HOST_PREFIX, 'member', 'login'))
-        .end(function(err, res) {
-            expect(res).to.have.status(200);
-            expect(res).to.be.json;
-            res.body.should.be.a('object');
-            res.body.should.have.property('object').eql('member');
-            res.body.should.have.property('action').eql('login');
-            res.body.should.have.property('brea').eql(2);
-            res.body.should.have.property('server_time').to.be.a('string');
+    //         done();
+    //     });
+    // });
+    // it('/POST login(Uncomplete request)', function(done) { 
+    //     chai.request(HOST)
+    //     .post(path.join(HOST_PREFIX, 'member', 'login'))
+    //     .end(function(err, res) {
+    //         expect(res).to.have.status(200);
+    //         expect(res).to.be.json;
+    //         res.body.should.be.a('object');
+    //         res.body.should.have.property('object').eql('member');
+    //         res.body.should.have.property('action').eql('login');
+    //         res.body.should.have.property('brea').eql(2);
+    //         res.body.should.have.property('server_time').to.be.a('string');
             
-            done();
-        });
-    });
+    //         done();
+    //     });
+    // });
 });
 
 describe('Mission Api', function(){
     var test_mid;
-    var player_uid;
-    var player_token;
+    // var player_uid;
+    // var player_token;
 
-    before(function(done){
-        var req = {'email':EMAIL, 'password':PASS};
-        var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
-        request.post({url: url, form: req},
-        function(err, httpResponse, body){
-            var player = JSON.parse(body);
-            player_uid = player.uid;
-            player_token = player.token;
+    // before(function(done){
+    //     var req = {'email':EMAIL, 'password':PASS};
+    //     var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
+    //     request.post({url: url, form: req},
+    //     function(err, httpResponse, body){
+    //         var player = JSON.parse(body);
+    //         player_uid = player.uid;
+    //         player_token = player.token;
 
-            done();
-        });
-    });
+    //         done();
+    //     });
+    // });
     beforeEach(function(){
         var test_mission = {
             'title':'Test Mission', 'content':'This is a test mission.',
@@ -672,21 +673,21 @@ describe('Report Api', function(){
     var image_data;
     var base64_image;
     var test_rid;
-    var player_uid;
-    var player_token;
+    // var player_uid;
+    // var player_token;
 
-    before(function(done){
-        var req = {'email':EMAIL, 'password':PASS};
-        var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
-        request.post({url: url, form: req},
-        function(err, httpResponse, body){
-            var player = JSON.parse(body);
-            player_uid = player.uid;
-            player_token = player.token;
+    // before(function(done){
+    //     var req = {'email':EMAIL, 'password':PASS};
+    //     var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
+    //     request.post({url: url, form: req},
+    //     function(err, httpResponse, body){
+    //         var player = JSON.parse(body);
+    //         player_uid = player.uid;
+    //         player_token = player.token;
 
-            done();
-        });
-    });
+    //         done();
+    //     });
+    // });
     before(function(done){
         image_data = fs.readFileSync(path.join(ROOT_PATH, 'test/data/img/test.jpg'));
         base64_image = new Buffer(image_data).toString('base64');
@@ -1006,21 +1007,21 @@ describe('Tool Api', function(){
     var image_data;
     var base64_image;
     var test_tid;
-    var player_uid;
-    var player_token;
+    // var player_uid;
+    // var player_token;
 
-    before(function(done){
-        var req = {'email':EMAIL, 'password':PASS};
-        var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
-        request.post({url: url, form: req},
-        function(err, httpResponse, body){
-            var player = JSON.parse(body);
-            player_uid = player.uid;
-            player_token = player.token;
+    // before(function(done){
+    //     var req = {'email':EMAIL, 'password':PASS};
+    //     var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
+    //     request.post({url: url, form: req},
+    //     function(err, httpResponse, body){
+    //         var player = JSON.parse(body);
+    //         player_uid = player.uid;
+    //         player_token = player.token;
 
-            done();
-        });
-    });
+    //         done();
+    //     });
+    // });
     before(function(done){
         image_data = fs.readFileSync(path.join(ROOT_PATH, 'test/data/img/test.jpg'));
         base64_image = new Buffer(image_data).toString('base64');
@@ -1244,21 +1245,21 @@ describe('Tool Api', function(){
 
 describe('Clue Api', function(){
     var test_cid;
-    var player_uid;
-    var player_token;
+    // var player_uid;
+    // var player_token;
 
-    before(function(done){
-        var req = {'email':EMAIL, 'password':PASS};
-        var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
-        request.post({url: url, form: req},
-        function(err, httpResponse, body){
-            var player = JSON.parse(body);
-            player_uid = player.uid;
-            player_token = player.token;
+    // before(function(done){
+    //     var req = {'email':EMAIL, 'password':PASS};
+    //     var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
+    //     request.post({url: url, form: req},
+    //     function(err, httpResponse, body){
+    //         var player = JSON.parse(body);
+    //         player_uid = player.uid;
+    //         player_token = player.token;
 
-            done();
-        });
-    });
+    //         done();
+    //     });
+    // });
     beforeEach(function(){
         var test_clue = {
             'content':'This is a test clue'
@@ -1453,21 +1454,21 @@ describe('Clue Api', function(){
 
 describe('Pack Api', function(){
     var test_pid;
-    var player_uid;
-    var player_token;
+    // var player_uid;
+    // var player_token;
 
-    before(function(done){
-        var req = {'email':EMAIL, 'password':PASS};
-        var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
-        request.post({url: url, form: req},
-        function(err, httpResponse, body){
-            var player = JSON.parse(body);
-            player_uid = player.uid;
-            player_token = player.token;
+    // before(function(done){
+    //     var req = {'email':EMAIL, 'password':PASS};
+    //     var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
+    //     request.post({url: url, form: req},
+    //     function(err, httpResponse, body){
+    //         var player = JSON.parse(body);
+    //         player_uid = player.uid;
+    //         player_token = player.token;
 
-            done();
-        });
-    });
+    //         done();
+    //     });
+    // });
     beforeEach(function(){
         var test_pack = {'uid':-1, 'class':'TOOL', 'id':13};
 
