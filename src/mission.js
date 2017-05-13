@@ -34,7 +34,7 @@ exports.create = function(req, res){
 		//check if post all of the values
 		var check = !isNaN(operator_uid) && (token!=undefined);
 		for (var key in mission) {
-			if (key!=location_n || key!=location_e){
+			if (key!='location_n' || key!='location_e'){
 				//if not undefined and not NaN
 				var valid = !(isNaN(mission[key]) && (mission[key]==undefined));
 				check = check && valid;

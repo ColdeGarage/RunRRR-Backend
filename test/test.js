@@ -559,7 +559,7 @@ describe('Mission Api', function(){
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
-            res.body.should.have.property('uid').eql(ADMIN_UID);
+            res.body.should.have.property('uid').eql(player_uid);
             res.body.should.have.property('object').eql('mission');
             res.body.should.have.property('action').eql('delete');
             res.body.should.have.property('brea').eql(4);
@@ -796,8 +796,8 @@ describe('Report Api', function(){
         });
     });
     it('/PUT edit', function(done) { 
-        var req = {'operator_uid':player_uid,'token':player_token,
-        	'rid':test_rid, 'image':base64_image};
+         var req = {'operator_uid':player_uid, 'token':player_token,
+         			'rid':test_rid, 'image':base64_image};
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'report', 'edit'))
         .send(req)
@@ -1006,7 +1006,7 @@ describe('Tool Api', function(){
                 throw 'delete test tool error:' + err;
             }
         });
-        fs.unlinkSync(path.join(ROOT_PATH, '/test/data/img/report-m-1-u'+player_uid+'.jpg'));
+        fs.unlinkSync(path.join(ROOT_PATH, '/test/data/img/tool-Test tool.jpg'));
     })
     it('/POST create', function(done) { 
         var req = {'operator_uid':ADMIN_UID,'token':ADMIN_TOKEN, 'title':'Test tool', 
@@ -1147,7 +1147,7 @@ describe('Tool Api', function(){
             }
             
             chai.request(HOST)
-            .get(path.join(HOST_PREFIX, 'download', 'img', res.body.payload.objects[0][url]))
+            .get(path.join(HOST_PREFIX, 'download', 'img', res.body.payload.objects[0]['url']))
             .end(function(err, res) {
                 expect(res).to.have.status(200);
                 expect(res.headers['content-length']).to.be.a('string').eql('7207');
