@@ -901,7 +901,7 @@ describe('Report Api', function(){
         });
     });
     it('/GET read(with mid)', function(done) { 
-        var req = {'operator_uid':ADMIN_UID, 'token':ADMIN_TOKEN, 'mid':5};
+        var req = {'operator_uid':ADMIN_UID, 'token':ADMIN_TOKEN, 'mid':-1};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'report', 'read'))
         .query(req)

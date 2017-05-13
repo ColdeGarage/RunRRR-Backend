@@ -382,8 +382,7 @@ exports.read = function(req, res){
 		});
 	});
 	fire.on('search_time', function(){
-		connection.query('SELECT * FROM mission WHERE time_start <'
-			+ new Date((new Date).getTime()-timezone*60*1000),
+		connection.query('SELECT * FROM mission WHERE time_start < NOW()',
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
