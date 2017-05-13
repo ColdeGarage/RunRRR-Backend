@@ -225,6 +225,7 @@ exports.edit = function(req, res){
 	var token = req.body.token;
 
 	var report = new Object;
+	report.rid = parseInt(req.body.rid);
 	report.uid = operator_uid;
 	report.status = 0;
 	report.time = new Date((new Date).getTime()-timezone*60*1000);
