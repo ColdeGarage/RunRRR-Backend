@@ -6,8 +6,10 @@
     "image_dir":"/img",
     "map_dir":"/map",
     "database":{
+        "host":"localhost",
     	"user":"run_for_ee",
     	"password": "runrrrr",
-    	"database":"run_for_ee"
+    	"database":"run_for_ee",
+        "timezone":"+00:00"
     }
 }

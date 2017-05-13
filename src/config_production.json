@@ -9,6 +9,7 @@
     	"host":"localhost",
     	"user":"run_for_ee",
     	"password": "runrrrr",
-    	"database":"run_for_ee"
+    	"database":"run_for_ee",
+        "timezone":"+00:00"
     }
 }
