@@ -921,7 +921,7 @@ describe('Report Api', function(){
             for (report in res.body.payload.objects){
                 res.body.payload.objects[report].should.have.property('rid').to.be.a('number');
                 res.body.payload.objects[report].should.have.property('uid').to.be.a('number');
-                res.body.payload.objects[report].should.have.property('mid').eql(5);
+                res.body.payload.objects[report].should.have.property('mid').eql(-1);
                 res.body.payload.objects[report].should.have.property('url').to.be.a('string');
                 res.body.payload.objects[report].should.have.property('status').to.be.a('number');
                 res.body.payload.objects[report].should.have.property('time').to.be.a('string');
