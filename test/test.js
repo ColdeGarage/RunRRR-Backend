@@ -789,14 +789,15 @@ describe('Report Api', function(){
             res.body.should.have.property('uid').eql(player_uid);
             res.body.should.have.property('object').eql('report');
             res.body.should.have.property('action').eql('check');
-            res.body.should.have.property('brea').eql(2);
+            res.body.should.have.property('brea').eql(4);
             res.body.should.have.property('server_time').to.be.a('string');
 
             done();
         });
     });
     it('/PUT edit', function(done) { 
-        var req = {'operator_uid':player_uid,'token':player_token, 'rid':test_rid, 'image':base64_image};
+        var req = {'operator_uid':player_uid,'token':player_token,
+        	'rid':test_rid, 'image':base64_image};
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'report', 'edit'))
         .send(req)
@@ -830,7 +831,8 @@ describe('Report Api', function(){
         });
     });
     it('/PUT edit(Failed authentication)', function(done) { 
-        var req = {'operator_uid':ADMIN_UID,'token':ADMIN_TOKEN, 'rid':test_rid, 'image':base64_image};
+        var req = {'operator_uid':ADMIN_UID,'token':ADMIN_TOKEN,
+        	'rid':test_rid, 'image':base64_image};
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'report', 'edit'))
         .send(req)
@@ -889,7 +891,7 @@ describe('Report Api', function(){
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
-            res.body.should.have.property('uid').eql(ADMIN_UID);
+            res.body.should.have.property('uid').eql(player_uid);
             res.body.should.have.property('object').eql('report');
             res.body.should.have.property('action').eql('delete');
             res.body.should.have.property('brea').eql(4);
@@ -1107,7 +1109,7 @@ describe('Tool Api', function(){
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
-            res.body.should.have.property('uid').eql(ADMIN_UID);
+            res.body.should.have.property('uid').eql(player_uid);
             res.body.should.have.property('object').eql('tool');
             res.body.should.have.property('action').eql('delete');
             res.body.should.have.property('brea').eql(4);

@@ -1,3 +1,4 @@
+var fs = require('fs');
 var path = require('path');
 var events = require('events');
 var ROOT_PATH = path.resolve(process.env.NODE_PATH)
@@ -230,8 +231,8 @@ exports.read = function(req, res){
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth_level>10) {
-				if (!isNaN(uid))
+			else if (token==rows[0].token && rows[0].auth_level>=10) {
+				if (!isNaN(tid))
 					fire.emit('search_tid');
 				else
 					fire.emit('search');

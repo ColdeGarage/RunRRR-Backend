@@ -585,6 +585,7 @@ exports.login = function(req, res){
 						token: data.token,
 						auth_level: data.auth
 					}
+
 					fire.emit('search');
 				}
 				else{
@@ -610,6 +611,8 @@ exports.login = function(req, res){
 				ret.brea = 1;
 				console.log('Failed! /member/login (uid='+ret.uid+') '
 					+'find with database error:' ,err);
+
+				fire.emit('send');
 			}
 			else if (rows.length == 0) {
 				fire.emit('insert');
@@ -617,8 +620,6 @@ exports.login = function(req, res){
 			else {
 				fire.emit('update');
 			}
-
-			fire.emit('send');
 		});
 	});
 	fire.on('insert', function(){
