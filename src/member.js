@@ -248,7 +248,7 @@ exports.read = function(req, res){
 
 	fire.on('check', function(){
 		var check = !isNaN(operator_uid) &&
-			(auth.token!=undefined);
+			(token!=undefined);
 
 		if (check) {
 			fire.emit('auth');
@@ -357,7 +357,7 @@ exports.money = function(req, res){
 
 	fire.on('check', function(){
 		var check = !isNaN(operator_uid) &&
-			(auth.token!=undefined) &&
+			(token!=undefined) &&
 			!isNaN(uid) &&
 			!isNaN(amount);
 		if (check){
@@ -463,7 +463,7 @@ exports.callhelp = function(req, res){
 	ret.action = 'callhelp';
 
 	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && (auth.token!=undefined);
+		var check = !isNaN(operator_uid) && (token!=undefined);
 		for (var key in member) {
 			check = check && !isNaN(member[key]);
 		}
