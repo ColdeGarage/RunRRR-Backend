@@ -1407,7 +1407,7 @@ describe('Pack Api', function(){
             } else {
                 test_pid = result.insertId;
             }
-        })
+        });
 
     });
     after(function(){
@@ -1525,7 +1525,7 @@ describe('Pack Api', function(){
             done();
         });
     });
-    it('/GET read(with pid)', function(done) { 
+    it('/GET read(with uid)', function(done) { 
         var req = {'operator_uid':player_uid, 'token':player_token, 'uid':-1};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'pack', 'read'))
@@ -1552,7 +1552,7 @@ describe('Pack Api', function(){
             done();
         });
     });
-    it('/GET read(with out pid)', function(done) { 
+    it('/GET read(with out uid)', function(done) { 
         var req = {'operator_uid':ADMIN_UID, 'token':ADMIN_TOKEN};
         chai.request(HOST)
         .get(path.join(HOST_PREFIX, 'pack', 'read'))
