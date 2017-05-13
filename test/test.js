@@ -28,9 +28,9 @@ describe('Member Api', function(){
     var player_uid;
     var player_token;
 
-    before(function(){
+    before(function(donedone){
         var req = {'email':EMAIL, 'password':PASS};
-        var url = path.join(HOST,HOST_PREFIX, 'member', 'login')
+        var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
         request.post({url: url, form: req},
         function(err, httpResponse, body){
             player_uid = body.uid;
@@ -379,9 +379,9 @@ describe('Mission Api', function(){
     var player_uid;
     var player_token;
 
-    before(function(){
+    before(function(done){
         var req = {'email':EMAIL, 'password':PASS};
-        var url = path.join(HOST,HOST_PREFIX, 'member', 'login')
+        var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
         request.post({url: url, form: req},
         function(err, httpResponse, body){
             player_uid = body.uid;
@@ -673,9 +673,9 @@ describe('Report Api', function(){
     var player_uid;
     var player_token;
 
-    before(function(){
+    before(function(done){
         var req = {'email':EMAIL, 'password':PASS};
-        var url = path.join(HOST,HOST_PREFIX, 'member', 'login')
+        var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
         request.post({url: url, form: req},
         function(err, httpResponse, body){
             player_uid = body.uid;
@@ -684,7 +684,7 @@ describe('Report Api', function(){
             done();
         });
     });
-    before(function(){
+    before(function(done){
         image_data = fs.readFileSync(path.join(ROOT_PATH, 'test/data/img/test.jpg'));
         base64_image = new Buffer(image_data).toString('base64');
     });
@@ -1006,9 +1006,9 @@ describe('Tool Api', function(){
     var player_uid;
     var player_token;
 
-    before(function(){
+    before(function(done){
         var req = {'email':EMAIL, 'password':PASS};
-        var url = path.join(HOST,HOST_PREFIX, 'member', 'login')
+        var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
         request.post({url: url, form: req},
         function(err, httpResponse, body){
             player_uid = body.uid;
@@ -1017,7 +1017,7 @@ describe('Tool Api', function(){
             done();
         });
     });
-    before(function(){
+    before(function(done){
         image_data = fs.readFileSync(path.join(ROOT_PATH, 'test/data/img/test.jpg'));
         base64_image = new Buffer(image_data).toString('base64');
     });
@@ -1243,9 +1243,9 @@ describe('Clue Api', function(){
     var player_uid;
     var player_token;
 
-    before(function(){
+    before(function(done){
         var req = {'email':EMAIL, 'password':PASS};
-        var url = path.join(HOST,HOST_PREFIX, 'member', 'login')
+        var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
         request.post({url: url, form: req},
         function(err, httpResponse, body){
             player_uid = body.uid;
@@ -1451,9 +1451,9 @@ describe('Pack Api', function(){
     var player_uid;
     var player_token;
 
-    before(function(){
+    before(function(done){
         var req = {'email':EMAIL, 'password':PASS};
-        var url = path.join(HOST,HOST_PREFIX, 'member', 'login')
+        var url = HOST+path.join(HOST_PREFIX, 'member', 'login')
         request.post({url: url, form: req},
         function(err, httpResponse, body){
             player_uid = body.uid;
