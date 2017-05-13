@@ -47,8 +47,8 @@ exports.create = function(req, res){
 		}
 		else {
 			ret.brea = 2; //if no complete tool values
-			console.log('Failed! /tool/create without operator_uid \
-				token or some values in object.');
+			console.log('Failed! /tool/create without operator_uid '
+				+'token or some values in object.');
 
 			fire.emit('send');
 		}
@@ -58,7 +58,7 @@ exports.create = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /tool/create auth_level with db error: ',
+				console.log('Failed! /tool/create auth with db error: ',
 					err);
 				
 				fire.emit('send');
@@ -68,8 +68,8 @@ exports.create = function(req, res){
 			}
 			else {
 				ret.brea = 4;
-				console.log('Failed! /tool/create \
-					(operator_uid='+operator_uid+') auth_level failed.');
+				console.log('Failed! /tool/create '
+					+'(operator_uid='+operator_uid+') auth failed.');
 				
 				fire.emit('send');
 			}
@@ -87,8 +87,9 @@ exports.create = function(req, res){
 					IMAGE_DIR, tool.url);
 				fs.writeFile(filename, new Buffer(req.body.image, 'base64'), 
 					function(err){
-		    		if (err) console.log('Error! /tool/create write image \
-		    			with error:', err);
+		    		if (err) 
+		    			console.log('Error! /tool/create write image '
+							+'with error:', err);
 		    	});
 
 				ret.brea = 0;
@@ -96,8 +97,8 @@ exports.create = function(req, res){
 					type : 'Attribute Name',
 					tid : result.insertId
 				};
-				console.log('Success! /tool/create (tid='+result.insertId+') \
-					successfully.');
+				console.log('Success! /tool/create (tid='+result.insertId+') '
+					+'successfully.');
 			}
 
 			fire.emit('send');
@@ -134,8 +135,8 @@ exports.delete = function(req, res){
 		}
 		else {
 			ret.brea = 2;
-			console.log('Failed! /tool/delete without operator_uid, \
-				token or tid.');
+			console.log('Failed! /tool/delete without operator_uid, '
+				+'token or tid.');
 
 			fire.emit('send');
 		}
@@ -145,7 +146,7 @@ exports.delete = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /tool/delete auth_level with db error: ',
+				console.log('Failed! /tool/delete auth with db error: ',
 					err);
 				
 				fire.emit('send');
@@ -155,8 +156,8 @@ exports.delete = function(req, res){
 			}
 			else {
 				ret.brea = 4;
-				console.log('Failed! /tool/delete \
-					(operator_uid='+operator_uid+') auth_level failed.');
+				console.log('Failed! /tool/delete '
+					+'(operator_uid='+operator_uid+') auth failed.');
 				
 				fire.emit('send');
 			}
@@ -167,18 +168,18 @@ exports.delete = function(req, res){
 		function(err, result){
 			if (err){
 				ret.brea = 1;
-				console.log('Failed! /tool/delete (tid='+tid+') \
-					with database error:', err);
+				console.log('Failed! /tool/delete (tid='+tid+') '
+					+'with database error:', err);
 			}
 			else if (result.affectedRows) {
 				ret.brea = 0;
-				console.log('Success! /tool/delete (tid='+tid+') \
-					successfully.');
+				console.log('Success! /tool/delete (tid='+tid+') '
+					+'successfully.');
 			}
 			else {
 				ret.brea = 3;
-				console.log('Failed! /tool/delete (tid='+tid+') \
-					is not in database.');
+				console.log('Failed! /tool/delete (tid='+tid+') '
+					+'is not in database.');
 			}
 			
 			fire.emit('send');
@@ -224,7 +225,7 @@ exports.read = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /tool/read auth_level with db error: ',
+				console.log('Failed! /tool/read auth with db error: ',
 					err);
 				
 				fire.emit('send');
@@ -237,8 +238,8 @@ exports.read = function(req, res){
 			}
 			else {
 				ret.brea = 4;
-				console.log('Failed! /tool/read \
-					(operator_uid='+operator_uid+') auth_level failed.');
+				console.log('Failed! /tool/read '
+					+'(operator_uid='+operator_uid+') auth failed.');
 				
 				fire.emit('send');
 			}
@@ -249,13 +250,13 @@ exports.read = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /tool/read (tid='+tid+') \
-					with database error:', err);
+				console.log('Failed! /tool/read (tid='+tid+') '
+					+'with database error:', err);
 			}
 			else if (rows.length == 0) {
 				ret.brea = 3;
-				console.log('Failed! /tool/read (tid='+tid+') \
-					is not in database.');
+				console.log('Failed! /tool/read (tid='+tid+') '
+					+'is not in database.');
 			}
 			else {
 				ret.brea = 0;
@@ -263,8 +264,8 @@ exports.read = function(req, res){
 					type : 'Objects',
 					objects : rows
 				};
-				console.log('Success! /tool/read (tid='+tid+') \
-					successfully.');
+				console.log('Success! /tool/read (tid='+tid+') '
+					+'successfully.');
 			}
 
 			fire.emit('send');

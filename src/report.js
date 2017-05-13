@@ -44,8 +44,8 @@ exports.create = function(req, res){
 		}
 		else {
 			ret.brea = 2;
-			console.log('Failed! /report/create without operator_uid, \
-				token, mid or image.');
+			console.log('Failed! /report/create without operator_uid, '
+				+'token, mid or image.');
 			
 			fire.emit('send');
 		}
@@ -55,7 +55,7 @@ exports.create = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /report/create auth_level with db error: ',
+				console.log('Failed! /report/create auth with db error: ',
 					err);
 				
 				fire.emit('send');
@@ -65,8 +65,8 @@ exports.create = function(req, res){
 			}
 			else {
 				ret.brea = 4;
-				console.log('Failed! /report/create \
-					(operator_uid='+operator_uid+') auth_level failed.');
+				console.log('Failed! /report/create '
+					+'(operator_uid='+operator_uid+') auth failed.');
 				
 				fire.emit('send');
 			}
@@ -77,16 +77,17 @@ exports.create = function(req, res){
     	function(err, result){
 			if (err){
 				ret.brea = 1;
-				console.log('Failed! /report/create (mid='+report.mid+') \
-					(uid='+report.uid+') with database error:', err);
+				console.log('Failed! /report/create (mid='+report.mid+') '
+					+'(uid='+report.uid+') with database error:', err);
 			}
 			else {
 				var filename = path.join(ROOT_PATH, FILE_PREFIX,
 					IMAGE_DIR, report.url);
 				fs.writeFile(filename, new Buffer(req.body.image, 'base64'), 
 					function(err){
-		    		if (err) console.log('Error! /report/create write image \
-		    			with error:', err);
+		    		if (err) 
+		    			console.log('Error! /report/create write image '
+		    				+'with error:', err);
 		    	});
 
 				ret.brea = 0;
@@ -94,8 +95,8 @@ exports.create = function(req, res){
 					type : 'Attribute Name',
 					rid : result.insertId
 				}
-				console.log('Success! /report/create (mid='+report.mid+') \
-					(uid='+report.uid+') successfully.');
+				console.log('Success! /report/create (mid='+report.mid+') '
+					+'(uid='+report.uid+') successfully.');
 			}
 
 			fire.emit('send');
@@ -103,8 +104,8 @@ exports.create = function(req, res){
 	});
 	fire.on('send', function(){
 		ret.brea = 2;
-		console.log('Failed! /report/create without operator_uid, \
-			token, mid or image.');	
+		console.log('Failed! /report/create without operator_uid, '
+			+'token, mid or image.');	
 	});
 
 	fire.emit('check');
@@ -135,8 +136,8 @@ exports.check = function(req, res){
 		}
 		else {
 			ret.brea = 2;
-			console.log('Failed! /report/check without operator_uid, \
-				token, rid or status.');
+			console.log('Failed! /report/check without operator_uid, '
+				+'token, rid or status.');
 			
 			fire.emit('send');
 		}
@@ -146,7 +147,7 @@ exports.check = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /report/check auth_level with db error: ',
+				console.log('Failed! /report/check auth with db error: ',
 					err);
 				
 				fire.emit('send');
@@ -156,8 +157,8 @@ exports.check = function(req, res){
 			}
 			else {
 				ret.brea = 4;
-				console.log('Failed! /report/check \
-					(operator_uid='+operator_uid+') auth_level failed.');
+				console.log('Failed! /report/check '
+					+'(operator_uid='+operator_uid+') auth failed.');
 				
 				fire.emit('send');
 			}
@@ -168,15 +169,15 @@ exports.check = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /report/check (rid='+report.rid+') \
-					find rid with database error:', err);
+				console.log('Failed! /report/check (rid='+report.rid+') '
+					+'find rid with database error:', err);
 
 				fire.emit('send');
 			}
 			else if (rows.length == 0) {
 				ret.brea = 3;
-				console.log('Failed! /report/check (rid='+report.rid+') \
-					is not in database.');
+				console.log('Failed! /report/check (rid='+report.rid+') '
+					+'is not in database.');
 
 				fire.emit('send');
 			}
@@ -190,8 +191,8 @@ exports.check = function(req, res){
 		function(err, result){
 			if (err){
 				ret.brea = 1;
-				console.log('Failed! /report/check (rid='+report.rid+') \
-					update with database error:', err);
+				console.log('Failed! /report/check (rid='+report.rid+') '
+					+'update with database error:', err);
 			}
 			else {
 				ret.brea = 0;
@@ -200,11 +201,11 @@ exports.check = function(req, res){
 					status: report.status
 				}
 				if (result.changedRows) 
-					console.log('Success! /report/check (rid='+report.rid+') \
-						(status='+report.status+') successfully.');
+					console.log('Success! /report/check (rid='+report.rid+') '
+						+'(status='+report.status+') successfully.');
 				else 
-					console.log('Success! /report/check (rid='+report.rid+') \
-						but status doesn\'t change.');
+					console.log('Success! /report/check (rid='+report.rid+') '
+						+'but status doesn\'t change.');
 			}
 			fire.emit('send');
 		});
@@ -243,8 +244,8 @@ exports.edit = function(req, res){
 		}
 		else {
 			ret.brea = 2;
-			console.log('Failed! /report/edit without operator_uid, \
-				token, rid, or image.');
+			console.log('Failed! /report/edit without operator_uid, '
+				+'token, rid, or image.');
 
 			fire.emit('send');
 		}
@@ -254,7 +255,7 @@ exports.edit = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /report/edit auth_level with db error: ',
+				console.log('Failed! /report/edit auth with db error: ',
 					err);
 				
 				fire.emit('send');
@@ -264,8 +265,8 @@ exports.edit = function(req, res){
 			}
 			else {
 				ret.brea = 4;
-				console.log('Failed! /report/edit \
-					(operator_uid='+operator_uid+') auth_level failed.');
+				console.log('Failed! /report/edit '
+					+'(operator_uid='+operator_uid+') auth failed.');
 				
 				fire.emit('send');
 			}
@@ -276,15 +277,15 @@ exports.edit = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /report/edit (rid='+report.rid+') \
-					find with database error:', err);
+				console.log('Failed! /report/edit (rid='+report.rid+') '
+					+'find with database error:', err);
 			
 				fire.emit('send');
 			}
 			else if (rows.length == 0) {
 				ret.brea = 3;
-				console.log('Failed! /report/edit (rid='+report.rid+') \
-					is not in database.');
+				console.log('Failed! /report/edit (rid='+report.rid+') '
+					+'is not in database.');
 
 				fire.emit('send');
 			}
@@ -300,24 +301,24 @@ exports.edit = function(req, res){
 		function(err, result){
 			if (err){
 				ret.brea = 1;
-				console.log('Failed! /report/edit (rid='+report.rid+') \
-					with database error:', err);
+				console.log('Failed! /report/edit (rid='+report.rid+') '
+					+'with database error:', err);
 			}
 			else {
 				var filename = path.join(ROOT_PATH, FILE_PREFIX, 
 					IMAGE_DIR, report.url);
 				fs.writeFile(filename, new Buffer(req.body.image, 'base64'), 
 				function(err){
-		    		if (err) console.log('Error! /report/edit write image \
-		    			with error:', err);
+		    		if (err) console.log('Error! /report/edit write image '
+						+'with error:', err);
 		    	});
 
 				ret.brea = 0;
 				if (result.changedRows) 
 					console.log('Success! /report/edit (rid='+report.rid+')');
 				else 
-					console.log('Success! /report/edit (rid='+report.rid+') \
-						but doesn\'t change.');	
+					console.log('Success! /report/edit (rid='+report.rid+') '
+						+'but doesn\'t change.');	
 			}
 
 			fire.emit('send');
@@ -354,8 +355,8 @@ exports.delete = function(req, res){
 		}
 		else {
 			ret.brea = 2;
-			console.log('Failed! /report/delete without operator_uid, \
-				token or rid.');
+			console.log('Failed! /report/delete without operator_uid, '
+				+'token or rid.');
 
 			fire.emit('send');
 		}
@@ -365,7 +366,7 @@ exports.delete = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /report/delete auth_level with db error: ',
+				console.log('Failed! /report/delete auth with db error: ',
 					err);
 				
 				fire.emit('send');
@@ -375,8 +376,8 @@ exports.delete = function(req, res){
 			}
 			else {
 				ret.brea = 4;
-				console.log('Failed! /report/delete \
-					(operator_uid='+operator_uid+') auth_level failed.');
+				console.log('Failed! /report/delete '
+					+'(operator_uid='+operator_uid+') auth failed.');
 				
 				fire.emit('send');
 			}
@@ -387,18 +388,18 @@ exports.delete = function(req, res){
 		function(err, result){
 			if (err){
 				ret.brea = 1;
-				console.log('Failed! /report/delete (rid='+rid+') \
-					with database error:', err);
+				console.log('Failed! /report/delete (rid='+rid+') '
+					+'with database error:', err);
 			}
 			else if (result.affectedRows) {
 				ret.brea = 0;
-				console.log('Success! /report/delete (rid='+rid+') \
-					successfully.');
+				console.log('Success! /report/delete (rid='+rid+') '
+					+'successfully.');
 			}
 			else {
 				ret.brea = 3;
-				console.log('Failed! /report/delete (rid='+rid+') \
-					is not in database.');
+				console.log('Failed! /report/delete (rid='+rid+') '
+					+'is not in database.');
 			}
 
 			fire.emit('send');
@@ -437,8 +438,8 @@ exports.read = function(req, res){
 		}
 		else {
 			ret.brea = 2;
-			console.log('Failed! /report/read without operator_uid, \
-				token, mid or uid.');
+			console.log('Failed! /report/read without operator_uid, '
+				+'token, mid or uid.');
 
 			fire.emit('send');
 		}
@@ -450,7 +451,7 @@ exports.read = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /report/read auth_level with db error: ',
+				console.log('Failed! /report/read auth with db error: ',
 					err);
 				
 				fire.emit('send');
@@ -464,16 +465,16 @@ exports.read = function(req, res){
 				}
 				else {
 					ret.brea = 4;
-					console.log('Failed! /report/read (operator_uid='+
-						operator_uid+') auth_level and attribute not match.');
+					console.log('Failed! /report/read (operator_uid='
+						+operator_uid+') auth and attribute not match.');
 
 					fire.emit('send');
 				}
 			}
 			else {
 				ret.brea = 4;
-				console.log('Failed! /report/read \
-					(operator_uid='+operator_uid+') auth_level failed.');
+				console.log('Failed! /report/read '
+					+'(operator_uid='+operator_uid+') auth failed.');
 				
 				fire.emit('send');
 			}
@@ -484,13 +485,13 @@ exports.read = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /report/read (uid='+uid+') \
-					with database error:', err);
+				console.log('Failed! /report/read (uid='+uid+') '
+					+'with database error:', err);
 			}
 			else if (rows.length == 0) {
 				ret.brea = 3;
-				console.log('Failed! /report/read (uid='+uid+') \
-					cannot find in database.');
+				console.log('Failed! /report/read (uid='+uid+') '
+					+'cannot find in database.');
 			}
 			else {
 				ret.brea = 0;
@@ -498,8 +499,8 @@ exports.read = function(req, res){
 					type : 'Objects',
 					objects : rows
 				}
-				console.log('Success! /report/read (uid='+uid+') \
-					successfully.');
+				console.log('Success! /report/read (uid='+uid+') '
+					+'successfully.');
 			}
 
 			fire.emit('send');
@@ -510,13 +511,13 @@ exports.read = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /report/read (mid='+mid+') \
-					with database error:', err);
+				console.log('Failed! /report/read (mid='+mid+') '
+					+'with database error:', err);
 			}
 			else if (rows.length == 0) {
 				ret.brea = 3;
-				console.log('Failed! /report/read (mid='+mid+') \
-					cannot find in database.');
+				console.log('Failed! /report/read (mid='+mid+') '
+					+'cannot find in database.');
 			}
 			else {
 				ret.brea = 0;
@@ -524,8 +525,8 @@ exports.read = function(req, res){
 					type : 'Objects',
 					objects : rows
 				}
-				console.log('Success! /report/read (mid='+mid+') \
-					successfully.');
+				console.log('Success! /report/read (mid='+mid+') '
+					+'successfully.');
 			}
 
 			fire.emit('send');

@@ -35,8 +35,8 @@ exports.create = function(req, res){
 		}
 		else {
 			ret.brea = 2; //if no complete pack values
-			console.log('Failed! /pack/create without operator_uid, \
-				token or some values in object.');
+			console.log('Failed! /pack/create without operator_uid, '
+				+'token or some values in object.');
 
 			fire.emit('send');
 		}
@@ -46,7 +46,7 @@ exports.create = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /pack/create auth_level with db error: ',
+				console.log('Failed! /pack/create auth with db error: ',
 					err);
 				
 				fire.emit('send');
@@ -56,8 +56,8 @@ exports.create = function(req, res){
 			}
 			else {
 				ret.brea = 4;
-				console.log('Failed! /pack/create \
-					(operator_uid='+operator_uid+') auth_level failed.');
+				console.log('Failed! /pack/create '
+					+'(operator_uid='+operator_uid+') auth failed.');
 				
 				fire.emit('send');
 			}
@@ -68,8 +68,8 @@ exports.create = function(req, res){
 		function(err, result){
 			if (err){
 				ret.brea = 1;
-				console.log('Failed! /pack/create (uid='+pack.uid+') \
-					with database error:', err);
+				console.log('Failed! /pack/create (uid='+pack.uid+') '
+					+'with database error:', err);
 			}
 			else {
 				ret.brea = 0;
@@ -77,8 +77,8 @@ exports.create = function(req, res){
 					type : 'Attribute Name',
 					pid : result.insertId
 				}
-				console.log('Success! /pack/create (uid='+pack.uid+') \
-					(pid='+result.insertId+').');
+				console.log('Success! /pack/create (uid='+pack.uid+') '
+					+'(pid='+result.insertId+').');
 			}
 
 			fire.emit('send');
@@ -115,8 +115,8 @@ exports.delete = function(req, res){
 		}
 		else {
 			ret.brea = 2;
-			console.log('Failed! /pack/delete without operator_uid, \
-				token or pid.');
+			console.log('Failed! /pack/delete without operator_uid, '
+				+'token or pid.');
 
 			fire.emit('send');
 		}
@@ -126,7 +126,7 @@ exports.delete = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /pack/delete auth_level with db error: ',
+				console.log('Failed! /pack/delete auth with db error: ',
 					err);
 				
 				fire.emit('send');
@@ -136,8 +136,8 @@ exports.delete = function(req, res){
 			}
 			else {
 				ret.brea = 4;
-				console.log('Failed! /pack/delete \
-					(operator_uid='+operator_uid+') auth_level failed.');
+				console.log('Failed! /pack/delete '
+					+'(operator_uid='+operator_uid+') auth failed.');
 				
 				fire.emit('send');
 			}
@@ -148,18 +148,18 @@ exports.delete = function(req, res){
 		function(err, result){
 			if (err){
 				ret.brea = 1;
-				console.log('Failed! /pack/delete (pid='+pid+') \
-					with database error:', err);
+				console.log('Failed! /pack/delete (pid='+pid+') '
+					+'with database error:', err);
 			}
 			else if (result.affectedRows) {
 				ret.brea = 0;
-				console.log('Success! /pack/delete (pid='+pid+') \
-					successfully.');
+				console.log('Success! /pack/delete (pid='+pid+') '
+					+'successfully.');
 			}
 			else {
 				ret.brea = 3;
-				console.log('Failed! /pack/delete (pid='+pid+') \
-					is not in database.');
+				console.log('Failed! /pack/delete (pid='+pid+') '
+					+'is not in database.');
 			}
 
 			fire.emit('send');
@@ -205,7 +205,7 @@ exports.read = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /pack/read auth_level with db error: ',
+				console.log('Failed! /pack/read auth with db error: ',
 					err);
 				
 				fire.emit('send');
@@ -218,8 +218,8 @@ exports.read = function(req, res){
 			}
 			else {
 				ret.brea = 4;
-				console.log('Failed! /pack/read \
-					(operator_uid='+operator_uid+') auth_level failed.');
+				console.log('Failed! /pack/read '
+					+'(operator_uid='+operator_uid+') auth failed.');
 				
 				fire.emit('send');
 			}
@@ -230,13 +230,13 @@ exports.read = function(req, res){
 		function(err, rows){
 				if (err) {
 					ret.brea = 3;
-					console.log('Failed! /pack/read (uid='+uid+') \
-						with database error:', err);
+					console.log('Failed! /pack/read (uid='+uid+') '
+						+'with database error:', err);
 				}
 				else if (rows.length == 0) {
 					ret.brea = 1;
-					console.log('Failed! /pack/read (uid='+uid+') \
-						is not in database.');
+					console.log('Failed! /pack/read (uid='+uid+') '
+						+'is not in database.');
 				}
 				else {
 					ret.brea = 0;
@@ -244,8 +244,8 @@ exports.read = function(req, res){
 						type : 'Objects',
 						objects : rows
 					};
-					console.log('Success! /pack/read (uid='+uid+') \
-						successfully.');
+					console.log('Success! /pack/read (uid='+uid+') '
+						+'successfully.');
 				}
 
 				fire.emit('send');

@@ -30,8 +30,8 @@ exports.create = function(req, res){
 		}
 		else {
 			ret.brea = 2; //if no complete clue values
-			console.log('Failed! /clue/create without operator_uid, \
-				token or some values in object.');
+			console.log('Failed! /clue/create without operator_uid, '
+				+'token or some values in object.');
 
 			fire.emit('send');
 		}
@@ -41,7 +41,7 @@ exports.create = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /clue/create auth_level with db error: ',
+				console.log('Failed! /clue/create auth with db error: ',
 					err);
 				
 				fire.emit('send');
@@ -51,8 +51,8 @@ exports.create = function(req, res){
 			}
 			else {
 				ret.brea = 4;
-				console.log('Failed! /clue/create \
-					(operator_uid='+operator_uid+') auth_level failed.');
+				console.log('Failed! /clue/create '
+					+'(operator_uid='+operator_uid+') auth failed.');
 				
 				fire.emit('send');
 			}
@@ -71,8 +71,8 @@ exports.create = function(req, res){
 					type : 'Attribute Name',
 					cid : result.insertId
 				};
-				console.log('Success! /clue/create (cid='+result.insertId+') \
-					successfully.');
+				console.log('Success! /clue/create (cid='+result.insertId+') '
+					+'successfully.');
 			}
 
 			fire.emit('send');
@@ -109,8 +109,8 @@ exports.delete = function(req, res){
 		}
 		else {
 			ret.brea = 2;
-			console.log('Failed! /clue/delete without operator_uid, \
-				token or cid.');
+			console.log('Failed! /clue/delete without operator_uid, '
+				+'token or cid.');
 
 			fire.emit('send');
 		}
@@ -120,7 +120,7 @@ exports.delete = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /clue/delete auth_level with db error: ',
+				console.log('Failed! /clue/delete auth with db error: ',
 					err);
 				
 				fire.emit('send');
@@ -130,8 +130,8 @@ exports.delete = function(req, res){
 			}
 			else {
 				ret.brea = 4;
-				console.log('Failed! /clue/delete \
-					(operator_uid='+operator_uid+') auth_level failed.');
+				console.log('Failed! /clue/delete '
+					+'(operator_uid='+operator_uid+') auth failed.');
 				
 				fire.emit('send');
 			}
@@ -142,18 +142,18 @@ exports.delete = function(req, res){
 		function(err, result){
 			if (err){
 				ret.brea = 1;
-				console.log('Failed! /clue/delete (cid='+cid+') \
-					with database error.');
+				console.log('Failed! /clue/delete (cid='+cid+') '
+					+'with database error.');
 			}
 			else if (result.affectedRows) {
 				ret.brea = 0;
-				console.log('Success! /clue/delete (cid='+cid+') \
-					successfully.');
+				console.log('Success! /clue/delete (cid='+cid+') '
+					+'successfully.');
 			}
 			else {
 				ret.brea = 3;
-				console.log('Failed! /clue/delete (cid='+cid+') \
-					is not in database.');
+				console.log('Failed! /clue/delete (cid='+cid+') '
+					+'is not in database.');
 			}
 			
 			fire.emit('send');
@@ -199,7 +199,7 @@ exports.read = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /clue/read auth_level with db error: ',
+				console.log('Failed! /clue/read auth with db error: ',
 					err);
 				
 				fire.emit('send');
@@ -212,8 +212,8 @@ exports.read = function(req, res){
 			}
 			else {
 				ret.brea = 4;
-				console.log('Failed! /clue/read \
-					(operator_uid='+operator_uid+') auth_level failed.');
+				console.log('Failed! /clue/read '
+					+'(operator_uid='+operator_uid+') auth failed.');
 				
 				fire.emit('send');
 			}
@@ -224,13 +224,13 @@ exports.read = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /clue/read (cid='+cid+') \
-					with database error:', err);
+				console.log('Failed! /clue/read (cid='+cid+') '
+					+'with database error:', err);
 			}
 			else if (rows.length == 0) {
 				ret.brea = 3;
-				console.log('Failed! /clue/read (cid='+cid+') \
-					is not in database.');
+				console.log('Failed! /clue/read (cid='+cid+') '
+					+'is not in database.');
 			}
 			else {
 				ret.brea = 0;
@@ -238,8 +238,8 @@ exports.read = function(req, res){
 					type : 'Objects',
 					objects : rows
 				};
-				console.log('Success! /clue/read (cid='+cid+') \
-					successfully.');
+				console.log('Success! /clue/read (cid='+cid+') '
+					+'successfully.');
 			}
 			
 			fire.emit('send');

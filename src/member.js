@@ -40,8 +40,8 @@ exports.liveordie = function(req, res){
 		}
 		else {
 			ret.brea = 2;
-			console.log('Failed! /member/liveordie without operator_uid, \
-				token, uid or status.');
+			console.log('Failed! /member/liveordie without operator_uid, '
+				+'token, uid or status.');
 
 			fire.emit('send');
 		}
@@ -51,7 +51,7 @@ exports.liveordie = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /member/liveordie auth_level with db error: ',
+				console.log('Failed! /member/liveordie auth with db error: ',
 					err);
 				
 				fire.emit('send');
@@ -61,8 +61,8 @@ exports.liveordie = function(req, res){
 			}
 			else {
 				ret.brea = 4;
-				console.log('Failed! /member/liveordie \
-					(operator_uid='+operator_uid+') auth_level failed.');
+				console.log('Failed! /member/liveordie '
+					+'(operator_uid='+operator_uid+') auth failed.');
 				
 				fire.emit('send');
 			}
@@ -73,15 +73,15 @@ exports.liveordie = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /member/liveordie (uid='+uid+') \
-					find with database error:', err);
+				console.log('Failed! /member/liveordie (uid='+uid+') '
+					+'find with database error:', err);
 				
 				fire.emit('send');
 			}
 			else if (rows.length == 0){
 				ret.brea = 3;
-				console.log('Failed! /member/liveordie (uid='+uid+') \
-					cannot be found in database.');
+				console.log('Failed! /member/liveordie (uid='+uid+') '
+					+'cannot be found in database.');
 				
 				fire.emit('send');
 			}
@@ -95,8 +95,8 @@ exports.liveordie = function(req, res){
 		function(err, result){
 			if (err){
 				ret.brea = 1;
-				console.log('Failed! /member/liveordie (uid='+uid+') \
-					with database error:', err);
+				console.log('Failed! /member/liveordie (uid='+uid+') '
+					+'with database error:', err);
 			}
 			else {
 				ret.brea = 0;
@@ -105,11 +105,11 @@ exports.liveordie = function(req, res){
 					status : info.status
 				};
 				if (result.changedRows) 
-					console.log('Success! /member/liveordie (uid='+uid+') \
-						change (status='+info.status+').');
+					console.log('Success! /member/liveordie (uid='+uid+') '
+						+'change (status='+info.status+').');
 				else 
-					console.log('Success! /member/liveordie (uid='+uid+') \
-						doesn\'t change.');
+					console.log('Success! /member/liveordie (uid='+uid+') '
+						+'doesn\'t change.');
 			}
 			
 			fire.emit('send');
@@ -151,8 +151,8 @@ exports.update = function(req, res){
 		}
 		else {
 			ret.brea = 2;
-			console.log('Failed! /member/update without operator_uid, \
-				token, position_n or position_e.');
+			console.log('Failed! /member/update without operator_uid, '
+				+'token, position_n or position_e.');
 			
 			fire.emit('send');
 		}
@@ -162,7 +162,7 @@ exports.update = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /member/update auth_level with db error: ',
+				console.log('Failed! /member/update auth with db error: ',
 					err);
 				
 				fire.emit('send');
@@ -172,8 +172,8 @@ exports.update = function(req, res){
 			}
 			else {
 				ret.brea = 4;
-				console.log('Failed! /member/update (uid='+operator_uid+') \
-					auth_level failed.');
+				console.log('Failed! /member/update (uid='+operator_uid+') '
+					+'auth failed.');
 				
 				fire.emit('send');
 			}
@@ -184,15 +184,15 @@ exports.update = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /member/update (uid'+member.uid+') \
-					find with database error:', err);
+				console.log('Failed! /member/update (uid'+member.uid+') '
+					+'find with database error:', err);
 				
 				fire.emit('send');
 			}
 			else if (rows.length == 0) {
 				ret.brea = 3;
-				console.log('Failed! /member/update (uid'+member.uid+') \
-					is not in database.');
+				console.log('Failed! /member/update (uid'+member.uid+') '
+					+'is not in database.');
 			}
 			else {
 				fire.emit('update');
@@ -204,8 +204,8 @@ exports.update = function(req, res){
 		function(err, result){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /member/update (uid'+member.uid+') \
-					with database error:', err);
+				console.log('Failed! /member/update (uid'+member.uid+') '
+					+'with database error:', err);
 			}
 			else {
 				ret.brea = 0;
@@ -214,11 +214,11 @@ exports.update = function(req, res){
 					valid_area : 1
 				}
 				if (result.changedRows) 
-					console.log('Success! /member/update (uid'+member.uid+') \
-						successfully.');
+					console.log('Success! /member/update (uid'+member.uid+') '
+						+'successfully.');
 				else 
-					console.log('Success! /member/update (uid'+member.uid+') \
-						doesn\'t change.');
+					console.log('Success! /member/update (uid'+member.uid+') '
+						+'doesn\'t change.');
 			}
 
 			fire.emit('send');
@@ -255,8 +255,8 @@ exports.read = function(req, res){
 		}
 		else {
 			ret.brea = 2;
-			console.log('Failed! /member/read without operator_uid, \
-				token or token.');
+			console.log('Failed! /member/read without operator_uid, '
+				+'token or token.');
 			
 			fire.emit('send');
 		}
@@ -266,7 +266,7 @@ exports.read = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /member/read auth_level with db error: ', err);
+				console.log('Failed! /member/read auth with db error: ', err);
 				
 				fire.emit('send');
 			}
@@ -278,8 +278,8 @@ exports.read = function(req, res){
 			}
 			else {
 				ret.brea = 4;
-				console.log('Failed! /member/read (uid='+operator_uid+') \
-					auth_level failed.');
+				console.log('Failed! /member/read (uid='+operator_uid+') '
+					+'auth failed.');
 				
 				fire.emit('send');
 			}
@@ -290,13 +290,13 @@ exports.read = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /member/read (uid='+uid+') \
-					with database error:', err);
+				console.log('Failed! /member/read (uid='+uid+') '
+					+'with database error:', err);
 			}
 			else if (rows.length == 0) {
 				ret.brea = 3;
-				console.log('Failed! /member/read (uid='+uid+') \
-					is not in database.');
+				console.log('Failed! /member/read (uid='+uid+') '
+					+'is not in database.');
 			}
 			else {
 				ret.brea = 0;
@@ -304,8 +304,8 @@ exports.read = function(req, res){
 					type : 'Objects',
 					objects : rows
 				}
-				console.log('Success! /member/read (uid='+uid+') \
-					successfully.');
+				console.log('Success! /member/read (uid='+uid+') '
+					+'successfully.');
 			}
 			fire.emit('send');
 		});
@@ -365,8 +365,8 @@ exports.money = function(req, res){
 		}
 		else {
 			ret.brea = 2;
-			console.log('Failed! /member/money without operator_uid, \
-				token, uid or money_amount.');
+			console.log('Failed! /member/money without operator_uid, '
+				+'token, uid or money_amount.');
 
 			fire.emit('send');
 		}
@@ -376,7 +376,7 @@ exports.money = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /member/money auth_level with db error: ', err);
+				console.log('Failed! /member/money auth with db error: ', err);
 				
 				fire.emit('send');
 			}
@@ -385,8 +385,8 @@ exports.money = function(req, res){
 			}
 			else {
 				ret.brea = 4;
-				console.log('Failed! /member/money (uid='+operator_uid+') \
-					auth_level failed.');
+				console.log('Failed! /member/money (uid='+operator_uid+') '
+					+'auth failed.');
 				
 				fire.emit('send');
 			}
@@ -398,15 +398,15 @@ exports.money = function(req, res){
 		function(err, rows){
 			if (err){
 				ret.brea = 1;
-				console.log('Failed! /member/money (uid='+uid+') \
-					find with database error:', err);
+				console.log('Failed! /member/money (uid='+uid+') '
+					+'find with database error:', err);
 
 				fire.emit('send');
 			}
 			else if (rows.length == 0) {
 				ret.brea = 3;
-				console.log('Failed! /member/money (uid='+uid+') \
-					is not in database.');
+				console.log('Failed! /member/money (uid='+uid+') '
+					+'is not in database.');
 
 				fire.emit('send');
 			}
@@ -422,17 +422,17 @@ exports.money = function(req, res){
 		function(err, result){
 			if (err){
 				ret.brea = 1;
-				console.log('Failed! /member/money (uid='+uid+') \
-					with database error:', err);
+				console.log('Failed! /member/money (uid='+uid+') '
+					+'with database error:', err);
 			}
 			else {
 				ret.brea = 0;
 				if (result.changedRows) 
-					console.log('Success! /member/money (uid='+uid+') \
-						successfully.');
+					console.log('Success! /member/money (uid='+uid+') '
+						+'successfully.');
 				else 
-					console.log('Success! /member/money (uid='+uid+') \
-						doesn\'t change.');
+					console.log('Success! /member/money (uid='+uid+') '
+						+'doesn\'t change.');
 			}
 			fire.emit('send');
 		});
@@ -473,8 +473,8 @@ exports.callhelp = function(req, res){
 		}
 		else {
 			ret.brea = 2;
-			console.log('Failed! /member/liveordie without operator_uid, \
-				token, uid or location.');
+			console.log('Failed! /member/liveordie without operator_uid, '
+				+'token, uid or location.');
 
 			fire.emit('send');
 		}
@@ -484,7 +484,7 @@ exports.callhelp = function(req, res){
 		function(err, rows){
 			if (err) {
 				ret.brea = 1;
-				console.log('Failed! /member/callhelp auth_level with db error: ',
+				console.log('Failed! /member/callhelp auth with db error: ',
 					err);
 				
 				fire.emit('send');
@@ -494,8 +494,8 @@ exports.callhelp = function(req, res){
 			}
 			else {
 				ret.brea = 4;
-				console.log('Failed! /member/callhelp (uid='+operator_uid+') \
-					auth_level failed.');
+				console.log('Failed! /member/callhelp (uid='+operator_uid+') '
+					+'auth failed.');
 				
 				fire.emit('send');
 			}
@@ -506,13 +506,13 @@ exports.callhelp = function(req, res){
 		function(err, rows){
 			if (err){
 				ret.brea = 1;
-				console.log('Failed! /member/callhelp (uid='+member.uid+') \
-					find with database error:' ,err);
+				console.log('Failed! /member/callhelp (uid='+member.uid+') '
+					+'find with database error:' ,err);
 			}
 			else if (rows.length == 0) {
 				ret.brea = 3;
-				console.log('Failed! /member/callhelp (uid='+member.uid+') \
-					is not in database.');
+				console.log('Failed! /member/callhelp (uid='+member.uid+') '
+					+'is not in database.');
 			}
 			else {
 				ret.brea = 0;
@@ -550,21 +550,21 @@ exports.login = function(req, res){
 		}
 		else {
 			ret.brea = 2;
-			console.log('Failed! /member/login without operator_uid, \
-				token, email or password.');
+			console.log('Failed! /member/login without operator_uid, '
+				+'email or password.');
 
 			fire.emit('send');
 		}
 	});
 	fire.on('auth', function(){
-		var URL = 'http://www.ee.nthu.edu.tw/engcamp/api/auth_level.php';
+		var URL = 'http://www.ee.nthu.edu.tw/engcamp/api/auth.php';
 		request.get({url:URL+'?token=nthuee&email='+email+'&id='+password},
 			function optionalCallback(err, httpResponse, body) {
 				if (err) {
 					ret.uid = 0;
 					ret.brea = 1;
-					console.log('Failed! (email='+email+') \
-						Login auth_level access failed:', err);
+					console.log('Failed! (email='+email+') '
+						+'Login auth access failed:', err);
 
 					fire.emit('send');
 				}
@@ -576,9 +576,9 @@ exports.login = function(req, res){
 						type : 'Attribute Name',
 						correct : 0
 					}
-					console.log('Success! (email='+email+') \
-						Login auth_level access success. \
-						User (uid='+data.rid+') auth_level success.');
+					console.log('Success! (email='+email+') '
+						+'Login auth access success. '
+						+'User (uid='+data.rid+') auth success.');
 					
 					secret = {
 						uid: ret.uid,
@@ -594,9 +594,9 @@ exports.login = function(req, res){
 						type : 'Attribute Name',
 						correct : 1
 					}
-					console.log('Failed! (email='+email+') \
-						Login auth_level access success. \
-						User auth_level failed.');
+					console.log('Failed! (email='+email+') '
+						+'Login auth access success. '
+						+'User auth failed.');
 
 					fire.emit('send');
 				}
@@ -608,8 +608,8 @@ exports.login = function(req, res){
 		function(err, rows){
 			if (err){
 				ret.brea = 1;
-				console.log('Failed! /member/login (uid='+ret.uid+') \
-					find with database error:' ,err);
+				console.log('Failed! /member/login (uid='+ret.uid+') '
+					+'find with database error:' ,err);
 			}
 			else if (rows.length == 0) {
 				fire.emit('insert');
@@ -623,17 +623,17 @@ exports.login = function(req, res){
 	});
 	fire.on('insert', function(){
 		secret.time = new Date((new Date).getTime()-timezone*60*1000);
-		connection.query('INSERT INTO token SET ?', secret,
+		connection.query('INSERT INTO auth SET ?', secret,
 		function(err, result){
 			if (err){
 				ret.brea = 1;
-				console.log('Failed! /member/login store auth into \
-					db error:', err);
+				console.log('Failed! /member/login store auth into '
+					+'db error:', err);
 			}
 			else {
 				ret.brea = 0;
-				console.log('Success! /member/login (uid='+ret.uid+') \
-					insert token.');
+				console.log('Success! /member/login (uid='+ret.uid+') '
+					+'insert token.');
 			}
 
 			fire.emit('send');
@@ -645,13 +645,13 @@ exports.login = function(req, res){
 		function(err, result){
 			if (err){
 				ret.brea = 1;
-				console.log('Failed! /member/login (uid='+ret.uid+') \
-					with database error:', err);
+				console.log('Failed! /member/login (uid='+ret.uid+') '
+					+'with database error:', err);
 			}
 			else {
 				ret.brea = 0;
-				console.log('Success! /member/login (uid='+ret.uid+') \
-					update token.');
+				console.log('Success! /member/login (uid='+ret.uid+') '
+					+'update token.');
 			}
 
 			fire.emit('send');
