@@ -136,7 +136,7 @@ describe('Member Api', function(){
         });
     });
     it('/PUT update(Failed authentication)', function(done) { 
-        var req = {'operator_uid':player_uid, 'token':player_token, 'uid':player_uid, 
+        var req = {'operator_uid':ADMIN_UID, 'token':ADMIN_TOKEN, 'uid':player_uid, 
             'position_e':'120.992135', 'position_n':'24.795156'};
         
         chai.request(HOST)
@@ -146,7 +146,7 @@ describe('Member Api', function(){
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.an('object');
-            res.body.should.have.property('uid').eql(player_uid);
+            res.body.should.have.property('uid').eql(ADMIN_UID);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('update');
             res.body.should.have.property('brea').eql(4);
@@ -169,7 +169,7 @@ describe('Member Api', function(){
             res.body.should.have.property('uid').eql(player_uid);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('callhelp');
-            res.body.should.have.property('brea').to.be.an('number');
+            res.body.should.have.property('brea').eql(0);
             res.body.should.have.property('server_time').to.be.a('string');
             
             done();

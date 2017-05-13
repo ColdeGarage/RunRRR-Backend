@@ -236,8 +236,8 @@ exports.update = function(req, res){
 exports.read = function(req, res){
 	var fire = new events.EventEmitter;
 
-	var operator_uid = parseInt(req.body.operator_uid);
-	var token = req.body.token;
+	var operator_uid = parseInt(req.query.operator_uid);
+	var token = req.query.token;
 
 	var uid = parseInt(req.query.uid);
 
@@ -489,7 +489,7 @@ exports.callhelp = function(req, res){
 				
 				fire.emit('send');
 			}
-			else if (token==rows[0].token && rows[0].auth_level>10) {
+			else if (token==rows[0].token && rows[0].auth_level==10) {
 					fire.emit('search');
 			}
 			else {

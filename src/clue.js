@@ -171,8 +171,8 @@ exports.delete = function(req, res){
 exports.read = function(req, res){
 	var fire = new events.EventEmitter;
 
-	var operator_uid = parseInt(req.body.operator_uid);
-	var token = req.body.token;
+	var operator_uid = parseInt(req.query.operator_uid);
+	var token = req.query.token;
 
 	var cid = parseInt(req.query.cid);
 
