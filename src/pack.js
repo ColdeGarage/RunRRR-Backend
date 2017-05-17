@@ -23,24 +23,6 @@ exports.create = function(req, res){
 	ret.object = 'pack';
 	ret.action = 'create';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && (token!=undefined);
-		for (var key in pack) {
-			var valid = !(isNaN(pack[key]) && (pack[key]==undefined));
-			check = check && valid;
-		}
-
-		if(check){
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2; //if no complete pack values
-			console.log('Failed! /pack/create without operator_uid, '
-				+'token or some values in object.');
-
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -88,8 +70,23 @@ exports.create = function(req, res){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 	});
-	
-	fire.emit('check');
+
+	var check = !isNaN(operator_uid) && (token!=undefined);
+	for (var key in pack) {
+		var valid = !(isNaN(pack[key]) && (pack[key]==undefined));
+		check = check && valid;
+	}
+
+	if(check){
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2; //if no complete pack values
+		console.log('Failed! /pack/create without operator_uid, '
+			+'token or some values in object.');
+
+		fire.emit('send');
+	}
 }
 
 //delete a backpack
@@ -106,21 +103,6 @@ exports.delete = function(req, res){
 	ret.object = 'pack';
 	ret.action = 'delete';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && 
-			(token!=undefined) && !isNaN(pid);
-
-		if (check) {
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /pack/delete without operator_uid, '
-				+'token or pid.');
-
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -170,7 +152,18 @@ exports.delete = function(req, res){
 		res.json(ret);
 	});
 	
-	fire.emit('check');
+	var check = !isNaN(operator_uid) && (token!=undefined) && !isNaN(pid);
+
+	if (check) {
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /pack/delete without operator_uid, '
+			+'token or pid.');
+
+		fire.emit('send');
+	}
 }
 
 //read the backpack's information
@@ -187,19 +180,6 @@ exports.read = function(req, res){
 	ret.object = 'pack';
 	ret.action = 'read';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && (token!=undefined);
-
-		if (check) {
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /pack/read without operator_uid or token.');
-
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -278,6 +258,24 @@ exports.read = function(req, res){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 	});
-			
-	fire.emit('check');
+
+	var check = !isNaN(operator_uid) && (token!=undefined);
+
+	if (check) {
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /pack/read without operator_uid or token.');
+
+		fire.emit('send');
+	}
 }
+
+setInterval(function(){
+	connection.query('SELECT * FROM pack WHERE 1', function(err){
+		if (err) {
+			console.log('Query pack database error:', err);
+		}
+	});
+}, 10000);

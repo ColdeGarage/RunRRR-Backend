@@ -35,21 +35,6 @@ exports.create = function(req, res){
 	ret.object = 'report';
 	ret.action = 'create';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && (token!=undefined) &&
-			!isNaN(report.mid) && (req.body.image!=undefined);
-
-		if (check) {
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /report/create without operator_uid, '
-				+'token, mid or image.');
-			
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -107,7 +92,19 @@ exports.create = function(req, res){
 		res.json(ret);	
 	});
 
-	fire.emit('check');
+	var check = !isNaN(operator_uid) && (token!=undefined) &&
+				!isNaN(report.mid) && (req.body.image!=undefined);
+
+	if (check) {
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /report/create without operator_uid, '
+			+'token, mid or image.');
+		
+		fire.emit('send');
+	}
 }
 
 //check the report status
@@ -126,21 +123,6 @@ exports.check = function(req, res){
 	ret.object = 'report';
 	ret.action = 'check';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && (token!=undefined) &&
-			!isNaN(report.rid) && !isNaN(report.status);
-
-		if (check){
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /report/check without operator_uid, '
-				+'token, rid or status.');
-			
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -199,12 +181,14 @@ exports.check = function(req, res){
 					type: 'Attribute Name',
 					status: report.status
 				}
-				if (result.changedRows) 
+				if (result.changedRows) {
 					console.log('Success! /report/check (rid='+report.rid+') '
 						+'(status='+report.status+') successfully.');
-				else 
+				}
+				else {
 					console.log('Success! /report/check (rid='+report.rid+') '
 						+'but status doesn\'t change.');
+				}
 			}
 			fire.emit('send');
 		});
@@ -214,7 +198,19 @@ exports.check = function(req, res){
 		res.json(ret);
 	});
 
-	fire.emit('check');
+	var check = !isNaN(operator_uid) && (token!=undefined) &&
+				!isNaN(report.rid) && !isNaN(report.status);
+
+	if (check){
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /report/check without operator_uid, '
+			+'token, rid or status.');
+		
+		fire.emit('send');
+	}
 }
 
 //edit the report
@@ -235,21 +231,6 @@ exports.edit = function(req, res){
 	ret.object = 'report';
 	ret.action = 'edit';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && (token!=undefined) &&
-			!isNaN(report.rid) && (req.body.image!=undefined);
-
-		if (check){
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /report/edit without operator_uid, '
-				+'token, rid, or image.');
-
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -329,7 +310,19 @@ exports.edit = function(req, res){
 		res.json(ret);
 	});
 
-	fire.emit('check');
+	var check = !isNaN(operator_uid) && (token!=undefined) &&
+				!isNaN(report.rid) && (req.body.image!=undefined);
+
+	if (check){
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /report/edit without operator_uid, '
+			+'token, rid, or image.');
+
+		fire.emit('send');
+	}
 }
 
 //delete a report
@@ -346,21 +339,6 @@ exports.delete = function(req, res){
 	ret.object = 'report';
 	ret.action = 'delete';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && 
-			(token!=undefined) && !isNaN(rid);
-
-		if (check){
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /report/delete without operator_uid, '
-				+'token or rid.');
-
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -410,7 +388,18 @@ exports.delete = function(req, res){
 		res.json(ret);
 	});
 	
-	fire.emit('check');
+	var check = !isNaN(operator_uid) && (token!=undefined) && !isNaN(rid);
+
+	if (check){
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /report/delete without operator_uid, '
+			+'token or rid.');
+
+		fire.emit('send');
+	}
 }
 
 //read the report's information
@@ -428,25 +417,7 @@ exports.read = function(req, res){
 	ret.object = 'report';
 	ret.action = 'read';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && (token!=undefined);
-		var read_which = !isNaN(uid)+!isNaN(mid);
-		check = check && (read_which==1); 
-
-		if (check){
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /report/read without operator_uid, '
-				+'token, mid or uid.');
-
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
-		
-
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
 			if (err) {
@@ -457,9 +428,11 @@ exports.read = function(req, res){
 				fire.emit('send');
 			}
 			else if (token==rows[0].token) {
+				//backstage reading
 				if (rows[0].auth_level>10 && !isNaN(mid)){
 					fire.emit('search_mid');
 				}
+				//frontend reading
 				else if (rows[0].auth_level==10 && !isNaN(uid)){
 					fire.emit('search_uid');
 				}
@@ -537,5 +510,26 @@ exports.read = function(req, res){
 		res.json(ret);
 	});
 	
-	fire.emit('check');
+	var check = !isNaN(operator_uid) && (token!=undefined);
+	var read_one = !isNaN(uid)+!isNaN(mid);
+	check = check && (read_one==1); 
+
+	if (check){
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /report/read without operator_uid, '
+			+'token, mid or uid.');
+
+		fire.emit('send');
+	}
 }
+
+setInterval(function(){
+	connection.query('SELECT * FROM report WHERE 1', function(err){
+		if (err) {
+			console.log('Query report database error:', err);
+		}
+	});
+}, 10000);

@@ -30,28 +30,6 @@ exports.create = function(req, res){
 	ret.object = 'mission';
 	ret.action = 'create';
 
-	fire.on('check', function(){
-		//check if post all of the values
-		var check = !isNaN(operator_uid) && (token!=undefined);
-		for (var key in mission) {
-			if (key!='location_n' || key!='location_e'){
-				//if not undefined and not NaN
-				var valid = !(isNaN(mission[key]) && (mission[key]==undefined));
-				check = check && valid;
-			}
-		}
-
-		if (check){
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /mission/create without operator_uid, '
-				+'token or some values in object.');
-
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -98,7 +76,26 @@ exports.create = function(req, res){
 		res.json(ret);
 	});
 
-	fire.emit('check');
+	var check = !isNaN(operator_uid) && (token!=undefined);
+	for (var key in mission) {
+		//no matter if there is location
+		if (key!='location_n' || key!='location_e'){
+			//if not undefined and not NaN
+			var valid = !(isNaN(mission[key]) && (mission[key]==undefined));
+			check = check && valid;
+		}
+	}
+
+	if (check){
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /mission/create without operator_uid, '
+			+'token or some values in object.');
+
+		fire.emit('send');
+	}
 }
 
 //edit mission content
@@ -132,21 +129,6 @@ exports.edit = function(req, res){
 	ret.object = 'mission';
 	ret.action = 'edit';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) &&
-			(token!=undefined) && !isNaN(mission.mid);
-
-		if (check) {
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /mission/edit without operator_uid, '
-				+'token or mid.');
-
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -217,7 +199,19 @@ exports.edit = function(req, res){
 		res.json(ret);
 	});
 
-	fire.emit('check');
+	var check = !isNaN(operator_uid) && (token!=undefined) && 
+				!isNaN(mission.mid);
+
+	if (check) {
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /mission/edit without operator_uid, '
+			+'token or mid.');
+
+		fire.emit('send');
+	}
 }
 
 //delete mission
@@ -234,21 +228,6 @@ exports.delete = function(req, res){
 	ret.object = 'mission';
 	ret.action = 'delete';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && 
-			(token!=undefined) && !isNaN(mid);
-
-		if (check) {
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /mission/delete without operator_uid, '
-				+'token or mid.');
-
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -298,7 +277,18 @@ exports.delete = function(req, res){
 		res.json(ret);
 	});
 
-	fire.emit('check');
+	var check = !isNaN(operator_uid) && (token!=undefined) && !isNaN(mid);
+
+	if (check) {
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /mission/delete without operator_uid, '
+			+'token or mid.');
+
+		fire.emit('send');
+	}
 }
 
 //get missions' information
@@ -315,19 +305,6 @@ exports.read = function(req, res){
 	ret.object = 'mission';
 	ret.action = 'read';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && (token!=undefined);
-
-		if (check) {
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /mission/read without operator_uid.');
-			
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -432,5 +409,23 @@ exports.read = function(req, res){
 		res.json(ret);
 	});
 
-	fire.emit('check');
+	var check = !isNaN(operator_uid) && (token!=undefined);
+
+	if (check) {
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /mission/read without operator_uid.');
+		
+		fire.emit('send');
+	}
 }
+
+setInterval(function(){
+	connection.query('SELECT * FROM mission WHERE 1', function(err){
+		if (err) {
+			console.log('Query mission database error:', err);
+		}
+	});
+}, 10000);

@@ -35,25 +35,6 @@ exports.create = function(req, res){
 	ret.object = 'tool';
 	ret.action = 'create';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && (token!=undefined) &&
-			(req.body.image!=undefined);
-		for (var key in tool) {
-			var valid = !(isNaN(tool[key]) && (tool[key]==undefined))
-			check = check && valid;
-		}
-
-		if (check) {
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2; //if no complete tool values
-			console.log('Failed! /tool/create without operator_uid '
-				+'token or some values in object.');
-
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -87,10 +68,11 @@ exports.create = function(req, res){
 				var filename = path.join(ROOT_PATH, FILE_PREFIX,
 					IMAGE_DIR, tool.url);
 				fs.writeFile(filename, new Buffer(req.body.image, 'base64'), 
-					function(err){
-		    		if (err) 
+				function(err){
+		    		if (err) {
 		    			console.log('Error! /tool/create write image '
 							+'with error:', err);
+		    		}
 		    	});
 
 				ret.brea = 0;
@@ -110,7 +92,23 @@ exports.create = function(req, res){
 		res.json(ret);
 	});
 	
-	fire.emit('check');
+	var check = !isNaN(operator_uid) && (token!=undefined) && 
+				(req.body.image!=undefined);
+	for (var key in tool) {
+		var valid = !(isNaN(tool[key]) && (tool[key]==undefined));
+		check = check && valid;
+	}
+
+	if (check) {
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2; //if no complete tool values
+		console.log('Failed! /tool/create without operator_uid '
+			+'token or some values in object.');
+
+		fire.emit('send');
+	}
 }
 
 //delete a tool
@@ -127,21 +125,6 @@ exports.delete = function(req, res){
 	ret.object = 'tool';
 	ret.action = 'delete';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && 
-			(token!=undefined) && !isNaN(tid);
-
-		if (check) {
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /tool/delete without operator_uid, '
-				+'token or tid.');
-
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -190,8 +173,18 @@ exports.delete = function(req, res){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 	});
-	
-	fire.emit('check');
+
+	var check = !isNaN(operator_uid) && (token!=undefined) && !isNaN(tid);
+
+	if (check) {
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /tool/delete without operator_uid, token or tid.');
+
+		fire.emit('send');
+	}
 }
 
 //read tools
@@ -208,19 +201,6 @@ exports.read = function(req, res){
 	ret.object = 'tool';
 	ret.action = 'read';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && (token!=undefined);
-
-		if (check) {
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /tool/read without operator_uid or token.');
-
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -299,5 +279,23 @@ exports.read = function(req, res){
 		res.json(ret);
 	});
 	
-	fire.emit('check');
+	var check = !isNaN(operator_uid) && (token!=undefined);
+
+	if (check) {
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /tool/read without operator_uid or token.');
+
+		fire.emit('send');
+	}
 }
+
+setInterval(function(){
+	connection.query('SELECT * FROM tool WHERE 1', function(err){
+		if (err) {
+			console.log('Query tool database error:', err);
+		}
+	});
+}, 10000);
