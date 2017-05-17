@@ -4,7 +4,23 @@ var path = require('path');
 var ROOT_PATH = path.resolve(process.env.NODE_PATH)
 var db = require(path.join(ROOT_PATH, 'src/db.js'));
 var connection = db.conn();
+if (process.env.NODE_ENV === 'production'){
+    var config = require(path.join(ROOT_PATH, 'src/config_production.json'));
+} else if (process.env.NODE_ENV === 'test') {
+    var config = require(path.join(ROOT_PATH, 'src/config_staging.json'));
+} else {
+    throw 'Environment setting error! Please set NODE_ENV Environment variable';
+}
 
+//for parsing and checking boundary
+var tj = require('togeojson');
+var fs = require('fs');
+var DOMParser = require('xmldom').DOMParser;
+var geolib = require('geolib');
+
+const FILE_PREFIX = config.file_prefix;
+const MAP_DIR = config.map_dir;
+const MAP_NAME = 'boundary.kml';
 const timezone = (new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
 
 //return member's status
@@ -123,6 +139,12 @@ exports.liveordie = function(req, res){
 	}
 }
 
+//parse kml
+var filename = path.join(ROOT_PATH, FILE_PREFIX, MAP_DIR, MAP_NAME);
+var kml = new DOMParser().parseFromString(fs.readFileSync(filename, 'utf8'));
+var converted = tj.kml(kml);
+var boundary = converted.features[0].geometry.coordinates[0];
+
 //update member's location
 exports.update = function(req, res){
 	var fire = new events.EventEmitter;
@@ -191,10 +213,16 @@ exports.update = function(req, res){
 					+'with database error:', err);
 			}
 			else {
+				var position = {
+					latitude: member.position_n, 
+					longitude: member.position_e}
+				};
+				var valid = geolib.isPointInside(position, boundary);
+
 				ret.brea = 0;
 				ret.payload = {
 					type : 'Attribute Name',
-					valid_area : 1
+					valid_area : valid
 				}
 				if (result.changedRows) {
 					console.log('Success! /member/update (uid'+member.uid+') '

@@ -100,7 +100,7 @@ describe('Member Api', function(){
     });
     it('/PUT update', function(done) { 
         var req = {'operator_uid':player_uid, 'token':player_token,'uid':player_uid, 
-            'position_e':'120.992135', 'position_n':'24.795156'};
+            'position_e':'120.993035', 'position_n':'24.794468'};
         
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'update'))
