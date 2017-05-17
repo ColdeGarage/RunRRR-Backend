@@ -116,7 +116,7 @@ describe('Member Api', function(){
             res.body.should.have.property('server_time').to.be.a('string');
             res.body.should.have.property('payload');
             res.body.payload.should.have.property('type').eql('Attribute Name');
-            res.body.payload.should.have.property('valid_area').eql(1);
+            res.body.payload.should.have.property('valid_area').eql(true);
             
             done();
         });

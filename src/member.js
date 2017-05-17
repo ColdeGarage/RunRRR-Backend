@@ -215,7 +215,7 @@ exports.update = function(req, res){
 			else {
 				var position = {
 					latitude: member.position_n, 
-					longitude: member.position_e}
+					longitude: member.position_e
 				};
 				var valid = geolib.isPointInside(position, boundary);
 
