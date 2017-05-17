@@ -21,21 +21,6 @@ exports.create = function(req, res){
 	ret.object = 'clue';
 	ret.action = 'create';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && (token!=undefined) &&
-			(clue.content != undefined);
-
-		if (check) {
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2; //if no complete clue values
-			console.log('Failed! /clue/create without operator_uid, '
-				+'token or some values in object.');
-
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -82,8 +67,20 @@ exports.create = function(req, res){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 	});
-	
-	fire.emit('check');
+
+	var check = !isNaN(operator_uid) && (token!=undefined) &&
+				(clue.content != undefined);
+
+	if (check) {
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2; //if no complete clue values
+		console.log('Failed! /clue/create without operator_uid, '
+			+'token or some values in object.');
+
+		fire.emit('send');
+	}
 }
 
 //delete a clue
@@ -100,21 +97,6 @@ exports.delete = function(req, res){
 	ret.object = 'clue';
 	ret.action = 'delete';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && 
-			(token!=undefined) && !isNaN(cid);
-
-		if (check) {
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /clue/delete without operator_uid, '
-				+'token or cid.');
-
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -163,8 +145,19 @@ exports.delete = function(req, res){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 	});
-	
-	fire.emit('check');
+
+	var check = !isNaN(operator_uid) && 
+		(token!=undefined) && !isNaN(cid);
+
+	if (check) {
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /clue/delete without operator_uid, token or cid.');
+
+		fire.emit('send');
+	}
 }
 
 //read clues
@@ -181,19 +174,6 @@ exports.read = function(req, res){
 	ret.object = 'clue';
 	ret.action = 'read';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && (token!=undefined);
-
-		if (check) {
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /clue/read without operator_uid or token.');
-
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -272,6 +252,24 @@ exports.read = function(req, res){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 	});
-	
-	fire.emit('check');
+
+	var check = !isNaN(operator_uid) && (token!=undefined);
+
+	if (check) {
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /clue/read without operator_uid or token.');
+
+		fire.emit('send');
+	}
 }
+
+setInterval(function(){
+	connection.query('SELECT * FROM clue WHERE 1', function(err){
+		if (err) {
+			console.log('Query clue database error:', err);
+		}
+	});
+}, 10000);

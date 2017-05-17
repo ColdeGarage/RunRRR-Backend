@@ -17,35 +17,21 @@ exports.liveordie = function(req, res){
 	var uid = parseInt(req.body.uid);
 	var info = {status : req.body.status};
 	//parse string to bool and invert
-	if ((info.status == 'true') || (info.status == '1')) 
+	if ((info.status == 'true') || (info.status == '1')) {
 		info.status = 0;
-	else if (info.status == 'false' || (info.status == '0')) 
+	}
+	else if (info.status == 'false' || (info.status == '0')) {
 		info.status = 1;
-	else 
+	}
+	else {
 		info.status = undefined;
+	}
 
 	var ret = new Object;
 	ret.uid = operator_uid;
 	ret.object = 'member';
 	ret.action = 'liveordie';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) &&
-			(token != undefined) &&
-			!isNaN(uid) &&
-			(info.status != undefined);
-
-		if (check) {
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /member/liveordie without operator_uid, '
-				+'token, uid or status.');
-
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){		
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -104,12 +90,14 @@ exports.liveordie = function(req, res){
 					type : 'Attribute Name',
 					status : info.status
 				};
-				if (result.changedRows) 
+				if (result.changedRows) {
 					console.log('Success! /member/liveordie (uid='+uid+') '
 						+'change (status='+info.status+').');
-				else 
+				}
+				else {
 					console.log('Success! /member/liveordie (uid='+uid+') '
 						+'doesn\'t change.');
+				}
 			}
 			
 			fire.emit('send');
@@ -120,7 +108,19 @@ exports.liveordie = function(req, res){
 		res.json(ret);
 	});
 	
-	fire.emit('check');
+	var check = !isNaN(operator_uid) && (token != undefined) &&
+				!isNaN(uid) && (info.status != undefined);
+
+	if (check) {
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /member/liveordie without operator_uid, '
+			+'token, uid or status.');
+
+		fire.emit('send');
+	}
 }
 
 //update member's location
@@ -140,23 +140,6 @@ exports.update = function(req, res){
 	ret.object = 'member';
 	ret.action = 'update';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && (token!=undefined);
-		for (var key in member) {
-			check = check && !isNaN(member[key]);
-		}
-
-		if (check) {
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /member/update without operator_uid, '
-				+'token, position_n or position_e.');
-			
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -213,12 +196,14 @@ exports.update = function(req, res){
 					type : 'Attribute Name',
 					valid_area : 1
 				}
-				if (result.changedRows) 
+				if (result.changedRows) {
 					console.log('Success! /member/update (uid'+member.uid+') '
 						+'successfully.');
-				else 
+				}
+				else {
 					console.log('Success! /member/update (uid'+member.uid+') '
 						+'doesn\'t change.');
+				}
 			}
 
 			fire.emit('send');
@@ -229,7 +214,21 @@ exports.update = function(req, res){
 		res.json(ret);
 	});
 
-	fire.emit('check');
+	var check = !isNaN(operator_uid) && (token!=undefined);
+	for (var key in member) {
+		check = check && !isNaN(member[key]);
+	}
+
+	if (check) {
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /member/update without operator_uid, '
+			+'token, position_n or position_e.');
+		
+		fire.emit('send');
+	}
 }
 
 //return member's information
@@ -246,21 +245,6 @@ exports.read = function(req, res){
 	ret.object = 'member';
 	ret.action = 'read';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) &&
-			(token!=undefined);
-
-		if (check) {
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /member/read without operator_uid, '
-				+'token or token.');
-			
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -337,8 +321,19 @@ exports.read = function(req, res){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 	});
-	
-	fire.emit('check');
+
+	var check = !isNaN(operator_uid) && (token!=undefined);
+
+	if (check) {
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /member/read without operator_uid, '
+			+'token or token.');
+		
+		fire.emit('send');
+	}
 }
 //edit member's money
 exports.money = function(req, res){
@@ -355,22 +350,6 @@ exports.money = function(req, res){
 	ret.object = 'member';
 	ret.action = 'money';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) &&
-			(token!=undefined) &&
-			!isNaN(uid) &&
-			!isNaN(amount);
-		if (check){
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /member/money without operator_uid, '
-				+'token, uid or money_amount.');
-
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -427,12 +406,14 @@ exports.money = function(req, res){
 			}
 			else {
 				ret.brea = 0;
-				if (result.changedRows) 
+				if (result.changedRows) {
 					console.log('Success! /member/money (uid='+uid+') '
 						+'successfully.');
-				else 
+				}
+				else {
 					console.log('Success! /member/money (uid='+uid+') '
 						+'doesn\'t change.');
+				}
 			}
 			fire.emit('send');
 		});
@@ -442,7 +423,19 @@ exports.money = function(req, res){
 		res.json(ret);
 	});
 
-	fire.emit('check');
+	var check = !isNaN(operator_uid) && (token!=undefined) &&
+				!isNaN(uid) && !isNaN(amount);
+
+	if (check){
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /member/money without operator_uid, '
+			+'token, uid or money_amount.');
+
+		fire.emit('send');
+	}
 }
 //get emergency
 exports.callhelp = function(req, res){
@@ -462,23 +455,6 @@ exports.callhelp = function(req, res){
 	ret.object = 'member';
 	ret.action = 'callhelp';
 
-	fire.on('check', function(){
-		var check = !isNaN(operator_uid) && (token!=undefined);
-		for (var key in member) {
-			check = check && !isNaN(member[key]);
-		}
-		if (check){
-			console.log('At ('+member.position_e+','+member.position_n+')');
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /member/liveordie without operator_uid, '
-				+'token, uid or location.');
-
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
 		function(err, rows){
@@ -527,7 +503,22 @@ exports.callhelp = function(req, res){
 		console.log('******Help!!!******');
 	});
 
-	fire.emit('check');
+	var check = !isNaN(operator_uid) && (token!=undefined);
+	for (var key in member) {
+		check = check && !isNaN(member[key]);
+	}
+
+	if (check){
+		console.log('At ('+member.position_e+','+member.position_n+')');
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /member/liveordie without operator_uid, '
+			+'token, uid or location.');
+
+		fire.emit('send');
+	}
 }
 
 // Login auth_level
@@ -543,19 +534,6 @@ exports.login = function(req, res){
 
 	var secret = new Object;
 
-	fire.on('check', function(){
-		var check = (email!=null) && (password!=null);
-		if (check){
-			fire.emit('auth');
-		}
-		else {
-			ret.brea = 2;
-			console.log('Failed! /member/login without operator_uid, '
-				+'email or password.');
-
-			fire.emit('send');
-		}
-	});
 	fire.on('auth', function(){
 		var URL = 'http://www.ee.nthu.edu.tw/engcamp/api/auth.php';
 		request.get({url:URL+'?token=nthuee&email='+email+'&id='+password},
@@ -663,5 +641,24 @@ exports.login = function(req, res){
 		res.json(ret);
 	});
 
-	fire.emit('check');
+	var check = (email!=null) && (password!=null);
+
+	if (check){
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /member/login without operator_uid, '
+			+'email or password.');
+
+		fire.emit('send');
+	}
 }
+
+setInterval(function(){
+	connection.query('SELECT * FROM member WHERE 1', function(err){
+		if (err) {
+			console.log('Query member database error:', err);
+		}
+	});
+}, 10000);
