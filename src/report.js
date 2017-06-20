@@ -1,5 +1,6 @@
 var fs = require('fs');
 var events = require('events');
+var crypto = require('crypto');
 var path = require('path');
 var ROOT_PATH = path.resolve(process.env.NODE_PATH)
 var db = require('./db.js');
@@ -23,12 +24,14 @@ exports.create = function(req, res){
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
 
+	var rand_name = crypto.randomBytes(5).toString('hex');
+
 	var report = new Object;
 	report.uid = operator_uid;
 	report.mid = parseInt(req.body.mid);
-	report.url = 'report-m'+report.mid+'-u'+report.uid+'.jpg';
-	report.status = 0;
 	report.time = new Date((new Date).getTime()-timezone*60*1000);
+	report.url = 'report-'+rand_name+'-'+report.time.getTime()+'.jpg';
+	report.status = 0;
 	
 	var ret = new Object;
 	ret.uid = operator_uid;
@@ -45,6 +48,13 @@ exports.create = function(req, res){
 				
 				fire.emit('send');
 			}
+			else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /report/create (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if (token==rows[0].token && rows[0].auth_level==10) {
 				fire.emit('create');
 			}
@@ -133,6 +143,13 @@ exports.check = function(req, res){
 				
 				fire.emit('send');
 			}
+			else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /report/check (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if (token==rows[0].token && rows[0].auth_level>10) {
 				fire.emit('search');
 			}
@@ -220,11 +237,14 @@ exports.edit = function(req, res){
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
 
+	var rand_name = crypto.randomBytes(5).toString('hex'); 
+
 	var report = new Object;
 	report.rid = parseInt(req.body.rid);
 	report.uid = operator_uid;
-	report.status = 0;
 	report.time = new Date((new Date).getTime()-timezone*60*1000);
+	report.status = 0;
+	report.url = 'report-'+rand_name+'-'+report.time.getTime()+'.jpg';
 
 	var ret = new Object;
 	ret.uid = parseInt(req.body.operator_uid);
@@ -241,6 +261,13 @@ exports.edit = function(req, res){
 				
 				fire.emit('send');
 			}
+			else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /report/edit (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if (token==rows[0].token && rows[0].auth_level==10) {
 				fire.emit('search');
 			}
@@ -271,8 +298,6 @@ exports.edit = function(req, res){
 				fire.emit('send');
 			}
 			else {
-				report.url = rows[0].url;
-
 				fire.emit('update');
 			}
 		});
@@ -349,6 +374,13 @@ exports.delete = function(req, res){
 				
 				fire.emit('send');
 			}
+			else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /report/delete (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if (token==rows[0].token && rows[0].auth_level>10) {
 				fire.emit('delete');
 			}
@@ -427,6 +459,13 @@ exports.read = function(req, res){
 				
 				fire.emit('send');
 			}
+			else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /report/read (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if (token==rows[0].token) {
 				//backstage reading
 				if (rows[0].auth_level>10 && !isNaN(mid)){

@@ -40,6 +40,13 @@ exports.create = function(req, res){
 				
 				fire.emit('send');
 			}
+			else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /mission/create (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if (token==rows[0].token && rows[0].auth_level>10) {
 				fire.emit('create');
 			}
@@ -139,6 +146,13 @@ exports.edit = function(req, res){
 				
 				fire.emit('send');
 			}
+			else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /mission/edit (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if (token==rows[0].token && rows[0].auth_level>10) {
 				fire.emit('search');
 			}
@@ -238,6 +252,13 @@ exports.delete = function(req, res){
 				
 				fire.emit('send');
 			}
+			else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /mission/delete (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if (token==rows[0].token && rows[0].auth_level>10) {
 				fire.emit('delete');
 			}
@@ -314,14 +335,23 @@ exports.read = function(req, res){
 				
 				fire.emit('send');
 			}
+			else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /mission/create (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if ((token==rows[0].token) && (rows[0].auth_level>=10)) {
-				if (!isNaN(mid))
+				if (!isNaN(mid)) {
 					fire.emit('search_mid');
-				else 
-					if (rows[0].auth_level==10)
-						fire.emit('search_time');
-					else 
-						fire.emit('search');
+				}
+				else if (rows[0].auth_level>10) {
+					fire.emit('search');
+				}
+				else {
+					fire.emit('search_time');
+				}
 			}
 			else {
 				ret.brea = 4;
