@@ -1,6 +1,7 @@
 var fs = require('fs');
-var path = require('path');
 var events = require('events');
+var crypto = require('crypto');
+var path = require('path');
 var ROOT_PATH = path.resolve(process.env.NODE_PATH)
 var db = require(path.join(ROOT_PATH, 'src/db.js'));
 var connection = db.conn();
@@ -23,10 +24,12 @@ exports.create = function(req, res){
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
 
+    var rand_name = crypto.randomBytes(5).toString('hex');
+
 	var tool = new Object;
 	tool.title = req.body.title;
 	tool.content = req.body.content;
-	tool.url = 'tool-'+tool.title+'.jpg';
+	tool.url = 'tool-'+rand_name+'.jpg';
 	tool.expire = parseInt(req.body.expire);
 	tool.price = parseInt(req.body.price);
 
@@ -45,6 +48,13 @@ exports.create = function(req, res){
 				
 				fire.emit('send');
 			}
+			else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /tool/create (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if (token==rows[0].token && rows[0].auth_level>10) {
 				fire.emit('create');
 			}
@@ -135,6 +145,13 @@ exports.delete = function(req, res){
 				
 				fire.emit('send');
 			}
+			else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /tool/delete (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if (token==rows[0].token && rows[0].auth_level>10) {
 				fire.emit('delete');
 			}
@@ -211,11 +228,20 @@ exports.read = function(req, res){
 				
 				fire.emit('send');
 			}
+			else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /tool/read (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if (token==rows[0].token && rows[0].auth_level>=10) {
-				if (!isNaN(tid))
+				if (!isNaN(tid)) {
 					fire.emit('search_tid');
-				else
+				}
+				else {
 					fire.emit('search');
+				}
 			}
 			else {
 				ret.brea = 4;

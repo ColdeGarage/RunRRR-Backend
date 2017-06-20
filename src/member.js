@@ -58,6 +58,13 @@ exports.liveordie = function(req, res){
 				
 				fire.emit('send');
 			}
+            else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /member/liveordie (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if (token==rows[0].token && rows[0].auth_level>10) {
 				fire.emit('search');
 			}
@@ -172,6 +179,13 @@ exports.update = function(req, res){
 				
 				fire.emit('send');
 			}
+            else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /member/update (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if (token==rows[0].token && rows[0].auth_level==10) {
 				fire.emit('search');
 			}
@@ -282,11 +296,20 @@ exports.read = function(req, res){
 				
 				fire.emit('send');
 			}
+            else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /member/read (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if ((token==rows[0].token) && (rows[0].auth_level>=10)) {
-				if (!isNaN(uid))
+				if (!isNaN(uid)) {
 					fire.emit('search_uid');
-				else 
+                }
+				else {
 					fire.emit('search');
+                }
 			}
 			else {
 				ret.brea = 4;
@@ -387,6 +410,13 @@ exports.money = function(req, res){
 				
 				fire.emit('send');
 			}
+            else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /member/money (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if (token==rows[0].token && rows[0].auth_level>10) {
 					fire.emit('search');
 			}
@@ -418,7 +448,7 @@ exports.money = function(req, res){
 				fire.emit('send');
 			}
 			else {
-				info = rows;
+				info = rows[0];
 				info.money = info.money + amount;
 				fire.emit('update');
 			}
@@ -465,7 +495,7 @@ exports.money = function(req, res){
 		fire.emit('send');
 	}
 }
-//get emergency
+// get emergency
 exports.callhelp = function(req, res){
 	console.log('******Help!!!******');
 	var fire = new events.EventEmitter;
@@ -493,6 +523,13 @@ exports.callhelp = function(req, res){
 				
 				fire.emit('send');
 			}
+            else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /member/callhelp (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if (token==rows[0].token && rows[0].auth_level==10) {
 					fire.emit('search');
 			}
@@ -521,6 +558,14 @@ exports.callhelp = function(req, res){
 			else {
 				ret.brea = 0;
 				console.log(rows.name+' press the help button!');
+
+				connection.query('UPDATE member SET ? WHERE uid = '+member.uid,
+					{help_status: 1},function(err, rows){
+					if (err){ 
+						console.log('Failed! /member/callhelp (uid='+member.uid
+							+') '+'with database error:' ,err);
+					}
+				});
 			}
 			fire.emit('send');
 		});
@@ -596,7 +641,7 @@ exports.login = function(req, res){
 				}
 				else{
 					ret.uid = 0;
-					ret.brea = 0;
+					ret.brea = 4;
 					ret.payload = {
 						type : 'Attribute Name',
 						correct : 1

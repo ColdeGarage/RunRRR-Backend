@@ -31,6 +31,13 @@ exports.create = function(req, res){
 				
 				fire.emit('send');
 			}
+			else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /clue/create (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if (token==rows[0].token && rows[0].auth_level>10) {
 				fire.emit('create');
 			}
@@ -107,6 +114,13 @@ exports.delete = function(req, res){
 				
 				fire.emit('send');
 			}
+			else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /clue/delete (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if (token==rows[0].token && rows[0].auth_level>10) {
 				fire.emit('delete');
 			}
@@ -184,11 +198,20 @@ exports.read = function(req, res){
 				
 				fire.emit('send');
 			}
+			else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /clue/read (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
 			else if (token==rows[0].token && rows[0].auth_level>=10) {
-				if (!isNaN(cid))
+				if (!isNaN(cid)) {
 					fire.emit('search_cid');
-				else
+				}
+				else {
 					fire.emit('search');
+				}
 			}
 			else {
 				ret.brea = 4;
