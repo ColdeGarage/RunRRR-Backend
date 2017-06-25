@@ -704,10 +704,16 @@ describe('Report Api', function(){
                 throw 'delete test report error:' + err;
             }
         })
+        conn.query('DELETE FROM report WHERE mid = -2', function(err, result){
+            if (err){
+                console.log(err);
+                throw 'delete test report error:' + err;
+            }
+        })
         // fs.unlinkSync(path.join(ROOT_PATH, '/test/data/img/report-m-1-u'+player_uid+'.jpg'));
     });
     it('/POST create', function(done) { 
-        var req = {'operator_uid':player_uid, 'token':player_token, 'mid':-1, 'image':base64_image};
+        var req = {'operator_uid':player_uid, 'token':player_token, 'mid':-2, 'image':base64_image};
         chai.request(HOST)
         .post(path.join(HOST_PREFIX, 'report', 'create'))
         .send(req)
@@ -725,6 +731,23 @@ describe('Report Api', function(){
             res.body.payload.should.have.property('rid').to.be.a('number');
             // expect(fs.existsSync(path.join(ROOT_PATH, '/test/data/img/report-m-1-u'+player_uid+'.jpg'))).eql(true);
             
+            done();
+        });
+    });
+    it('/POST create(Multiple create)', function(done) { 
+        var req = {'operator_uid':player_uid, 'token':player_token, 'mid':-1, 'image':base64_image};
+        chai.request(HOST)
+        .post(path.join(HOST_PREFIX, 'report', 'create'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(player_uid);
+            res.body.should.have.property('object').eql('report');
+            res.body.should.have.property('action').eql('create');
+            res.body.should.have.property('brea').eql(5);
+            res.body.should.have.property('server_time').to.be.a('string');
             done();
         });
     });

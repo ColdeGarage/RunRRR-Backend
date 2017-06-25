@@ -56,7 +56,7 @@ exports.create = function(req, res){
                 fire.emit('send');
             }
 			else if (token==rows[0].token && rows[0].auth_level==10) {
-				fire.emit('create');
+				fire.emit('check_duplicate');
 			}
 			else {
 				ret.brea = 4;
@@ -64,6 +64,29 @@ exports.create = function(req, res){
 					+'(operator_uid='+operator_uid+') auth failed.');
 				
 				fire.emit('send');
+			}
+		});
+	});
+
+	fire.on('check_duplicate', function(){
+		connection.query('SELECT * FROM report WHERE mid = ' + report.mid
+						+ ' AND uid = ' + report.uid,
+		function(err, rows){
+			if (err) {
+				ret.brea = 1;
+				console.log('Failed! /report/create (mid='+report.mid+') '
+					+'with database error:', err);
+				fire.emit('send');
+			}
+			else if (rows.length != 0) {
+				ret.brea = 5;
+				console.log('Failed! /report/create (mid='+report.mid+') '
+					+'already find in database.');
+
+				fire.emit('send');
+			}
+			else {
+				fire.emit('create');
 			}
 		});
 	});
