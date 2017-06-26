@@ -605,6 +605,7 @@ exports.login = function(req, res){
 	ret.object = 'member';
 	ret.action = 'login';
 
+	var member = new Object;
 	var secret = new Object;
 
 	fire.on('auth', function(){
@@ -631,13 +632,21 @@ exports.login = function(req, res){
 						+'Login auth access success. '
 						+'User (uid='+data.rid+') auth success.');
 					
+					member = {
+						name: data.name_chn,
+						uid: ret.uid,
+						money: 0,
+						status: 1,
+						score: 0,
+						help_status: 0,
+					};
 					secret = {
 						uid: ret.uid,
 						token: data.token,
 						auth_level: data.auth
-					}
+					};
 
-					fire.emit('search');
+					fire.emit('search_member');
 				}
 				else{
 					ret.uid = 0;
@@ -655,8 +664,8 @@ exports.login = function(req, res){
 			}
 		);
 	});
-	fire.on('search', function(){
-		connection.query('SELECT * FROM auth WHERE uid = '+ret.uid,
+	fire.on('search_member', function(){
+		connection.query('SELECT * FROM member WHERE uid = '+ret.uid,
 		function(err, rows){
 			if (err){
 				ret.brea = 1;
@@ -666,14 +675,27 @@ exports.login = function(req, res){
 				fire.emit('send');
 			}
 			else if (rows.length == 0) {
-				fire.emit('insert');
+				fire.emit('insert_member');
 			}
 			else {
-				fire.emit('update');
+				fire.emit('search_auth');
 			}
 		});
 	});
-	fire.on('insert', function(){
+	fire.on('insert_member', function(){
+		connection.query('INSERT INTO member SET ?', member,
+		function(err, result){
+			if (err){
+				ret.brea = 1;
+				console.log('Failed! /member/login store member into '
+					+'db error:', err);
+			}
+			else {
+				fire.emit('insert_auth');
+			}
+		});
+	});
+	fire.on('insert_auth', function(){
 		secret.time = new Date((new Date).getTime()-timezone*60*1000);
 		connection.query('INSERT INTO auth SET ?', secret,
 		function(err, result){
@@ -684,14 +706,30 @@ exports.login = function(req, res){
 			}
 			else {
 				ret.brea = 0;
-				console.log('Success! /member/login (uid='+ret.uid+') '
-					+'insert token.');
 			}
 
 			fire.emit('send');
 		});
 	});
-	fire.on('update', function(){
+	fire.on('search_auth', function(){
+		connection.query('SELECT * FROM auth WHERE uid = '+ret.uid,
+		function(err, rows){
+			if (err){
+				ret.brea = 1;
+				console.log('Failed! /member/login (uid='+ret.uid+') '
+					+'find with database error:' ,err);
+
+				fire.emit('send');
+			}
+			else if (rows.length == 0) {
+				fire.emit('insert_auth');
+			}
+			else {
+				fire.emit('update_auth');
+			}
+		});
+	});
+	fire.on('update_auth', function(){
 		secret.time = new Date((new Date).getTime()-timezone*60*1000);
 		connection.query('UPDATE auth SET ? WHERE uid = '+ret.uid, secret,
 		function(err, result){
@@ -702,8 +740,6 @@ exports.login = function(req, res){
 			}
 			else {
 				ret.brea = 0;
-				console.log('Success! /member/login (uid='+ret.uid+') '
-					+'update token.');
 			}
 
 			fire.emit('send');
