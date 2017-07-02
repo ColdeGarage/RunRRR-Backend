@@ -1,5 +1,6 @@
 var events = require('events');
 var path = require('path');
+var crypto = require('crypto');
 var ROOT_PATH = path.resolve(process.env.NODE_PATH)
 var db = require(path.join(ROOT_PATH, 'src/db.js'));
 var connection = db.conn();
@@ -12,8 +13,10 @@ exports.create = function(req, res){
 
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
-
+	var rand_name = crypto.randomBytes(5).toString('hex');
+	
 	var mission = new Object;
+
 	mission.title = req.body.title;
 	mission.content = req.body.content;
 	mission.time_start = req.body.time_start;
@@ -24,7 +27,10 @@ exports.create = function(req, res){
 	mission.score = parseInt(req.body.score);
 	mission.location_e = parseFloat(req.body.location_e);
 	mission.location_n = parseFloat(req.body.location_n);
-
+	if (!isNaN(req.body.image) && (req.body.image !== undefined)){
+		mission.time = new Date((new Date).getTime()-timezone*60*1000);
+		mission.url = 'mission-'+rand_name+'-'+mission.time.getTime()+'.jpg';
+	} 
 	var ret = new Object;
 	ret.uid = operator_uid;
 	ret.object = 'mission';
@@ -67,6 +73,16 @@ exports.create = function(req, res){
 				console.log('Failed! /mission/create with database error:', err);
 			}
 			else {
+				if (mission.url !== undefined && !isNaN(mission.url)){
+					var filename = path.join(ROOT_PATH, FILE_PREFIX,
+						IMAGE_DIR, mission.url);
+					fs.writeFile(filename, new Buffer(req.body.image, 'base64'), 
+						function(err){
+			    		if (err) 
+			    			console.log('Error! /mission/create write image '
+			    				+'with error:', err);
+			    	});
+			    }
 				ret.brea = 0;
 				ret.payload = {
 					type : 'Attribute Name',
@@ -124,7 +140,10 @@ exports.edit = function(req, res){
 	mission.score = parseInt(req.body.score);
 	mission.location_e = parseFloat(req.body.location_e);
 	mission.location_n = parseFloat(req.body.location_n);
-
+	if (!isNaN(req.body.image) && (req.body.image !== undefined)){
+		mission.time = new Date((new Date).getTime()-timezone*60*1000);
+		mission.url = 'mission-'+rand_name+'-'+mission.time.getTime()+'.jpg';
+	} 
 	//delete the key that don't send
 	for (var key in mission) {
 		var invalid = isNaN(mission[key]) || (mission[key]==undefined);
@@ -196,6 +215,16 @@ exports.edit = function(req, res){
 					+'with database error:', err);
 			}
 			else {
+				if (mission.url !== undefined && !isNaN(mission.url)){
+					var filename = path.join(ROOT_PATH, FILE_PREFIX,
+						IMAGE_DIR, mission.url);
+					fs.writeFile(filename, new Buffer(req.body.image, 'base64'), 
+						function(err){
+			    		if (err) 
+			    			console.log('Error! /mission/edit write image '
+			    				+'with error:', err);
+			    	});
+			    }
 				ret.brea = 0;
 				if (result.changedRows) 
 					console.log('Success! /mission/edit (mid='+mission.mid+') '

@@ -400,6 +400,12 @@ describe('Member Api', function(){
 
 describe('Mission Api', function(){
     var test_mid;
+    var image_data;
+    var base64_image;
+    before(function(){
+        image_data = fs.readFileSync(path.join(ROOT_PATH, 'test/data/img/test.jpg'));
+        base64_image = new Buffer(image_data).toString('base64');
+    });
     beforeEach(function(){
         var test_mission = {
             'title':'Test Mission', 'content':'This is a test mission.',
@@ -424,7 +430,32 @@ describe('Mission Api', function(){
             }
         })
     });
-    it('/POST create', function(done) { 
+    it('/POST create(with image)', function(done) { 
+        var req = {'operator_uid':ADMIN_UID, 'token':ADMIN_TOKEN, 'title':'Test Mission',
+                   'content':'This is a test mission.',
+                   'time_start':'2017-06-13 04:22:23', 'time_end':'2017-06-13 04:32:23',
+                   'prize':250, 'clue':12, 'class':'MAIN', 'score':100,
+                   'location_e':123.33, 'location_n':25.32, 'image':base64_image};
+        chai.request(HOST)
+        .post(path.join(HOST_PREFIX, 'mission', 'create'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(ADMIN_UID);
+            res.body.should.have.property('object').eql('mission');
+            res.body.should.have.property('action').eql('create');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('server_time').to.be.a('string');
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Attribute Name');
+            res.body.payload.should.have.property('mid').to.be.a('number');
+                        
+            done();
+        });
+    });
+    it('/POST create(with out image)', function(done) { 
         var req = {'operator_uid':ADMIN_UID, 'token':ADMIN_TOKEN, 'title':'Test Mission',
                    'content':'This is a test mission.',
                    'time_start':'2017-06-13 04:22:23', 'time_end':'2017-06-13 04:32:23',
