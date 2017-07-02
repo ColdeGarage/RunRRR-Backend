@@ -127,7 +127,7 @@ exports.delete = function(req, res){
 
                 fire.emit('send');
             }
-			else if (token==rows[0].token && rows[0].auth_level>10) {
+			else if (token==rows[0].token && rows[0].auth_level>=10) {
 				fire.emit('delete');
 			}
 			else {
