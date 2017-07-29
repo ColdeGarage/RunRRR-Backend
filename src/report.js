@@ -122,7 +122,7 @@ exports.create = function(req, res){
 	});
 	fire.on('send', function(){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
-		res.json(ret);	
+		res.json(ret);
 	});
 
 	var check = !isNaN(operator_uid) && (token!=undefined) &&
@@ -442,7 +442,7 @@ exports.delete = function(req, res){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 	});
-	
+
 	var check = !isNaN(operator_uid) && (token!=undefined) && !isNaN(rid);
 
 	if (check){
@@ -571,7 +571,7 @@ exports.read = function(req, res){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 	});
-	
+
 	var check = !isNaN(operator_uid) && (token!=undefined);
 	var read_one = !isNaN(uid)+!isNaN(mid);
 	check = check && (read_one==1); 

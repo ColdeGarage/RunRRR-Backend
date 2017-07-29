@@ -165,7 +165,7 @@ exports.delete = function(req, res){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 	});
-	
+
 	var check = !isNaN(operator_uid) && (token!=undefined) && !isNaN(pid);
 
 	if (check) {

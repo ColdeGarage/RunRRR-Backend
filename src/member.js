@@ -18,6 +18,7 @@ var fs = require('fs');
 var DOMParser = require('xmldom').DOMParser;
 var geolib = require('geolib');
 
+const EE_HOST = config.ee_host;
 const FILE_PREFIX = config.file_prefix;
 const MAP_DIR = config.map_dir;
 const MAP_NAME = 'boundary.kml';
@@ -609,8 +610,8 @@ exports.login = function(req, res){
 	var secret = new Object;
 
 	fire.on('auth', function(){
-		var URL = 'http://www.ee.nthu.edu.tw/engcamp/api/auth.php';
-		request.get({url:URL+'?token=nthuee&email='+email+'&id='+password},
+		request.get({url:EE_HOST+'/auth.php?token='+process.env.TOKEN+
+			'&email='+email+'&id='+password},
 			function optionalCallback(err, httpResponse, body) {
 				if (err) {
 					ret.uid = 0;

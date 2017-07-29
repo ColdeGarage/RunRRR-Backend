@@ -77,7 +77,7 @@ exports.create = function(req, res){
 			else {
 				var filename = path.join(ROOT_PATH, FILE_PREFIX,
 					IMAGE_DIR, tool.url);
-				fs.writeFile(filename, new Buffer(req.body.image, 'base64'), 
+				fs.writeFile(filename, new Buffer(req.body.image, 'base64'),
 				function(err){
 		    		if (err) {
 		    			console.log('Error! /tool/create write image '
@@ -101,7 +101,7 @@ exports.create = function(req, res){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 	});
-	
+
 	var check = !isNaN(operator_uid) && (token!=undefined) && 
 				(req.body.image!=undefined);
 	for (var key in tool) {
@@ -304,7 +304,7 @@ exports.read = function(req, res){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 	});
-	
+
 	var check = !isNaN(operator_uid) && (token!=undefined);
 
 	if (check) {

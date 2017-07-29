@@ -1,8 +1,9 @@
+var request = require('request');
 var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
 var fs = require('fs');
-var ROOT_PATH = path.resolve(process.env.NODE_PATH)
+var ROOT_PATH = path.resolve(process.env.NODE_PATH);
 var member = require(path.join(ROOT_PATH, 'src/member.js'));
 var mission = require(path.join(ROOT_PATH, 'src/mission.js'));
 var clue = require(path.join(ROOT_PATH, 'src/clue.js'));
@@ -11,15 +12,28 @@ var tool = require(path.join(ROOT_PATH, 'src/tool.js'));
 var report = require(path.join(ROOT_PATH, 'src/report.js'));
 if (process.env.NODE_ENV === 'production'){
     var config = require(path.join(ROOT_PATH, 'src/config_production.json'));
+    // create output file for logs
+	var util = require('util');
+	var output = fs.createWriteStream(path.join(ROOT_PATH, '/output.log'), {flags:'a'});
+	console.log = function(){
+	    output.write(util.format.apply(null, arguments)+'\n');
+	}
+	console.error = console.log;
 } else if (process.env.NODE_ENV === 'test') {
     var config = require(path.join(ROOT_PATH, 'src/config_staging.json'));
 } else {
     throw 'Environment setting error! Please set NODE_ENV Environment variable';
 }
-var PORT = config.port;
-var HOST = config.host;
-var HOST_PREFIX = config.host_prefix;
-var FILE_PREFIX = config.file_prefix;
+
+if (process.env.TOKEN===undefined) {
+	throw 'Environment setting error! Please set NODE_ENV Environment variable';
+}
+
+const PORT = config.port;
+const HOST = config.host;
+const HOST_PREFIX = config.host_prefix;
+const FILE_PREFIX = config.file_prefix;
+const EE_HOST = config.ee_host;
 
 var app = express();
 app.use(bodyParser.urlencoded({ limit:'10mb', extended: true }));
@@ -57,6 +71,7 @@ app.get(HOST_PREFIX+'/pack/read', pack.read);
 
 app.get(HOST_PREFIX+'/download/:type/:filename', function(req, res){
     console.log("Getting file " + req.params.type + '/' + req.params.filename);
+
     filename = path.join(ROOT_PATH, FILE_PREFIX, req.params.type, req.params.filename);
     if (fs.existsSync(filename)){
 		console.log('Sending file ' + filename);
@@ -67,6 +82,28 @@ app.get(HOST_PREFIX+'/download/:type/:filename', function(req, res){
 		res.send('File not found');
     }
 });
+
+app.get(HOST_PREFIX+'/utility/:squad', function(req, res){
+	var squad = req.params.squad;
+	console.log("Getting contact of group " + squad);
+
+	request.get({url:EE_HOST+'/contact.php?squad='+squad+'&token='+process.env.TOKEN},
+		function optionalCallback(err, httpResponse, body) {
+			if (err) {
+				console.log('Failed! Getting contact information error:', err);
+			}
+			else if (httpResponse.statusCode == 200){
+				console.log('Success! Get the contact information of group '+squad+'.');
+			}
+			else{
+				console.log('Failed! Cannot access contact information of group '+squad+'.');
+			}
+			res.status(httpResponse.statusCode);
+			res.json(JSON.parse(body));
+		}
+	);
+});
+
 var server = app.listen(PORT, function () {
     var port =  server.address().port;
     console.log("Start Server at " + port);
