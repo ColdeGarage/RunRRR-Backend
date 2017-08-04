@@ -623,29 +623,36 @@ exports.login = function(req, res){
 				}
 				else if (httpResponse.statusCode == 200){
 					var data = JSON.parse(body);
-					ret.uid = parseInt(data.rid);
+					if (data.rid == null) {
+						ret.uid = 10000 * parseInt(data.uid);
+						member.name = data.name;
+					}
+					else {
+						ret.uid = parseInt(data.rid);
+						member.name = data.name_chn;
+					}
+
 					ret.token = data.token;
 					ret.payload = {
 						type : 'Attribute Name',
 						correct : 0
 					}
-					console.log('Success! (email='+email+') '
-						+'Login auth access success. '
-						+'User (uid='+data.rid+') auth success.');
-					
-					member = {
-						name: data.name_chn,
-						uid: ret.uid,
-						money: 0,
-						status: 1,
-						score: 0,
-						help_status: 0,
-					};
+
+					member.uid = ret.uid;
+					member.money = 0;
+					member.status = 1;
+					member.score = 0;
+					member.help_status = 0;
+
 					secret = {
 						uid: ret.uid,
 						token: data.token,
 						auth_level: data.auth
 					};
+
+					console.log('Success! (email='+email+') '
+						+'Login auth access success. '
+						+'User (uid='+data.rid+') auth success.');
 
 					fire.emit('search_member');
 				}

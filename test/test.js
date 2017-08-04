@@ -377,8 +377,30 @@ describe('Member Api', function(){
             done();
         });
     });
-    it('/POST login', function(done) {
+    it('/POST login(player)', function(done) {
         var req = {'email':'nick831111@gmail.com', 'password':'A100000000'};
+        chai.request(HOST)
+        .post(path.join(HOST_PREFIX, 'member', 'login'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').to.be.a('number');
+            res.body.should.have.property('object').eql('member');
+            res.body.should.have.property('action').eql('login');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('server_time').to.be.a('string');
+            res.body.should.have.property('token').to.be.a('string');
+            res.body.should.have.property('payload');
+            res.body.payload.should.have.property('type').eql('Attribute Name');
+            res.body.payload.should.have.property('correct').to.be.a('number');
+            
+            done();
+        });
+    });
+    it('/POST login(admin)', function(done) {
+        var req = {'email':'abc@gmail.com', 'password':'abcde'};
         chai.request(HOST)
         .post(path.join(HOST_PREFIX, 'member', 'login'))
         .send(req)
