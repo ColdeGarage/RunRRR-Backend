@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === 'production'){
     var config = require(path.join(ROOT_PATH, 'src/config_production.json'));
     // create output file for logs
 	var util = require('util');
-	var output = fs.createWriteStream(path.join(ROOT_PATH, '/output.log'), {flags:'a'});
+	var output = fs.createWriteStream(path.join(ROOT_PATH, '/server-log/output.log'), {flags:'a'});
 	console.log = function(){
 	    output.write(util.format.apply(null, arguments)+'\n');
 	}
