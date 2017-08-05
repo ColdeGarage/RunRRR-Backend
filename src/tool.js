@@ -23,6 +23,7 @@ exports.create = function(req, res){
 
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
+	console.log('operator_uid = '+operator_uid);
 
     var rand_name = crypto.randomBytes(5).toString('hex');
 
@@ -127,6 +128,7 @@ exports.delete = function(req, res){
 
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var tid = parseInt(req.body.tid);
 
@@ -210,6 +212,7 @@ exports.read = function(req, res){
 
 	var operator_uid = parseInt(req.query.operator_uid);
 	var token = req.query.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var tid = parseInt(req.query.tid);
 

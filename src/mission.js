@@ -14,6 +14,7 @@ exports.create = function(req, res){
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
 	var rand_name = crypto.randomBytes(5).toString('hex');
+	console.log('operator_uid = '+operator_uid);
 	
 	var mission = new Object;
 
@@ -27,7 +28,7 @@ exports.create = function(req, res){
 	mission.score = parseInt(req.body.score);
 	mission.location_e = parseFloat(req.body.location_e);
 	mission.location_n = parseFloat(req.body.location_n);
-	if (!isNaN(req.body.image) && (req.body.image !== undefined)){
+	if (req.body.image !== undefined){
 		mission.time = new Date((new Date).getTime()-timezone*60*1000);
 		mission.url = 'mission-'+rand_name+'-'+mission.time.getTime()+'.jpg';
 	} 
@@ -127,6 +128,7 @@ exports.edit = function(req, res){
 
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var mission = new Object;
 	mission.mid = parseInt(req.body.mid);
@@ -263,6 +265,7 @@ exports.delete = function(req, res){
 
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var mid = parseInt(req.body.mid);
 
@@ -347,6 +350,7 @@ exports.read = function(req, res){
 
 	var operator_uid = parseInt(req.query.operator_uid);
 	var token = req.query.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var mid = parseInt(req.query.mid);
 

@@ -23,6 +23,7 @@ exports.create = function(req, res){
 
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var rand_name = crypto.randomBytes(5).toString('hex');
 
@@ -146,6 +147,7 @@ exports.check = function(req, res){
 
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var report = new Object;
 	report.rid = parseInt(req.body.rid);
@@ -259,6 +261,7 @@ exports.edit = function(req, res){
 
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var rand_name = crypto.randomBytes(5).toString('hex'); 
 
@@ -379,6 +382,7 @@ exports.delete = function(req, res){
 
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var rid = parseInt(req.body.rid);
 
@@ -463,6 +467,7 @@ exports.read = function(req, res){
 
 	var operator_uid = parseInt(req.query.operator_uid);
 	var token = req.query.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var uid = parseInt(req.query.uid);
 	var mid = parseInt(req.query.mid);

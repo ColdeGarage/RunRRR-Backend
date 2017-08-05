@@ -30,6 +30,7 @@ exports.liveordie = function(req, res){
 
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var uid = parseInt(req.body.uid);
 	var info = {status : req.body.status};
@@ -159,6 +160,7 @@ exports.update = function(req, res){
 
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var member = new Object;
 	member.uid = parseInt(req.body.uid);
@@ -280,6 +282,7 @@ exports.read = function(req, res){
 
 	var operator_uid = parseInt(req.query.operator_uid);
 	var token = req.query.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var uid = parseInt(req.query.uid);
 
@@ -393,6 +396,7 @@ exports.money = function(req, res){
 
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var uid = parseInt(req.body.uid);
 	var amount = parseInt(req.body.money_amount);
@@ -503,6 +507,7 @@ exports.callhelp = function(req, res){
 
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var member = new Object;
 	member.uid = parseInt(req.body.uid);

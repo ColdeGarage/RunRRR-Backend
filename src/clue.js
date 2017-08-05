@@ -12,6 +12,7 @@ exports.create = function(req, res){
 
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var clue = new Object;
 	clue.content = req.body.content;
@@ -96,6 +97,7 @@ exports.delete = function(req, res){
 
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var cid = parseInt(req.body.cid);
 
@@ -180,6 +182,7 @@ exports.read = function(req, res){
 
 	var operator_uid = parseInt(req.query.operator_uid);
 	var token = req.query.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var cid = parseInt(req.query.cid);
 

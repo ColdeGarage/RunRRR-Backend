@@ -12,6 +12,7 @@ exports.create = function(req, res){
 
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var pack = new Object;
 	pack.uid = parseInt(req.body.uid);
@@ -102,6 +103,7 @@ exports.delete = function(req, res){
 
 	var operator_uid = parseInt(req.body.operator_uid);
 	var token = req.body.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var pid = parseInt(req.body.pid);
 
@@ -186,6 +188,7 @@ exports.read = function(req, res){
 
 	var operator_uid = parseInt(req.query.operator_uid);
 	var token = req.query.token;
+	console.log('operator_uid = '+operator_uid);
 
 	var uid = parseInt(req.query.uid);
 
