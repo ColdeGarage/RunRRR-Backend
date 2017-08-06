@@ -536,8 +536,11 @@ exports.callhelp = function(req, res){
 
                 fire.emit('send');
             }
-			else if (token==rows[0].token && rows[0].auth_level==10) {
-					fire.emit('search');
+			else if (token == rows[0].token && rows[0].auth_level == 10) {
+				fire.emit('search');
+			}
+			else if (token == rows[0].token && rows[0].auth_level > 10) {
+				fire.emit('update_status');
 			}
 			else {
 				ret.brea = 4;
@@ -576,25 +579,37 @@ exports.callhelp = function(req, res){
 			fire.emit('send');
 		});
 	});
+	fire.on('update_status', function(){
+		connection.query('UPDATE member SET ? WHERE uid = '+member.uid,
+			{help_status: 0},function(err, rows){
+			if (err){ 
+				ret.brea = 1;
+				console.log('Failed! /member/callhelp (uid='+member.uid
+					+') with database error:' ,err);
+			}
+			else {
+				ret.brea = 0
+				console.log('Success! /member/callhelp (uid'+member.uid
+					+') help_status clear by admin');
+			}
+			fire.emit('send');
+		});
+	});
 	fire.on('send', function(){
 		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
 		res.json(ret);
 		console.log('******Help!!!******');
 	});
 
-	var check = !isNaN(operator_uid) && (token!=undefined);
-	for (var key in member) {
-		check = check && !isNaN(member[key]);
-	}
+	var check = !isNaN(operator_uid) && (token!=undefined) && !isNaN(member.uid);
 
 	if (check){
-		console.log('At ('+member.position_e+','+member.position_n+')');
 		fire.emit('auth');
 	}
 	else {
 		ret.brea = 2;
 		console.log('Failed! /member/liveordie without operator_uid, '
-			+'token, uid or location.');
+			+'token, uid.');
 
 		fire.emit('send');
 	}
@@ -772,6 +787,116 @@ exports.login = function(req, res){
 		ret.brea = 2;
 		console.log('Failed! /member/login without operator_uid, '
 			+'email or password.');
+
+		fire.emit('send');
+	}
+}
+//edit member's score
+exports.score = function(req, res){
+	var fire = new events.EventEmitter;
+
+	var operator_uid = parseInt(req.body.operator_uid);
+	var token = req.body.token;
+	console.log('operator_uid = '+operator_uid);
+
+	var uid = parseInt(req.body.uid);
+	var score = parseInt(req.body.score);
+
+	var ret = new Object;
+	ret.uid = operator_uid;
+	ret.object = 'member';
+	ret.action = 'score';
+
+	fire.on('auth', function(){
+		connection.query('SELECT * FROM auth WHERE uid = '+operator_uid,
+		function(err, rows){
+			if (err) {
+				ret.brea = 1;
+				console.log('Failed! /member/score auth with db error: ', err);
+				
+				fire.emit('send');
+			}
+            else if (rows.length == 0) {
+                ret.brea = 3;
+                console.log('Failed! /member/score (operator_uid:'
+                            +operator_uid+') not in database');
+
+                fire.emit('send');
+            }
+			else if (token==rows[0].token && rows[0].auth_level>10) {
+				fire.emit('search');
+			}
+			else {
+				ret.brea = 4;
+				console.log('Failed! /member/score (operator_uid='+operator_uid
+					+') auth failed.');
+				
+				fire.emit('send');
+			}
+		});
+	});
+	var info;
+	fire.on('search', function(){
+		connection.query('SELECT score FROM member WHERE uid = '+uid,
+		function(err, rows){
+			if (err){
+				ret.brea = 1;
+				console.log('Failed! /member/score (uid='+uid+') '
+					+'find with database error:', err);
+
+				fire.emit('send');
+			}
+			else if (rows.length == 0) {
+				ret.brea = 3;
+				console.log('Failed! /member/score (uid='+uid+') '
+					+'is not in database.');
+
+				fire.emit('send');
+			}
+			else {
+				info = rows[0];
+				info.score = info.score + score;
+				fire.emit('update');
+			}
+		});
+	});
+	fire.on('update', function(){
+		connection.query('UPDATE member SET ? WHERE uid = '+uid, info,
+		function(err, result){
+			if (err){
+				ret.brea = 1;
+				console.log('Failed! /member/score (uid='+uid+') '
+					+'with database error:', err);
+			}
+			else {
+				ret.brea = 0;
+				if (result.changedRows) {
+					console.log('Success! /member/score (uid='+uid+') '
+						+'successfully.');
+				}
+				else {
+					console.log('Success! /member/score (uid='+uid+') '
+						+'doesn\'t change.');
+				}
+			}
+			fire.emit('send');
+		});
+	});
+	fire.on('send', function(){
+		ret.server_time = new Date((new Date).getTime()-timezone*60*1000);
+		res.json(ret);
+	});
+
+	var check = !isNaN(operator_uid) && (token!=undefined) &&
+				!isNaN(uid) && !isNaN(score);
+
+	if (check){
+		fire.emit('auth');
+	}
+	else {
+		ret.brea = 2;
+		console.log('Failed! /member/score without operator_uid, '
+			+'token, uid or score.');
 
 		fire.emit('send');
 	}

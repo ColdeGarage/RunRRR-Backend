@@ -6,7 +6,7 @@
     "image_dir":"/img",
     "map_dir":"/map",
     "database":{
-    	"host":"localhost",
+    	"host":"192.168.0.2",
     	"user":"run_for_ee",
     	"password": "runrrrr",
     	"database":"run_for_ee",

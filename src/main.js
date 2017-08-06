@@ -45,6 +45,7 @@ app.put(HOST_PREFIX+'/member/update', member.update);
 app.put(HOST_PREFIX+'/member/callhelp', member.callhelp);
 app.get(HOST_PREFIX+'/member/read', member.read);
 app.put(HOST_PREFIX+'/member/money', member.money);
+app.put(HOST_PREFIX+'/member/score', member.score);
 
 app.post(HOST_PREFIX+'/mission/create', mission.create);
 app.put(HOST_PREFIX+'/mission/edit', mission.edit);

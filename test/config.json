@@ -1,5 +1,0 @@
-{
-    "host_prefix":"/api/v1",
-    "port":8081,
-    "host":"localhost"
-}

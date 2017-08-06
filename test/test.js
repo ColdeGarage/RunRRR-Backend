@@ -166,9 +166,9 @@ describe('Member Api', function(){
             done();
         });
     });
-    it('/PUT callhelp', function(done) { 
+    it('/PUT callhelp(player)', function(done) { 
         var req = {'operator_uid':player_uid, 'token':player_token, 'uid':player_uid, 
-            'status':1, 'position_e':'120.13', 'position_n':'23.456'};
+            'position_e':'120.13', 'position_n':'23.456'};
         var help_status = 0;
         
         chai.request(HOST)
@@ -196,24 +196,10 @@ describe('Member Api', function(){
             });
         });
     });
-    it('/PUT callhelp(Uncomplete request)', function(done) { 
-        chai.request(HOST)
-        .put(path.join(HOST_PREFIX, 'member', 'callhelp'))
-        .end(function(err, res) {
-            expect(res).to.have.status(200);
-            expect(res).to.be.json;
-            res.body.should.be.a('object');
-            res.body.should.have.property('object').eql('member');
-            res.body.should.have.property('action').eql('callhelp');
-            res.body.should.have.property('brea').eql(2);
-            res.body.should.have.property('server_time').to.be.a('string');
-            
-            done();
-        });
-    });
-    it('/PUT callhelp(Failed authentication)', function(done) { 
+    it('/PUT callhelp(admin)', function(done) { 
         var req = {'operator_uid':ADMIN_UID, 'token':ADMIN_TOKEN, 'uid':player_uid, 
-            'status':1, 'position_e':'120.13', 'position_n':'23.456'};
+            'position_e':'120.13', 'position_n':'23.456'};
+        var help_status = 1;
         
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'callhelp'))
@@ -225,26 +211,31 @@ describe('Member Api', function(){
             res.body.should.have.property('uid').eql(ADMIN_UID);
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('callhelp');
-            res.body.should.have.property('brea').eql(4);
+            res.body.should.have.property('brea').eql(0);
             res.body.should.have.property('server_time').to.be.a('string');
-            
-            done();
+
+            conn.query('SELECT * FROM member WHERE uid='+player_uid, function(err, rows){
+                if (err){
+                    throw 'read member error:' + err;
+                } else {
+                    help_status = rows[0].help_status;
+                }
+
+                help_status.should.eql(0);
+                done();
+            });
         });
     });
-    it('/PUT callhelp(Failed authentication)', function(done) { 
-        var req = {'operator_uid':ADMIN_UID, 'token':ADMIN_TOKEN, 'uid':player_uid, 
-            'status':1, 'position_e':'120.13', 'position_n':'23.456'};
-        
+    it('/PUT callhelp(Uncomplete request)', function(done) { 
         chai.request(HOST)
         .put(path.join(HOST_PREFIX, 'member', 'callhelp'))
-        .send(req)
         .end(function(err, res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
             res.body.should.be.a('object');
             res.body.should.have.property('object').eql('member');
             res.body.should.have.property('action').eql('callhelp');
-            res.body.should.have.property('brea').eql(4);
+            res.body.should.have.property('brea').eql(2);
             res.body.should.have.property('server_time').to.be.a('string');
             
             done();
@@ -399,28 +390,6 @@ describe('Member Api', function(){
             done();
         });
     });
-    it('/POST login(admin)', function(done) {
-        var req = {'email':'abc@gmail.com', 'password':'abcde'};
-        chai.request(HOST)
-        .post(path.join(HOST_PREFIX, 'member', 'login'))
-        .send(req)
-        .end(function(err, res) {
-            expect(res).to.have.status(200);
-            expect(res).to.be.json;
-            res.body.should.be.a('object');
-            res.body.should.have.property('uid').to.be.a('number');
-            res.body.should.have.property('object').eql('member');
-            res.body.should.have.property('action').eql('login');
-            res.body.should.have.property('brea').eql(0);
-            res.body.should.have.property('server_time').to.be.a('string');
-            res.body.should.have.property('token').to.be.a('string');
-            res.body.should.have.property('payload');
-            res.body.payload.should.have.property('type').eql('Attribute Name');
-            res.body.payload.should.have.property('correct').to.be.a('number');
-            
-            done();
-        });
-    });
     it('/POST login(Uncomplete request)', function(done) { 
         chai.request(HOST)
         .post(path.join(HOST_PREFIX, 'member', 'login'))
@@ -432,6 +401,57 @@ describe('Member Api', function(){
             res.body.should.have.property('action').eql('login');
             res.body.should.have.property('brea').eql(2);
             res.body.should.have.property('server_time').to.be.a('string');
+            done();
+        });
+    });
+    it('/PUT score', function(done) { 
+        var req = {'operator_uid':ADMIN_UID, 'token':ADMIN_TOKEN, 'uid':player_uid, 'score':10};
+        chai.request(HOST)
+        .put(path.join(HOST_PREFIX, 'member', 'score'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(ADMIN_UID);
+            res.body.should.have.property('object').eql('member');
+            res.body.should.have.property('action').eql('score');
+            res.body.should.have.property('brea').eql(0);
+            res.body.should.have.property('server_time').to.be.a('string');
+
+            done();
+        });
+    });
+    it('/PUT score(Uncomplete request)', function(done) { 
+        chai.request(HOST)
+        .put(path.join(HOST_PREFIX, 'member', 'score'))
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('object').eql('member');
+            res.body.should.have.property('action').eql('score');
+            res.body.should.have.property('brea').eql(2);
+            res.body.should.have.property('server_time').to.be.a('string');
+
+            done();
+        });
+    });
+    it('/PUT score(Failed authentication)', function(done) { 
+        var req = {'operator_uid':player_uid, 'token':player_token, 'uid':player_uid, 'score':50};
+        chai.request(HOST)
+        .put(path.join(HOST_PREFIX, 'member', 'score'))
+        .send(req)
+        .end(function(err, res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('uid').eql(player_uid);
+            res.body.should.have.property('object').eql('member');
+            res.body.should.have.property('action').eql('score');
+            res.body.should.have.property('brea').eql(4);
+            res.body.should.have.property('server_time').to.be.a('string');
+
             done();
         });
     });
