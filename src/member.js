@@ -338,6 +338,15 @@ exports.read = function(req, res){
 					+'is not in database.');
 			}
 			else {
+				for (i in rows) {
+					var position = {
+						latitude: rows[i].position_n, 
+						longitude: rows[i].position_e
+					};
+					var valid = geolib.isPointInside(position, boundary);
+					rows[i].valid_area = valid;
+				}
+
 				ret.brea = 0;
 				ret.payload = {
 					type : 'Objects',
@@ -361,6 +370,15 @@ exports.read = function(req, res){
 				console.log('Failed! /member/read database is still empty.');
 			}
 			else {
+				for (i in rows) {
+					var position = {
+						latitude: rows[i].position_n, 
+						longitude: rows[i].position_e
+					};
+					var valid = geolib.isPointInside(position, boundary);
+					rows[i].valid_area = valid;
+				}
+
 				ret.brea = 0;
 				ret.payload = {
 					type : 'Objects',

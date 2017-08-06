@@ -30,7 +30,7 @@ exports.create = function(req, res){
 	var tool = new Object;
 	tool.title = req.body.title;
 	tool.content = req.body.content;
-	tool.url = 'tool-'+rand_name+'.jpg';
+	if (req.body.image !== undefined) tool.url = 'tool-'+rand_name+'.jpg';
 	tool.expire = parseInt(req.body.expire);
 	tool.price = parseInt(req.body.price);
 
