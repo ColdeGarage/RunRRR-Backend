@@ -148,8 +148,8 @@ exports.edit = function(req, res){
 	} 
 	//delete the key that don't send
 	for (var key in mission) {
-		var invalid = isNaN(mission[key]) || (mission[key]==undefined);
-		if (invalid) delete mission[key];
+		var invalid = !isNaN(mission[key]) || (mission[key]!==undefined);
+		if (!valid) delete mission[key];
 	}
 
 	var ret = new Object;
