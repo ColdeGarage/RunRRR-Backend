@@ -131,26 +131,21 @@ exports.edit = function(req, res){
 	console.log('operator_uid = '+operator_uid);
 
 	var mission = new Object;
-	mission.mid = parseInt(req.body.mid);
-	mission.title = req.body.title;
-	mission.content = req.body.content;
-	mission.time_start = req.body.time_start;
-	mission.time_end = req.body.time_end;
-	mission.prize = parseInt(req.body.prize);
-	mission.clue = req.body.clue;
-	mission.class = req.body.class;
-	mission.score = parseInt(req.body.score);
-	mission.location_e = parseFloat(req.body.location_e);
-	mission.location_n = parseFloat(req.body.location_n);
+	if (req.body.mid!==undefined) mission.mid = parseInt(req.body.mid);
+	if (req.body.title!==undefined) mission.title = req.body.title;
+	if (req.body.content!==undefined) mission.content = req.body.content;
+	if (req.body.time_start!==undefined) mission.time_start = req.body.time_start;
+	if (req.body.time_end!==undefined) mission.time_end = req.body.time_end;
+	if (req.body.prize!==undefined) mission.prize = parseInt(req.body.prize);
+	if (req.body.clue!==undefined) mission.clue = req.body.clue;
+	if (req.body.class!==undefined) mission.class = req.body.class;
+	if (req.body.score!==undefined) mission.score = parseInt(req.body.score);
+	if (req.body.location_e!==undefined) mission.location_e = parseFloat(req.body.location_e);
+	if (req.body.location_n!==undefined) mission.location_n = parseFloat(req.body.location_n);
 	if (!isNaN(req.body.image) && (req.body.image !== undefined)){
 		mission.time = new Date((new Date).getTime()-timezone*60*1000);
 		mission.url = 'mission-'+rand_name+'-'+mission.time.getTime()+'.jpg';
 	} 
-	//delete the key that don't send
-	for (var key in mission) {
-		var invalid = !isNaN(mission[key]) || (mission[key]!==undefined);
-		if (!valid) delete mission[key];
-	}
 
 	var ret = new Object;
 	ret.uid = parseInt(req.body.operator_uid);
