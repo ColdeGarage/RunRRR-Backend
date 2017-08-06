@@ -235,12 +235,12 @@ exports.read = function(req, res){
 		connection.query('SELECT * FROM pack WHERE uid = '+uid,
 		function(err, rows){
 				if (err) {
-					ret.brea = 3;
+					ret.brea = 1;
 					console.log('Failed! /pack/read (uid='+uid+') '
 						+'with database error:', err);
 				}
 				else if (rows.length == 0) {
-					ret.brea = 1;
+					ret.brea = 3;
 					console.log('Failed! /pack/read (uid='+uid+') '
 						+'is not in database.');
 				}
