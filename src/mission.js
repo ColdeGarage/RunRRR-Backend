@@ -1,10 +1,20 @@
+var fs = require('fs');
 var events = require('events');
 var path = require('path');
 var crypto = require('crypto');
 var ROOT_PATH = path.resolve(process.env.NODE_PATH)
 var db = require(path.join(ROOT_PATH, 'src/db.js'));
 var connection = db.conn();
+if (process.env.NODE_ENV === 'production'){
+    var config = require(path.join(ROOT_PATH, 'src/config_production.json'));
+} else if (process.env.NODE_ENV === 'test') {
+    var config = require(path.join(ROOT_PATH, 'src/config_staging.json'));
+} else {
+    throw 'Environment setting error! Please set NODE_ENV Environment variable';
+}
 
+const FILE_PREFIX = config.file_prefix;
+const IMAGE_DIR = config.image_dir;
 const timezone = (new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
 
 //create a new mission
@@ -26,8 +36,12 @@ exports.create = function(req, res){
 	mission.clue = req.body.clue;
 	mission.class = req.body.class;
 	mission.score = parseInt(req.body.score);
-	mission.location_e = parseFloat(req.body.location_e);
-	mission.location_n = parseFloat(req.body.location_n);
+	if (req.body.location_e !== undefined){
+		mission.location_e = parseFloat(req.body.location_e);
+	}
+	if (req.body.location_e !== undefined){
+		mission.location_n = parseFloat(req.body.location_n);
+	}
 	if (req.body.image !== undefined){
 		mission.time = new Date((new Date).getTime()-timezone*60*1000);
 		mission.url = 'mission-'+rand_name+'-'+mission.time.getTime()+'.jpg';
@@ -74,14 +88,19 @@ exports.create = function(req, res){
 				console.log('Failed! /mission/create with database error:', err);
 			}
 			else {
-				if (mission.url !== undefined && !isNaN(mission.url)){
+				if (mission.url !== undefined){
 					var filename = path.join(ROOT_PATH, FILE_PREFIX,
 						IMAGE_DIR, mission.url);
 					fs.writeFile(filename, new Buffer(req.body.image, 'base64'), 
 						function(err){
-			    		if (err) 
+			    		if (err) {
 			    			console.log('Error! /mission/create write image '
 			    				+'with error:', err);
+			    		}
+			    		else {
+			    			console.log('Mission image (mid='+result.insertId
+			    				+') is created!');
+			    		}
 			    	});
 			    }
 				ret.brea = 0;
@@ -142,7 +161,7 @@ exports.edit = function(req, res){
 	if (req.body.score!==undefined) mission.score = parseInt(req.body.score);
 	if (req.body.location_e!==undefined) mission.location_e = parseFloat(req.body.location_e);
 	if (req.body.location_n!==undefined) mission.location_n = parseFloat(req.body.location_n);
-	if (!isNaN(req.body.image) && (req.body.image !== undefined)){
+	if (req.body.image !== undefined){
 		mission.time = new Date((new Date).getTime()-timezone*60*1000);
 		mission.url = 'mission-'+rand_name+'-'+mission.time.getTime()+'.jpg';
 	} 
@@ -212,14 +231,19 @@ exports.edit = function(req, res){
 					+'with database error:', err);
 			}
 			else {
-				if (mission.url !== undefined && !isNaN(mission.url)){
+				if (mission.url !== undefined){
 					var filename = path.join(ROOT_PATH, FILE_PREFIX,
 						IMAGE_DIR, mission.url);
 					fs.writeFile(filename, new Buffer(req.body.image, 'base64'), 
 						function(err){
-			    		if (err) 
+			    		if (err) {
 			    			console.log('Error! /mission/edit write image '
 			    				+'with error:', err);
+			    		}
+			    		else {
+			    			console.log('Mission image (mid='+mission.mid
+			    				+') is changed!');
+			    		}
 			    	});
 			    }
 				ret.brea = 0;
@@ -474,7 +498,7 @@ exports.read = function(req, res){
 	}
 	else {
 		ret.brea = 2;
-		console.log('Failed! /mission/read without operator_uid.');
+		console.log('Failed! /mission/read without operator_uid or token.');
 		
 		fire.emit('send');
 	}

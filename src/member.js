@@ -403,7 +403,7 @@ exports.read = function(req, res){
 	else {
 		ret.brea = 2;
 		console.log('Failed! /member/read without operator_uid, '
-			+'token or token.');
+			+'or token.');
 		
 		fire.emit('send');
 	}
@@ -681,6 +681,7 @@ exports.login = function(req, res){
 					member.status = 1;
 					member.score = 0;
 					member.help_status = 0;
+					member.squad = parseInt(data.squad);
 
 					secret = {
 						uid: ret.uid,

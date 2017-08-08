@@ -267,6 +267,7 @@ describe('Member Api', function(){
                 res.body.payload.objects[member].should.have.property('position_n').to.be.an('number');
                 res.body.payload.objects[member].should.have.property('score').to.be.an('number');
                 res.body.payload.objects[member].should.have.property('name').to.be.an('string');
+                res.body.payload.objects[member].should.have.property('squad').to.be.an('number');
                 res.body.payload.objects[member].should.have.property('valid_area').to.be.an('boolean');
             }
             
@@ -298,6 +299,7 @@ describe('Member Api', function(){
                 res.body.payload.objects[member].should.have.property('position_n').to.be.an('number');
                 res.body.payload.objects[member].should.have.property('score').to.be.an('number');
                 res.body.payload.objects[member].should.have.property('name').to.be.an('string');
+                res.body.payload.objects[member].should.have.property('squad').to.be.an('number');
                 res.body.payload.objects[member].should.have.property('valid_area').to.be.an('boolean');
             }
             
