@@ -173,19 +173,30 @@ exports.delete = function(req, res){
 				ret.brea = 1;
 				console.log('Failed! /tool/delete (tid='+tid+') '
 					+'with database error:', err);
+				fire.emit('send');
 			}
 			else if (result.affectedRows) {
-				ret.brea = 0;
-				console.log('Success! /tool/delete (tid='+tid+') '
-					+'successfully.');
+				connection.query('DELETE FROM tool WHERE id = '+tid+' AND class="TOOL"',
+				function(err, result){
+					if (err) {
+						ret.brea = 1;
+						console.log('Failed! /tool/delete (tid='+tid+') '
+							+'with database error:', err);
+					}
+					else {
+						ret.brea = 0;
+						console.log('Success! /tool/delete (tid='+tid+') '
+							+'successfully.(include pack delete)');
+					}
+					fire.emit('send');
+				});
 			}
 			else {
 				ret.brea = 3;
 				console.log('Failed! /tool/delete (tid='+tid+') '
 					+'is not in database.');
+				fire.emit('send');
 			}
-			
-			fire.emit('send');
 		});
 	});
 	fire.on('send', function(){

@@ -142,19 +142,30 @@ exports.delete = function(req, res){
 				ret.brea = 1;
 				console.log('Failed! /clue/delete (cid='+cid+') '
 					+'with database error.');
+				fire.emit('send');
 			}
 			else if (result.affectedRows) {
-				ret.brea = 0;
-				console.log('Success! /clue/delete (cid='+cid+') '
-					+'successfully.');
+				connection.query('DELETE FROM pack WHERE id = '+cid+ 'AND class="CLUE"',
+				function(err, result){
+					if (err){
+						ret.brea = 1;
+						console.log('Failed! /clue/delete (cid='+cid+') '
+							+'with database error.');
+					}
+					else {
+						ret.brea = 0;
+						console.log('Success! /clue/delete (cid='+cid+') '
+							+'successfully.(include pack delete)');
+					}
+					fire.emit('send');
+				});				
 			}
 			else {
 				ret.brea = 3;
 				console.log('Failed! /clue/delete (cid='+cid+') '
 					+'is not in database.');
+				fire.emit('send');
 			}
-			
-			fire.emit('send');
 		});
 	});
 	fire.on('send', function(){

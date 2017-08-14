@@ -329,19 +329,30 @@ exports.delete = function(req, res){
 				ret.brea = 1;
 				console.log('Failed! /mission/delete (mid='+mid+') '
 					+'with database error:', err);
+				fire.emit('send');
 			}
 			else if (result.affectedRows) {
-				ret.brea = 0;
-				console.log('Success! /mission/delete (mid='+mid+') '
-					+'successfully.');
+				connection.query('DELETE FROM report WHERE mid = '+mid,
+				function(err, result){
+					if (err){
+						ret.brea = 1;
+						console.log('Failed! /mission/delete (mid='+mid+') '
+							+'delete report with database error:', err);
+					}
+					else{
+						ret.brea = 0;
+						console.log('Success! /mission/delete (mid='+mid+') '
+							+'successfully.(include report delete)');
+					}
+					fire.emit('send');
+				});
 			}
 			else {
 				ret.brea = 3;
 				console.log('Failed! /mission/delete (mid='+mid+') '
 					+'is not in database.');
+				fire.emit('send');
 			}
-
-			fire.emit('send');
 		});
 	});
 	fire.on('send', function(){
