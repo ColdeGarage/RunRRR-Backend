@@ -46,7 +46,7 @@ exports.create = function(req, res){
 				ret.brea = 1;
 				console.log('Failed! /tool/create auth with db error: ',
 					err);
-				
+
 				fire.emit('send');
 			}
 			else if (rows.length == 0) {
@@ -63,7 +63,7 @@ exports.create = function(req, res){
 				ret.brea = 4;
 				console.log('Failed! /tool/create '
 					+'(operator_uid='+operator_uid+') auth failed.');
-				
+
 				fire.emit('send');
 			}
 		});
@@ -103,7 +103,7 @@ exports.create = function(req, res){
 		res.json(ret);
 	});
 
-	var check = !isNaN(operator_uid) && (token!=undefined) && 
+	var check = !isNaN(operator_uid) && (token!=undefined) &&
 				(req.body.image!=undefined);
 	for (var key in tool) {
 		var valid = !(isNaN(tool[key]) && (tool[key]==undefined));
@@ -144,7 +144,7 @@ exports.delete = function(req, res){
 				ret.brea = 1;
 				console.log('Failed! /tool/delete auth with db error: ',
 					err);
-				
+
 				fire.emit('send');
 			}
 			else if (rows.length == 0) {
@@ -161,7 +161,7 @@ exports.delete = function(req, res){
 				ret.brea = 4;
 				console.log('Failed! /tool/delete '
 					+'(operator_uid='+operator_uid+') auth failed.');
-				
+
 				fire.emit('send');
 			}
 		});
@@ -176,7 +176,7 @@ exports.delete = function(req, res){
 				fire.emit('send');
 			}
 			else if (result.affectedRows) {
-				connection.query('DELETE FROM tool WHERE id = '+tid+' AND class="TOOL"',
+				connection.query('DELETE FROM pack WHERE id = '+tid+' AND class="TOOL"',
 				function(err, result){
 					if (err) {
 						ret.brea = 1;
@@ -239,7 +239,7 @@ exports.read = function(req, res){
 				ret.brea = 1;
 				console.log('Failed! /tool/read auth with db error: ',
 					err);
-				
+
 				fire.emit('send');
 			}
 			else if (rows.length == 0) {
@@ -261,7 +261,7 @@ exports.read = function(req, res){
 				ret.brea = 4;
 				console.log('Failed! /tool/read '
 					+'(operator_uid='+operator_uid+') auth failed.');
-				
+
 				fire.emit('send');
 			}
 		});
@@ -309,8 +309,8 @@ exports.read = function(req, res){
 					objects : rows
 				};
 				console.log('Success! /tool/read successfully.');
-			}	
-			
+			}
+
 			fire.emit('send');
 		});
 	});

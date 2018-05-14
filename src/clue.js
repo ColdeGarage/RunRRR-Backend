@@ -29,7 +29,7 @@ exports.create = function(req, res){
 				ret.brea = 1;
 				console.log('Failed! /clue/create auth with db error: ',
 					err);
-				
+
 				fire.emit('send');
 			}
 			else if (rows.length == 0) {
@@ -46,7 +46,7 @@ exports.create = function(req, res){
 				ret.brea = 4;
 				console.log('Failed! /clue/create '
 					+'(operator_uid='+operator_uid+') auth failed.');
-				
+
 				fire.emit('send');
 			}
 		});
@@ -113,7 +113,7 @@ exports.delete = function(req, res){
 				ret.brea = 1;
 				console.log('Failed! /clue/delete auth with db error: ',
 					err);
-				
+
 				fire.emit('send');
 			}
 			else if (rows.length == 0) {
@@ -130,7 +130,7 @@ exports.delete = function(req, res){
 				ret.brea = 4;
 				console.log('Failed! /clue/delete '
 					+'(operator_uid='+operator_uid+') auth failed.');
-				
+
 				fire.emit('send');
 			}
 		});
@@ -145,7 +145,7 @@ exports.delete = function(req, res){
 				fire.emit('send');
 			}
 			else if (result.affectedRows) {
-				connection.query('DELETE FROM pack WHERE id = '+cid+ 'AND class="CLUE"',
+				connection.query('DELETE FROM pack WHERE id = '+cid+ ' AND class="CLUE"',
 				function(err, result){
 					if (err){
 						ret.brea = 1;
@@ -158,7 +158,7 @@ exports.delete = function(req, res){
 							+'successfully.(include pack delete)');
 					}
 					fire.emit('send');
-				});				
+				});
 			}
 			else {
 				ret.brea = 3;
@@ -173,7 +173,7 @@ exports.delete = function(req, res){
 		res.json(ret);
 	});
 
-	var check = !isNaN(operator_uid) && 
+	var check = !isNaN(operator_uid) &&
 		(token!=undefined) && !isNaN(cid);
 
 	if (check) {
@@ -209,7 +209,7 @@ exports.read = function(req, res){
 				ret.brea = 1;
 				console.log('Failed! /clue/read auth with db error: ',
 					err);
-				
+
 				fire.emit('send');
 			}
 			else if (rows.length == 0) {
@@ -231,7 +231,7 @@ exports.read = function(req, res){
 				ret.brea = 4;
 				console.log('Failed! /clue/read '
 					+'(operator_uid='+operator_uid+') auth failed.');
-				
+
 				fire.emit('send');
 			}
 		});
@@ -258,7 +258,7 @@ exports.read = function(req, res){
 				console.log('Success! /clue/read (cid='+cid+') '
 					+'successfully.');
 			}
-			
+
 			fire.emit('send');
 		});
 	});
