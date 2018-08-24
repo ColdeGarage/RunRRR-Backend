@@ -22,7 +22,7 @@ const EE_HOST = config.ee_host;
 const FILE_PREFIX = config.file_prefix;
 const MAP_DIR = config.map_dir;
 const MAP_NAME = 'boundary.kml';
-const timezone = (new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
+const timezone = -480;//(new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
 
 //return member's status
 exports.liveordie = function(req, res){

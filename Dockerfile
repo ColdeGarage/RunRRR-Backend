@@ -4,7 +4,8 @@ WORKDIR /coldegarage
 COPY . .
 RUN npm install && \
     apt-get update && \
-    apt-get install -y  vim
+    apt-get install -y  vim && \
+    mkdir server-log
 EXPOSE 8081 3000
-CMD ["/bin/bash"]
 
+ENTRYPOINT ["npm", "start"]

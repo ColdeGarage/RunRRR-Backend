@@ -12,5 +12,5 @@
     	"database":"run_for_ee",
         "timezone":"+00:00"
     },
-    "ee_host": "http://www.ee.nthu.edu.tw/engcamp/api"
+    "ee_host": "http://eecc.nthuee.org/api"
 }

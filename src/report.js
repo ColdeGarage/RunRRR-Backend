@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === 'production'){
 
 const FILE_PREFIX = config.file_prefix;
 const IMAGE_DIR = config.image_dir;
-const timezone = (new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
+const timezone = -480;//(new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
 
 //create a new report
 exports.create = function(req, res){

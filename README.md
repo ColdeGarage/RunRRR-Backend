@@ -1,17 +1,58 @@
 # EveryoneRunning-Backend
 
 ## Installation
+### 前置工作
+* Google Map Boundary File `(boundary.kml)`
+* Environment Values File `(.env)`
+* Check Directory Structure
+```
+├── Dockerfile
+├── package.json
+├── README.md
+├── data
+│   ├── img
+│   └── map
+│       └── boundary.kml
+├── src
+│   ├── clue.js
+│   ├── config_production.json
+│   ├── config_staging.json
+│   ├── db.js
+│   ├── main.js
+│   ├── member.js
+│   ├── mission.js
+│   ├── pack.js
+│   ├── report.js
+│   └── tool.js
+└── server-log
+```
+## Develop
+### Install Depencency
+```bash
+path_to_project $ npm install
+```
+### Running Unit test
+Setup `./src/config_staging.json`
+```bash
+path_to_project $ npm test
+```
+## Deployment
 ### Start server
+Setup `./src/config_production.json`
+
 ```bash
 git clone https://github.com/ColdeGarage/RunRRR-Backend.git
 cd RunRRR
 npm install
 npm start
 ```
-### Running Unit test
+
+### Deploy as docker
 ```bash
-path_to_project $ npm test
+docker build -t runrrr-backend .
+docker run runrrr-backend
 ```
+
 
 
 ## Directory Structure
@@ -19,6 +60,14 @@ path_to_project $ npm test
 Source code of the project. <br>
 * `main.js` : RESTful API Reqest Handler
 * `object.js`: Object definition of each *object*, such as *member*, *mission* etc.
+
+### /data
+Image and other related data used in game. <br>
+* `img/` : Mission Report photo images, Tools images, etc.
+* `map/boundary.kml` : Google Map Boundary File
+
+### /server-log
+Dumped logs while backend-server is running.
 
 ### API URL (temporarily)
 Call the API with URL when you're at EECS822. <br>

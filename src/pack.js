@@ -4,7 +4,7 @@ var ROOT_PATH = path.resolve(process.env.NODE_PATH)
 var db = require(path.join(ROOT_PATH, 'src/db.js'));
 var connection = db.conn();
 
-const timezone = (new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
+const timezone = -480;//(new Date).getTimezoneOffset(); //get timezone(UTC+8) offset
 
 //create a backpack
 exports.create = function(req, res){
